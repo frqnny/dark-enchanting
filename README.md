@@ -1,4 +1,4 @@
-# Fabric Example Mod
+# Dark Enchanting
 
 ## Setup
 
@@ -13,4 +13,4 @@
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+LGPL-3 license, this is.
