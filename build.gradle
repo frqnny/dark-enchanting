@@ -12,17 +12,6 @@ group = project.maven_group
 
 minecraft {
 }
-repositories {
-	jcenter()
-	maven {
-		name = "Cotton (snapshots)"
-		url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
-	}
-    maven {
-        name = "Cotton"
-        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
-    }
-}
 
 dependencies {
 	//to change the versions see the gradle.properties file

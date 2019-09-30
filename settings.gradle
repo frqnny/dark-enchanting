@@ -5,6 +5,14 @@ pluginManagement {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        maven {
+            name = "Cotton (snapshots)"
+            url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
+        }
+        maven {
+            name = "Cotton"
+            url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+        }
         gradlePluginPortal()
     }
 }

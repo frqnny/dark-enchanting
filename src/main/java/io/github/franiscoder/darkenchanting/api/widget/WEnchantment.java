@@ -39,8 +39,10 @@ public class WEnchantment extends WLB {
             enchantmentName = labelUpdater.updateLabel(value);
         }
         ListTag lt = stack.getEnchantments();
-        boolean hi = lt.contains(Enchantments.SHARPNESS);
-        if (value != 0 && hi) {
+        if (value != 0 && !lt.contains(enchantment)) {
+            stack.addEnchantment(enchantment, value);
+        } else if (value != 0) {
+            lt.removeIf(tag -> tag == enchantment);
             stack.addEnchantment(enchantment, value);
         }
     }
