@@ -1,34 +1,35 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "dark-enchanting",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Dark Enchanting",
+  "description": "Adding Dark Enchantments, Dark Enchanter, and many other cool things since 2019.",
   "authors": [
     "Me!"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/franiscoder/dark-enchanting",
+    "sources": "https://github.com/franiscoder/dark-enchanting"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "LGPL-3.0",
+  "icon": "assets/dark-enchanting/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "io.github.franiscoder.darkenchanting.DarkEnchanting"
+    ],
+    "client": [
+      "io.github.franiscoder.darkenchanting.DarkEnchantingClient"
     ]
   },
-  "mixins": [
-    "modid.mixins.json"
-  ],
 
   "depends": {
     "fabricloader": ">=0.4.0",
-    "fabric": "*"
+    "fabric": "*",
+    "libgui": ">=1.3.3-beta.5"
   },
   "suggests": {
     "flamingo": "*"

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GPG",
+    "FEF",
+    "GPG"
+  ],
+  "key": {
+    "F": {
+      "item": "dark-enchanting:enchanted_gem"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "P": {
+      "item": "minecraft:purple_wool"
+    },
+    "E": {
+      "item": "minecraft:enchanting_table"
+    }
+  },
+  "result": {
+    "item": "dark-enchanting:dark_enchanter",
+    "count": 1
+  }
+}

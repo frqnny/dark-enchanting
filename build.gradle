@@ -35,6 +35,8 @@ dependencies {
 
 	// Dependencies
 	modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
+	modImplementation "io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0"
+	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 }
 
 processResources {
