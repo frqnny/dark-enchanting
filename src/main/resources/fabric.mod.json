@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "dark-enchanting",
   "version": "${version}",
-
   "name": "Dark Enchanting",
   "description": "Adding Dark Enchantments, Dark Enchanter, and many other cool things since 2019.",
   "authors": [
@@ -12,10 +11,8 @@
     "homepage": "https://github.com/franiscoder/dark-enchanting",
     "sources": "https://github.com/franiscoder/dark-enchanting"
   },
-
   "license": "LGPL-3.0",
   "icon": "assets/dark-enchanting/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -25,7 +22,6 @@
       "io.github.franiscoder.darkenchanting.DarkEnchantingClient"
     ]
   },
-
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*",

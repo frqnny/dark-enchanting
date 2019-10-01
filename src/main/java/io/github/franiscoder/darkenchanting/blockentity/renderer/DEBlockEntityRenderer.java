@@ -20,10 +20,9 @@ public class DEBlockEntityRenderer extends BlockEntityRenderer<DEBlockEntity> {
     private static final Identifier BOOK_TEX = new Identifier("dark-enchanting:entity/book1");
     private final BookModel book = new BookModel();
 
-    public DEBlockEntityRenderer(BlockEntityRenderDispatcher blockEntityRenderDispatcher) {
-        super(blockEntityRenderDispatcher);
+    public DEBlockEntityRenderer() {
+        super(BlockEntityRenderDispatcher.INSTANCE);
     }
-    public DEBlockEntityRenderer() { super(BlockEntityRenderDispatcher.INSTANCE); }
 
 
     //From Mojang Code, redone to slightly replace some but not all random names.
@@ -32,15 +31,15 @@ public class DEBlockEntityRenderer extends BlockEntityRenderer<DEBlockEntity> {
     public void render(DEBlockEntity blockEntity, double x, double y, double z, float partialTicks, class_4587 class_4587_1, class_4597 class_4597_1, int int_1) {
         class_4587_1.method_22903();
         class_4587_1.method_22904(0.5D, 0.75D, 0.5D);
-        float float_2 = (float)blockEntity.ticks + partialTicks;
+        float float_2 = (float) blockEntity.ticks + partialTicks;
         class_4587_1.method_22904(0.0D, (0.1F + MathHelper.sin(float_2 * 0.1F) * 0.01F), 0.0D);
 
         float float_3 = blockEntity.field_11964 - blockEntity.field_11963;
-        while( float_3 >= 3.1415927F) {
+        while (float_3 >= 3.1415927F) {
             float_3 -= 6.2831855F;
         }
 
-        while(float_3 < -3.1415927F) {
+        while (float_3 < -3.1415927F) {
             float_3 += 6.2831855F;
         }
 

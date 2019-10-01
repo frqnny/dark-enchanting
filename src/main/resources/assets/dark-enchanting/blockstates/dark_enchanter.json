@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "dark-enchanting:block/dark_enchanter" }
+    "": {
+      "model": "dark-enchanting:block/dark_enchanter"
+    }
   }
 }

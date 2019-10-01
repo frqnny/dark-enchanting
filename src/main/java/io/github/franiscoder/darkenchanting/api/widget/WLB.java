@@ -1,6 +1,5 @@
 package io.github.franiscoder.darkenchanting.api.widget;
 
-import javax.annotation.Nullable;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.WAbstractSlider;
@@ -12,10 +11,14 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.text.Text;
 
+import javax.annotation.Nullable;
+
 public class WLB extends WAbstractSlider {
     //Since like, a lot of stuff is protected and stuff I'm just including this so I can do my work.
-    @Nullable private Text label = null;
-    @Nullable private WLB.LabelUpdater labelUpdater = null;
+    @Nullable
+    private Text label = null;
+    @Nullable
+    private WLB.LabelUpdater labelUpdater = null;
     private Alignment labelAlignment = Alignment.CENTER;
 
     public WLB(int min, int max) {
@@ -26,15 +29,6 @@ public class WLB extends WAbstractSlider {
         super(min, max, axis);
     }
 
-    public WLB(int min, int max, Axis axis, @Nullable Text label) {
-        this(min, max, axis);
-        this.label = label;
-    }
-
-    public WLB(int min, int max, @Nullable Text label) {
-        this(min, max);
-        this.label = label;
-    }
 
     @Override
     public void setSize(int x, int y) {
@@ -117,7 +111,7 @@ public class WLB extends WAbstractSlider {
 
         if (thumbState == 1 && isFocused()) {
             float px = 1 / 32f;
-            ScreenDrawing.texturedRect(thumbX, thumbY, thumbWidth, thumbHeight, WSlider.LIGHT_TEXTURE, 24*px, 0*px, 32*px, 20*px, 0xFFFFFFFF);
+            ScreenDrawing.texturedRect(thumbX, thumbY, thumbWidth, thumbHeight, WSlider.LIGHT_TEXTURE, 24 * px, 0 * px, 32 * px, 20 * px, 0xFFFFFFFF);
         }
 
         if (label != null) {

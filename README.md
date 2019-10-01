@@ -1,7 +1,7 @@
 # Dark Enchanting
 
-The Mod Dark Enchanting's Repository.
-
+The mod Dark Enchanting's Repository ->->->
+Requires Fabric!
 ## License
 
 LGPL-3 license, this is.

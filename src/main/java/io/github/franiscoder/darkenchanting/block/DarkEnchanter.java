@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvider {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
     public DarkEnchanter(Settings settings) {
         super(settings);

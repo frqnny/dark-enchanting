@@ -16,6 +16,7 @@ import java.util.Random;
 public class DEBlockEntity extends BlockEntity implements ImplementedInventory, Tickable {
     private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
 
+
     public DEBlockEntity() {
         super(BlockEntities.DE_BLOCK_ENTITY);
     }
@@ -25,13 +26,13 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
     public int ticks;
     public float nextPageAngle;
     public float pageAngle;
-    public float field_11969;
-    public float field_11967;
+    private float field_11969;
+    private float field_11967;
     public float nextPageTurningSpeed;
     public float pageTurningSpeed;
     public float field_11964;
     public float field_11963;
-    public float field_11962;
+    private float field_11962;
     private static final Random RANDOM = new Random();
 
     @Override
@@ -60,45 +61,46 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
     public void tick() {
         this.pageTurningSpeed = this.nextPageTurningSpeed;
         this.field_11963 = this.field_11964;
-        PlayerEntity playerEntity_1 = this.world.getClosestPlayer((double)((float)this.pos.getX() + 0.5F), (double)((float)this.pos.getY() + 0.5F), (double)((float)this.pos.getZ() + 0.5F), 3.0D, false);
+        PlayerEntity playerEntity_1 = this.world.getClosestPlayer((float) this.pos.getX() + 0.5F, (float) this.pos.getY() + 0.5F, (float) this.pos.getZ() + 0.5F, 3.0D, false);
         if (playerEntity_1 != null) {
-            double double_1 = playerEntity_1.x - (double)((float)this.pos.getX() + 0.5F);
-            double double_2 = playerEntity_1.z - (double)((float)this.pos.getZ() + 0.5F);
-            this.field_11962 = (float)MathHelper.atan2(double_2, double_1);
+            double double_1 = playerEntity_1.x - (double) ((float) this.pos.getX() + 0.5F);
+            double double_2 = playerEntity_1.z - (double) ((float) this.pos.getZ() + 0.5F);
+            this.field_11962 = (float) MathHelper.atan2(double_2, double_1);
             this.nextPageTurningSpeed += 0.1F;
             if (this.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
                 float float_1 = this.field_11969;
 
                 do {
-                    this.field_11969 += (float)(RANDOM.nextInt(4) - RANDOM.nextInt(4));
-                } while(float_1 == this.field_11969);
+                    this.field_11969 += (float) (RANDOM.nextInt(4) - RANDOM.nextInt(4));
+                } while (float_1 == this.field_11969);
             }
         } else {
             this.field_11962 += 0.02F;
             this.nextPageTurningSpeed -= 0.1F;
         }
 
-        while(this.field_11964 >= 3.1415927F) {
+        while (this.field_11964 >= 3.1415927F) {
             this.field_11964 -= 6.2831855F;
         }
 
-        while(this.field_11964 < -3.1415927F) {
+        while (this.field_11964 < -3.1415927F) {
             this.field_11964 += 6.2831855F;
         }
 
-        while(this.field_11962 >= 3.1415927F) {
+        while (this.field_11962 >= 3.1415927F) {
             this.field_11962 -= 6.2831855F;
         }
 
-        while(this.field_11962 < -3.1415927F) {
+        while (this.field_11962 < -3.1415927F) {
             this.field_11962 += 6.2831855F;
         }
 
-        float float_2;
-        for(float_2 = this.field_11962 - this.field_11964; float_2 >= 3.1415927F; float_2 -= 6.2831855F) {
+        float float_2 = this.field_11962 - this.field_11964;
+        while (float_2 >= 3.1415927F) {
+            float_2 -= 6.2831855F;
         }
 
-        while(float_2 < -3.1415927F) {
+        while (float_2 < -3.1415927F) {
             float_2 += 6.2831855F;
         }
 

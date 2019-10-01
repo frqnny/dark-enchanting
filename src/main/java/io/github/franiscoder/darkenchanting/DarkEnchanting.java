@@ -7,14 +7,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 public class DarkEnchanting implements ModInitializer {
     public static String MODID = "dark-enchanting";
-    ModItems ItemRegistry = new ModItems();
-    ModBlocks BlockRegistry = new ModBlocks();
-    BlockEntities BlockEntities = new BlockEntities();
+    private ModItems ItemRegistry = new ModItems();
+    private ModBlocks BlockRegistry = new ModBlocks();
 
     public static final ItemGroup DARK_ENCHANTING = FabricItemGroupBuilder.create(
             new Identifier(MODID, "dark_enchanting_group"))
@@ -31,6 +29,5 @@ public class DarkEnchanting implements ModInitializer {
         ItemRegistry.registerItems();
         BlockRegistry.registerBlocks();
         BlockEntities.registerBlockEntities();
-
     }
 }

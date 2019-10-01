@@ -1,7 +1,6 @@
 package io.github.franiscoder.darkenchanting;
 
 import io.github.franiscoder.darkenchanting.block.DarkEnchanter;
-import io.github.franiscoder.darkenchanting.blockentity.DEBlockEntity;
 import io.github.franiscoder.darkenchanting.blockentity.renderer.DEBlockEntityRenderer;
 import io.github.franiscoder.darkenchanting.gui.DEGuiController;
 import io.github.franiscoder.darkenchanting.gui.DEGuiScreen;
@@ -18,7 +17,7 @@ public class DarkEnchantingClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ScreenProviderRegistry.INSTANCE.registerFactory(DarkEnchanter.ID, (syncId, identifier, player, buf) -> new DEGuiScreen(new DEGuiController(syncId, player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
-        BlockEntityRendererRegistry.INSTANCE.register(BlockEntities.DE_BLOCK_ENTITY, new DEBlockEntityRenderer() );
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntities.DE_BLOCK_ENTITY, new DEBlockEntityRenderer());
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX).register((atlas, registry) -> {
             registry.register(new Identifier("dark-enchanting:entity/book1"));
         });

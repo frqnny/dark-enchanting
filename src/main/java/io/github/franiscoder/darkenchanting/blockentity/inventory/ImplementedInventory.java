@@ -28,10 +28,11 @@ public interface ImplementedInventory extends Inventory {
 
     /**
      * Creates a new inventory with the size.
+
+     static ImplementedInventory ofSize(int size) {
+     return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
+     }
      */
-    static ImplementedInventory ofSize(int size) {
-        return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
-    }
     // Inventory
 
     /**

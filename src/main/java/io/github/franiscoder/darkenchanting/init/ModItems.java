@@ -2,7 +2,6 @@ package io.github.franiscoder.darkenchanting.init;
 
 import io.github.franiscoder.darkenchanting.DarkEnchanting;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

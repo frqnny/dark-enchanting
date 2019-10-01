@@ -5,7 +5,6 @@ import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.franiscoder.darkenchanting.api.widget.WEnchantment;
-import io.github.franiscoder.darkenchanting.blockentity.inventory.ImplementedInventory;
 import net.minecraft.container.BlockContext;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,21 +22,18 @@ public class DEGuiController extends CottonCraftingController {
         WItemSlot inputSlot1 = WItemSlot.of(blockInventory, 0);
         rootPanel.add(inputSlot1, 1, 1);
 
-
-        //WLabeledSlider slider = new WLabeledSlider(0, 4, Axis.HORIZONTAL, new LiteralText("hi"));
-        //rootPanel.add(slider, 3, 1, 5, 1)
         WEnchantment enchantment = new WEnchantment(Enchantments.SHARPNESS, blockInventory);
-        rootPanel.add(enchantment, 3,1, 5,1);
-
-
-
+        enchantment.setLabel(enchantment.enchantmentName);
+        rootPanel.add(enchantment, 3, 1, 5, 1);
 
         rootPanel.add(this.createPlayerInventoryPanel(), 0, 5);
 
         rootPanel.validate(this);
     }
+
     @Override
     public int getCraftingResultSlotIndex() {
         return -1; //There's no real result slot
     }
+
 }
