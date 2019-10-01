@@ -1,7 +1,8 @@
 # Dark Enchanting
+This mod adds several new enchanting things useful for RPG. 
+Check the Projects tab for our Roadmap.
 
-The mod Dark Enchanting's Repository ->->->
-Requires Fabric!
+REQUIRES FABRICMC!
 ## License
 
 LGPL-3 license, this is.
