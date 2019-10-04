@@ -1,5 +1,6 @@
 package io.github.franiscoder.darkenchanting.api.widget;
 
+import io.github.franiscoder.darkenchanting.api.events.EnchantingEvent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.Inventory;
@@ -35,13 +36,16 @@ public class WEnchantment extends WLB {
         if (labelUpdater != null) {
             enchantmentName = labelUpdater.updateLabel(value);
         }
-        Map<Enchantment, Integer> map = EnchantmentHelper.method_22445(stack.getEnchantments());
-        if (value != 0 && !map.containsKey(enchantment)) {
-            stack.addEnchantment(enchantment, value);
-        } else if (value != 0) {
-            map.remove(enchantment);
-            map.put(enchantment, value);
-            EnchantmentHelper.set(map, stack);
+        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
+        if (value != 0) {
+            if(!map.containsKey(enchantment)) {
+                stack.addEnchantment(enchantment, value);
+            } else {
+                map.remove(enchantment);
+                map.put(enchantment, value);
+                ItemStack stack2 = stack.copy();
+                stack = EnchantingEvent.set(map, stack2);
+            }
         }
     }
 }
