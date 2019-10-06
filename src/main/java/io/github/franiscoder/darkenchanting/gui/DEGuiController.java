@@ -19,13 +19,14 @@ public class DEGuiController extends CottonCraftingController {
 
         rootPanel.add(new WLabel(new LiteralText("Dark Enchanter"), WLabel.DEFAULT_TEXT_COLOR), 0, 0);
 
-        WItemSlot inputSlot1 = WItemSlot.of(blockInventory, 0);
-        rootPanel.add(inputSlot1, 1, 1);
+        WItemSlot slot = WItemSlot.of(blockInventory, 0);
+        rootPanel.add(slot, 1, 1);
 
-        WEnchantment enchantment = new WEnchantment(Enchantments.SHARPNESS, blockInventory);
+        WEnchantment enchantment = new WEnchantment(Enchantments.SHARPNESS, context);
         enchantment.setLabel(enchantment.enchantmentName);
         rootPanel.add(enchantment, 3, 1, 5, 1);
 
+        rootPanel.add(new WLabel("Inventory"), 0, 4);
         rootPanel.add(this.createPlayerInventoryPanel(), 0, 5);
 
         rootPanel.validate(this);
@@ -35,5 +36,4 @@ public class DEGuiController extends CottonCraftingController {
     public int getCraftingResultSlotIndex() {
         return -1; //There's no real result slot
     }
-
 }

@@ -1,5 +1,6 @@
 package io.github.franiscoder.darkenchanting.blockentity;
 
+
 import io.github.franiscoder.darkenchanting.blockentity.inventory.ImplementedInventory;
 import io.github.franiscoder.darkenchanting.init.BlockEntities;
 import net.minecraft.block.entity.BlockEntity;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Random;
 
 public class DEBlockEntity extends BlockEntity implements ImplementedInventory, Tickable {
-    private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> items = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
 
     public DEBlockEntity() {
@@ -109,7 +110,7 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
         ++this.ticks;
         this.pageAngle = this.nextPageAngle;
         float float_3 = (this.field_11969 - this.nextPageAngle) * 0.4F;
-        float float_4 = 0.2F;
+        //float float_4 = 0.2F;
         float_3 = MathHelper.clamp(float_3, -0.2F, 0.2F);
         this.field_11967 += (float_3 - this.field_11967) * 0.9F;
         this.nextPageAngle += this.field_11967;

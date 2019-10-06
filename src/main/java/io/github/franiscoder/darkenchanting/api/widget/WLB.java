@@ -29,6 +29,15 @@ public class WLB extends WAbstractSlider {
         super(min, max, axis);
     }
 
+    public WLB(int min, int max, Axis axis, @Nullable Text label) {
+        this(min, max, axis);
+        this.label = label;
+    }
+
+    public WLB(int min, int max, @Nullable Text label) {
+        this(min, max);
+        this.label = label;
+    }
 
     @Override
     public void setSize(int x, int y) {

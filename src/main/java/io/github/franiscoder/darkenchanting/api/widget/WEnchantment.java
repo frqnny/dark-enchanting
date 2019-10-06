@@ -1,51 +1,66 @@
 package io.github.franiscoder.darkenchanting.api.widget;
 
-import io.github.franiscoder.darkenchanting.api.events.EnchantingEvent;
+
+import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.franiscoder.darkenchanting.DarkEnchanting;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.minecraft.container.BlockContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.PacketByteBuf;
+import net.minecraft.util.registry.Registry;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
 public class WEnchantment extends WLB {
     @Nullable
-    private WEnchantment.LabelUpdater labelUpdater = null;
-    @Nullable
     public Text enchantmentName;
+    @Nullable
+    private WEnchantment.LabelUpdater labelUpdater = null;
     private Enchantment enchantment;
-    private Inventory inv;
+    private BlockContext ctx;
 
 
-    public WEnchantment(Enchantment enchantment, Inventory inv) {
+    public WEnchantment(Enchantment enchantment, BlockContext ctx) {
         super(0, enchantment.getMaximumLevel());
         this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
         this.enchantment = enchantment;
-        this.inv = inv;
+        this.ctx = ctx;
 
     }
 
-    private ItemStack stack = inv.getInvStack(0);
-
     @Override
     protected void onValueChanged(int value) {
+        //I hope this works
+        Inventory inv = CottonCraftingController.getBlockInventory(ctx);
+        ItemStack stack = inv.getInvStack(0);
         super.onValueChanged(value);
+
         if (labelUpdater != null) {
             enchantmentName = labelUpdater.updateLabel(value);
         }
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
-        if (value != 0) {
-            if(!map.containsKey(enchantment)) {
-                stack.addEnchantment(enchantment, value);
-            } else {
-                map.remove(enchantment);
-                map.put(enchantment, value);
-                ItemStack stack2 = stack.copy();
-                stack = EnchantingEvent.set(map, stack2);
-            }
-        }
+        map.put(enchantment, value);
+        EnchantmentHelper.set(map, stack);
+        ctx.run(
+                (world, pos) -> {
+
+                    PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+                    passedData.writeBlockPos(pos);
+                    passedData.writeIdentifier(Registry.ENCHANTMENT.getId(enchantment));
+                    passedData.writeInt(value);
+                    System.out.println("Sending Packet...");
+                    ClientSidePacketRegistry.INSTANCE.sendToServer(DarkEnchanting.ENCHANT_PACKET, passedData);
+                    System.out.println("Packet Sent!");
+                }
+        );
+
+
     }
 }

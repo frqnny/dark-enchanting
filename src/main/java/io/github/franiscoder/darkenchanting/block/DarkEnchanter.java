@@ -24,6 +24,7 @@ public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvide
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
+
     public DarkEnchanter(Settings settings) {
         super(settings);
     }
@@ -40,9 +41,13 @@ public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvide
 
     @Override
     public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-        if (!world.isClient) {
+        if (world.isClient) return true;
+
+        BlockEntity be = world.getBlockEntity(pos);
+        if (be != null && be instanceof DEBlockEntity) {
             ContainerProviderRegistry.INSTANCE.openContainer(ID, player, (buf) -> buf.writeBlockPos(pos));
         }
+
         return true;
     }
 
@@ -84,6 +89,6 @@ public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvide
                 }
             }
         }
-
     }
 }
+
