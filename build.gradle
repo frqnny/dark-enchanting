@@ -25,6 +25,11 @@ dependencies {
 	// Dependencies
 	modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
 	modImplementation "io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0"
+	modCompileOnly "io.github.prospector:modmenu:1.7.9-unstable.19w34a+build.1"
+	modCompileOnly ("me.shedaniel:RoughlyEnoughItems:3.1-pre+build.4") {
+		//Thanks for moving the project breaking gradle...
+		exclude group: 'io.github.prospector.modmenu', module: 'ModMenu'
+	}
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 }
 

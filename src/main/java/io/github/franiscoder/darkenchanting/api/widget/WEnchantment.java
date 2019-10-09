@@ -17,8 +17,9 @@ import net.minecraft.util.registry.Registry;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class WEnchantment extends WLB {
+public class WEnchantment extends WLB implements Supplier<WEnchantment> {
     @Nullable
     public Text enchantmentName;
     @Nullable
@@ -32,6 +33,14 @@ public class WEnchantment extends WLB {
         this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
         this.enchantment = enchantment;
         this.ctx = ctx;
+
+    }
+
+
+    public void setEnchantment(Enchantment enchantment) {
+        this.enchantment = enchantment;
+        this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
+        setLabel(this.enchantmentName);
 
     }
 
@@ -60,7 +69,10 @@ public class WEnchantment extends WLB {
                     System.out.println("Packet Sent!");
                 }
         );
+    }
 
-
+    @Override
+    public WEnchantment get() {
+        return this;
     }
 }

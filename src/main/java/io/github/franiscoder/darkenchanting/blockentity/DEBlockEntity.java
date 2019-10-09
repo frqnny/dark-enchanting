@@ -2,10 +2,13 @@ package io.github.franiscoder.darkenchanting.blockentity;
 
 
 import io.github.franiscoder.darkenchanting.blockentity.inventory.ImplementedInventory;
+import io.github.franiscoder.darkenchanting.gui.DEGuiController;
+import io.github.franiscoder.darkenchanting.gui.DEGuiScreen;
 import io.github.franiscoder.darkenchanting.init.BlockEntities;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
@@ -46,6 +49,11 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
         return pos.isWithinDistance(player.getBlockPos(), 5.5D);
     }
 
+    @Override
+    public void markDirty() {
+        Inventory inv = (Inventory) this;
+        DEGuiController.updateGUI(inv);
+    }
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
