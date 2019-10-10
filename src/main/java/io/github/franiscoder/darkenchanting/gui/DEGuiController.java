@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 
 public class DEGuiController extends CottonCraftingController {
     private static List<EnchDataContext> data = new ArrayList<>();
-    private static WListPanel<EnchDataContext, WEnchantment> listPanel;
+    private static WListPanel listPanel;
 
     public DEGuiController(int syncId, PlayerInventory playerInventory, BlockContext context) {
         super(RecipeType.SMELTING, syncId, playerInventory, getBlockInventory(context), getBlockPropertyDelegate(context));
@@ -40,8 +40,8 @@ public class DEGuiController extends CottonCraftingController {
         rootPanel.add(this.createPlayerInventoryPanel(), 0, 5);
 
         BiConsumer<EnchDataContext, WEnchantment> configurator = (EnchDataContext ctx, WEnchantment widget) -> {
-            widget.setValue(ctx.level);
-            widget.setEnchantment(ctx.enchantment);
+            EnchDataContext debug = ctx;
+            widget = WEnchantment.set(ctx.enchantment, ctx.level, context);
         };
         listPanel = new WListPanel(data, WEnchantment.class, new WEnchantment(Enchantments.SHARPNESS, context), configurator);
         rootPanel.add(listPanel, 3, 1, 6, 3);

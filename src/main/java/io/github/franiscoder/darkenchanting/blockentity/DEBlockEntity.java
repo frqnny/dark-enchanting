@@ -3,7 +3,6 @@ package io.github.franiscoder.darkenchanting.blockentity;
 
 import io.github.franiscoder.darkenchanting.blockentity.inventory.ImplementedInventory;
 import io.github.franiscoder.darkenchanting.gui.DEGuiController;
-import io.github.franiscoder.darkenchanting.gui.DEGuiScreen;
 import io.github.franiscoder.darkenchanting.init.BlockEntities;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

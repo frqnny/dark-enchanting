@@ -19,9 +19,9 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class WEnchantment extends WLB implements Supplier<WEnchantment> {
+public class WEnchantment extends WLB implements Supplier<WEnchantment>{
     @Nullable
-    public Text enchantmentName;
+    private Text enchantmentName;
     @Nullable
     private WEnchantment.LabelUpdater labelUpdater = null;
     private Enchantment enchantment;
@@ -36,12 +36,13 @@ public class WEnchantment extends WLB implements Supplier<WEnchantment> {
 
     }
 
-
-    public void setEnchantment(Enchantment enchantment) {
-        this.enchantment = enchantment;
-        this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
-        setLabel(this.enchantmentName);
-
+    public static WEnchantment set(Enchantment enchantment, int value, BlockContext ctx) {
+        WEnchantment w = new WEnchantment(enchantment, ctx);
+        w.enchantment = enchantment;
+        w.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
+        w.setLabel(w.enchantmentName);
+        w.setValue(value);
+        return w;
     }
 
     @Override
