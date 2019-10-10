@@ -39,10 +39,9 @@ public class DEGuiController extends CottonCraftingController {
 
         rootPanel.add(this.createPlayerInventoryPanel(), 0, 5);
 
-        BiConsumer<EnchDataContext, WEnchantment> configurator = (EnchDataContext ctx, WEnchantment widget) -> {
-            EnchDataContext debug = ctx;
-            widget = WEnchantment.set(ctx.enchantment, ctx.level, context);
-        };
+        BiConsumer<EnchDataContext, WEnchantment> configurator = (EnchDataContext ctx, WEnchantment widget) ->
+            widget = WEnchantment.set(ctx.getEnchantment(), ctx.getLevel(), context);
+
         listPanel = new WListPanel(data, WEnchantment.class, new WEnchantment(Enchantments.SHARPNESS, context), configurator);
         rootPanel.add(listPanel, 3, 1, 6, 3);
         rootPanel.validate(this);

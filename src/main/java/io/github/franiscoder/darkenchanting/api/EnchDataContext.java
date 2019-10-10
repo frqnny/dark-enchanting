@@ -3,7 +3,11 @@ package io.github.franiscoder.darkenchanting.api;
 import net.minecraft.enchantment.Enchantment;
 
 public class EnchDataContext {
+
+
     public static int level;
+
+
     public static Enchantment enchantment;
 
     public static EnchDataContext create(Enchantment enchantment, int level) {
@@ -12,4 +16,12 @@ public class EnchDataContext {
         d.level = level;
         return d;
     }
+    public  Enchantment getEnchantment() {
+        return enchantment;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
 }
