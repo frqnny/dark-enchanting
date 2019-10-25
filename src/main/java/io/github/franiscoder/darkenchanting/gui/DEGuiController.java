@@ -11,18 +11,18 @@ import io.github.franiscoder.darkenchanting.api.widget.WEnchantment;
 import net.minecraft.container.BlockContext;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryListener;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.text.LiteralText;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 
 public class DEGuiController extends CottonCraftingController implements InventoryListener {
-    private List<EnchDataContext> data;
+    private List<EnchDataContext> data = new ArrayList<>();
     private WListPanel listPanel;
 
     public DEGuiController(int syncId, PlayerInventory playerInventory, BlockContext context) {
@@ -41,7 +41,7 @@ public class DEGuiController extends CottonCraftingController implements Invento
 
         data = EnchantingHelperEvent.getDataList(blockInventory.getInvStack(0));
         listPanel = new WListPanel(data, WEnchantment.class, new WEnchantment(Enchantments.SHARPNESS, context), configurator);
-
+        listPanel.layout();
         rootPanel.add(listPanel, 3, 1, 6,0);
         rootPanel.validate(this);
 
@@ -53,8 +53,7 @@ public class DEGuiController extends CottonCraftingController implements Invento
     }
 
     private void updateGUI() {
-        BasicInventory bInv = (BasicInventory) blockInventory;
-        data = EnchantingHelperEvent.getDataList(bInv.getInvStack(0));
+        data = EnchantingHelperEvent.getDataList(blockInventory.getInvStack(0));
         listPanel.layout();
     }
 

@@ -76,6 +76,6 @@ public class WEnchantment extends WLabeledSlider implements Supplier<WEnchantmen
 
     @Override
     public WEnchantment get() {
-        return this;
+        return new WEnchantment(this.enchantment, this.ctx);
     }
 }
