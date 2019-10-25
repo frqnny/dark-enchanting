@@ -7,12 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class EnchantingHelperEvent {
-    public static List<EnchDataContext> getDataList(ItemStack stack) {
-        List<EnchDataContext> data = new ArrayList<>();
+    public static ArrayList<EnchDataContext> getDataList(ItemStack stack) {
+        ArrayList<EnchDataContext> data = new ArrayList<>();
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
         map.forEach(
                 ((enchantment, integer) -> {

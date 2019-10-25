@@ -2,6 +2,7 @@ package io.github.franiscoder.darkenchanting.api.widget;
 
 
 import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.cottonmc.cotton.gui.widget.WLabeledSlider;
 import io.github.franiscoder.darkenchanting.DarkEnchanting;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class WEnchantment extends WLB implements Supplier<WEnchantment>{
+public class WEnchantment extends WLabeledSlider implements Supplier<WEnchantment>{
     @Nullable
     private Text enchantmentName;
     @Nullable
@@ -29,20 +30,21 @@ public class WEnchantment extends WLB implements Supplier<WEnchantment>{
 
 
     public WEnchantment(Enchantment enchantment, BlockContext ctx) {
-        super(0, enchantment.getMaximumLevel());
+        super(0,enchantment.getMaximumLevel());
         this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
         this.enchantment = enchantment;
         this.ctx = ctx;
 
     }
 
-    public static WEnchantment set(Enchantment enchantment, int value, BlockContext ctx) {
-        WEnchantment w = new WEnchantment(enchantment, ctx);
-        w.enchantment = enchantment;
-        w.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
-        w.setLabel(w.enchantmentName);
-        w.setValue(value);
-        return w;
+    public void set(Enchantment enchantment, int value, BlockContext ctx) {
+        this.enchantment = enchantment;
+        this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
+        this.setLabel(enchantmentName);
+        if (value > 0) setValue(value);
+        this.ctx = ctx;
+        setMinValue(0);
+        setMaxValue(enchantment.getMaximumLevel());
     }
 
     @Override

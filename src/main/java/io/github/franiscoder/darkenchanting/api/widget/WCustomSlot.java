@@ -21,8 +21,12 @@ public class WCustomSlot extends WWidget {
     private int slotsWide = 1;
     private int slotsHigh = 1;
     private boolean big = false;
+    private Runnable onClick;
+    public void setOnClick(Runnable r) {
+        this.onClick = r;
+    }
 
-    public WCustomSlot(Inventory inventory, int startIndex, int slotsWide, int slotsHigh, boolean big, boolean ltr) {
+    public WCustomSlot(Inventory inventory, int startIndex, int slotsWide, int slotsHigh, boolean big) {
         this.inventory = inventory;
         this.startIndex = startIndex;
         this.slotsWide = slotsWide;
@@ -31,8 +35,7 @@ public class WCustomSlot extends WWidget {
         //this.ltr = ltr;
     }
 
-    private WCustomSlot() {
-    }
+    private WCustomSlot() {}
 
     public static WCustomSlot of(Inventory inventory, int index) {
         WCustomSlot w = new WCustomSlot();
@@ -91,7 +94,6 @@ public class WCustomSlot extends WWidget {
         super.createPeers(c);
         peers.clear();
         int index = startIndex;
-
         for (int y = 0; y < slotsHigh; y++) {
             for (int x = 0; x < slotsWide; x++) {
                 ValidatedSlot slot = new ValidatedSlot(inventory, index, this.getAbsoluteX() + (x * 18), this.getAbsoluteY() + (y * 18));
@@ -110,11 +112,11 @@ public class WCustomSlot extends WWidget {
     @Environment(EnvType.CLIENT)
     @Override
     public void paintBackground(int x, int y) {
-        if (backgroundPainter != null) {
+        if (backgroundPainter!=null) {
             backgroundPainter.paintBackground(x, y, this);
         } else {
-            for (int ix = 0; ix < getWidth() / 18; ++ix) {
-                for (int iy = 0; iy < getHeight() / 18; ++iy) {
+            for(int ix = 0; ix < getWidth()/18; ++ix) {
+                for(int iy = 0; iy < getHeight()/18; ++iy) {
                     int lo = 0xB8000000;
                     int bg = 0x4C000000;
                     int hi = 0xB8FFFFFF;

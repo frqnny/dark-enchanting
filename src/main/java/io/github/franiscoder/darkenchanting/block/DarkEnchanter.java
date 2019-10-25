@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -38,17 +39,15 @@ public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvide
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new DEBlockEntity();
     }
-
     @Override
-    public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-        if (world.isClient) return true;
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
+        if (world.isClient) return ActionResult.SUCCESS;
 
         BlockEntity be = world.getBlockEntity(pos);
-        if (be != null && be instanceof DEBlockEntity) {
-            ContainerProviderRegistry.INSTANCE.openContainer(ID, player, (buf) -> buf.writeBlockPos(pos));
+        if(be != null && be instanceof DEBlockEntity) {
+            ContainerProviderRegistry.INSTANCE.openContainer(ID,player,(buf) -> buf.writeBlockPos(pos));
         }
-
-        return true;
+        return ActionResult.PASS;
     }
 
     @Override

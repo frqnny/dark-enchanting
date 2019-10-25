@@ -3,10 +3,14 @@ package io.github.franiscoder.darkenchanting.blockentity.inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryListener;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.math.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@code SidedInventory} implementation with only default methods + an item list getter.
@@ -21,12 +25,14 @@ import net.minecraft.util.math.Direction;
  */
 @FunctionalInterface
 public interface ImplementedInventory extends SidedInventory {
-    /**
-     * Gets the item list of this inventory.
-     * Must return the same instance every time it's called.
-     *
-     * @return the item list
-     */
+    List<InventoryListener> listeners = new ArrayList<>();
+
+        /**
+         * Gets the item list of this inventory.
+         * Must return the same instance every time it's called.
+         *
+         * @return the item list
+         */
     DefaultedList<ItemStack> getItems();
 
     // Creation
@@ -201,11 +207,13 @@ public interface ImplementedInventory extends SidedInventory {
 
     @Override
     default void markDirty() {
-        // Override if you want behavior.
     }
 
     @Override
     default boolean canPlayerUseInv(PlayerEntity player) {
         return true;
+    }
+    default void addListener(InventoryListener listener) {
+        this.listeners.add(listener);
     }
 }
