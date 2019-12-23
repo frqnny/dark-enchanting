@@ -62,18 +62,18 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
     public void tick() {
         this.pageTurningSpeed = this.nextPageTurningSpeed;
         this.field_11963 = this.field_11964;
-        PlayerEntity playerEntity_1 = this.world.getClosestPlayer(((float)this.pos.getX() + 0.5F), ((float)this.pos.getY() + 0.5F), ((float)this.pos.getZ() + 0.5F), 3.0D, false);
-        if (playerEntity_1 != null) {
-            double double_1 = playerEntity_1.getX() - (double)((float)this.pos.getX() + 0.5F);
-            double double_2 = playerEntity_1.getZ() - (double)((float)this.pos.getZ() + 0.5F);
-            this.field_11962 = (float)MathHelper.atan2(double_2, double_1);
+        PlayerEntity playerEntity = this.world.getClosestPlayer((double)((float)this.pos.getX() + 0.5F), (double)((float)this.pos.getY() + 0.5F), (double)((float)this.pos.getZ() + 0.5F), 3.0D, false);
+        if (playerEntity != null) {
+            double d = playerEntity.getX() - ((double)this.pos.getX() + 0.5D);
+            double e = playerEntity.getZ() - ((double)this.pos.getZ() + 0.5D);
+            this.field_11962 = (float)MathHelper.atan2(e, d);
             this.nextPageTurningSpeed += 0.1F;
             if (this.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
-                float float_1 = this.field_11969;
+                float f = this.field_11969;
 
                 do {
                     this.field_11969 += (float)(RANDOM.nextInt(4) - RANDOM.nextInt(4));
-                } while(float_1 == this.field_11969);
+                } while(f == this.field_11969);
             }
         } else {
             this.field_11962 += 0.02F;
@@ -96,22 +96,23 @@ public class DEBlockEntity extends BlockEntity implements ImplementedInventory, 
             this.field_11962 += 6.2831855F;
         }
 
-        float float_2;
-        for(float_2 = this.field_11962 - this.field_11964; float_2 >= 3.1415927F; float_2 -= 6.2831855F) {
+        float g;
+        for(g = this.field_11962 - this.field_11964; g >= 3.1415927F; ) {
+            g -= 6.2831855F;
         }
 
-        while(float_2 < -3.1415927F) {
-            float_2 += 6.2831855F;
+        while(g < -3.1415927F) {
+            g += 6.2831855F;
         }
 
-        this.field_11964 += float_2 * 0.4F;
+        this.field_11964 += g * 0.4F;
         this.nextPageTurningSpeed = MathHelper.clamp(this.nextPageTurningSpeed, 0.0F, 1.0F);
         ++this.ticks;
         this.pageAngle = this.nextPageAngle;
-        float float_3 = (this.field_11969 - this.nextPageAngle) * 0.4F;
-        float float_4 = 0.2F;
-        float_3 = MathHelper.clamp(float_3, -0.2F, 0.2F);
-        this.field_11967 += (float_3 - this.field_11967) * 0.9F;
+        float h = (this.field_11969 - this.nextPageAngle) * 0.4F;
+        //float i = 0.2F;
+        h = MathHelper.clamp(h, -0.2F, 0.2F);
+        this.field_11967 += (h - this.field_11967) * 0.9F;
         this.nextPageAngle += this.field_11967;
     }
 }

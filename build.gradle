@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.5-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -16,7 +16,7 @@ minecraft {
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
@@ -24,12 +24,6 @@ dependencies {
 
 	// Dependencies
 	modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
-	modImplementation "io.github.cottonmc:Jankson-Fabric:2.0.0+j1.2.0"
-	modCompileOnly "io.github.prospector:modmenu:1.7.9-unstable.19w34a+build.1"
-	modCompileOnly ("me.shedaniel:RoughlyEnoughItems:3.1-pre+build.4") {
-		//Thanks for moving the project breaking gradle...
-		exclude group: 'io.github.prospector.modmenu', module: 'ModMenu'
-	}
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 }
 
@@ -85,16 +79,12 @@ publishing {
 		// mavenLocal()
 	}
 }
-repositories {
-    maven {
-        name = "Cotton (snapshots)"
-        url = "http://server.bbkr.space:8081/artifactory/libs-snapshot/"
-    }
-    maven {
-        name = "Cotton"
-        url = "http://server.bbkr.space:8081/artifactory/libs-release/"
-    }
-}
 runClient {
 	jvmArgs "-Xmx7G"
+}
+repositories {
+    maven {
+        name = "CottonMC"
+        url = "http://server.bbkr.space:8081/artifactory/libs-release"
+    }
 }

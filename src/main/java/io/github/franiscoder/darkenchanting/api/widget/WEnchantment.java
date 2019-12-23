@@ -39,12 +39,12 @@ public class WEnchantment extends WLabeledSlider implements Supplier<WEnchantmen
 
     public void set(Enchantment enchantment, int value, BlockContext ctx) {
         this.enchantment = enchantment;
-        this.enchantmentName = new TranslatableText(enchantment.getTranslationKey());
+        this.enchantmentName = new TranslatableText(this.enchantment.getTranslationKey());
         this.setLabel(enchantmentName);
         if (value > 0) setValue(value);
         this.ctx = ctx;
-        setMinValue(0);
-        setMaxValue(enchantment.getMaximumLevel());
+        this.setMinValue(0);
+        this.setMaxValue(enchantment.getMaximumLevel());
     }
 
     @Override
@@ -62,7 +62,6 @@ public class WEnchantment extends WLabeledSlider implements Supplier<WEnchantmen
         EnchantmentHelper.set(map, stack);
         ctx.run(
                 (world, pos) -> {
-
                     PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
                     passedData.writeBlockPos(pos);
                     passedData.writeIdentifier(Registry.ENCHANTMENT.getId(enchantment));
@@ -76,6 +75,6 @@ public class WEnchantment extends WLabeledSlider implements Supplier<WEnchantmen
 
     @Override
     public WEnchantment get() {
-        return new WEnchantment(this.enchantment, this.ctx);
+        return this;
     }
 }

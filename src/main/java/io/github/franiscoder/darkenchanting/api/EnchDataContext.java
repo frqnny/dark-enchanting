@@ -5,18 +5,16 @@ import net.minecraft.enchantment.Enchantment;
 public class EnchDataContext {
 
 
-    public static int level;
+    public int level;
 
 
-    public static Enchantment enchantment;
+    public  Enchantment enchantment;
 
-    public static EnchDataContext create(Enchantment enchantment, int level) {
-        EnchDataContext d = new EnchDataContext();
-        d.enchantment = enchantment;
-        d.level = level;
-        return d;
+    public EnchDataContext(Enchantment enchantment, int level) {
+        this.enchantment = enchantment;
+        this.level = level;
     }
-    public  Enchantment getEnchantment() {
+    public Enchantment getEnchantment() {
         return enchantment;
     }
 

@@ -15,14 +15,14 @@ public class EnchantingHelperEvent {
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
         map.forEach(
                 ((enchantment, integer) -> {
-                    data.add(EnchDataContext.create(enchantment, integer));
+                    data.add(new EnchDataContext(enchantment, integer));
                 })
         );
         //Make sure an that if an Enchantment API ever gets made, to update this. 
-        Registry.ENCHANTMENT.forEach(
+        Registry.ENCHANTMENT.stream().forEach(
                 (enchantment -> {
                     if (enchantment.isAcceptableItem(stack)) {
-                        data.add(EnchDataContext.create(enchantment, 0));
+                        data.add(new EnchDataContext(enchantment, 0));
                     }
                 })
         );

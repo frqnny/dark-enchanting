@@ -14,15 +14,13 @@ import net.minecraft.container.BlockContext;
 import net.minecraft.util.Identifier;
 
 public class DarkEnchantingClient implements ClientModInitializer {
-    public static final Identifier GUI_SYNC_LIST_PANEL_CREATION = new Identifier(DarkEnchanting.MODID, "gui_sync");
 
     @Override
     public void onInitializeClient() {
         ScreenProviderRegistry.INSTANCE.registerFactory(DarkEnchanter.ID, (syncId, identifier, player, buf) -> new DEGuiScreen(new DEGuiController(syncId, player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
-        BlockEntityRendererRegistry.INSTANCE.register(BlockEntities.DE_BLOCK_ENTITY, new DEBlockEntityRenderer());
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntities.DE_BLOCK_ENTITY, DEBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX).register((atlas, registry) -> {
             registry.register(new Identifier("dark-enchanting:entity/book1"));
         });
-
     }
 }
