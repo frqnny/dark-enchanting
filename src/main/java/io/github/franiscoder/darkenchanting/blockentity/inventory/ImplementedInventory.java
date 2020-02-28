@@ -27,12 +27,12 @@ import java.util.List;
 public interface ImplementedInventory extends SidedInventory {
     List<InventoryListener> listeners = new ArrayList<>();
 
-        /**
-         * Gets the item list of this inventory.
-         * Must return the same instance every time it's called.
-         *
-         * @return the item list
-         */
+    /**
+     * Gets the item list of this inventory.
+     * Must return the same instance every time it's called.
+     *
+     * @return the item list
+     */
     DefaultedList<ItemStack> getItems();
 
     // Creation
@@ -213,6 +213,7 @@ public interface ImplementedInventory extends SidedInventory {
     default boolean canPlayerUseInv(PlayerEntity player) {
         return true;
     }
+
     default void addListener(InventoryListener listener) {
         this.listeners.add(listener);
     }

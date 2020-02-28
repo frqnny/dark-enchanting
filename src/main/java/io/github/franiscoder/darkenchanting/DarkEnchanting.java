@@ -4,7 +4,7 @@ package io.github.franiscoder.darkenchanting;
 import io.github.franiscoder.darkenchanting.block.DarkEnchanter;
 import io.github.franiscoder.darkenchanting.blockentity.DEBlockEntity;
 import io.github.franiscoder.darkenchanting.blockentity.inventory.ImplementedInventory;
-import io.github.franiscoder.darkenchanting.gui.DEGuiController;
+import io.github.franiscoder.darkenchanting.gui.DarkEnchanterGUI;
 import io.github.franiscoder.darkenchanting.init.BlockEntities;
 import io.github.franiscoder.darkenchanting.init.ModBlocks;
 import io.github.franiscoder.darkenchanting.init.ModItems;
@@ -48,8 +48,7 @@ public class DarkEnchanting implements ModInitializer {
         ItemRegistry.registerItems();
         BlockRegistry.registerBlocks();
         BlockEntities.registerBlockEntities();
-        ContainerProviderRegistry.INSTANCE.registerFactory(DarkEnchanter.ID, (syncId, id, player, buf) -> new DEGuiController(syncId, player.inventory, BlockContext.create(player.world, buf.readBlockPos())));
-
+        ContainerProviderRegistry.INSTANCE.registerFactory(DarkEnchanter.ID, (syncId, id, player, buf) -> new DarkEnchanterGUI(syncId, player.inventory, BlockContext.create(player.world, buf.readBlockPos())));
         ServerSidePacketRegistry.INSTANCE.register(ENCHANT_PACKET,
                 (packetContext, attachedData) -> {
                     // Read in the correct, networking thread
@@ -69,6 +68,7 @@ public class DarkEnchanting implements ModInitializer {
                         ItemStack stack = inv.getInvStack(0);
                         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
                         map.put(enchantment, level);
+                        if (level == 0) map.remove(enchantment);
                         EnchantmentHelper.set(map, stack);
                         System.out.println("Dark Enchanting: Enchanting Packet sent succesfully");
 

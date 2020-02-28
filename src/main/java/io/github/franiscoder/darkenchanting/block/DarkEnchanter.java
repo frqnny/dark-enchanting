@@ -39,13 +39,13 @@ public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvide
     public BlockEntity createBlockEntity(BlockView blockView) {
         return new DEBlockEntity();
     }
+
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
         if (world.isClient) return ActionResult.SUCCESS;
-
         BlockEntity be = world.getBlockEntity(pos);
-        if(be != null && be instanceof DEBlockEntity) {
-            ContainerProviderRegistry.INSTANCE.openContainer(ID,player,(buf) -> buf.writeBlockPos(pos));
+        if (be != null && be instanceof DEBlockEntity) {
+            ContainerProviderRegistry.INSTANCE.openContainer(ID, player, (buf) -> buf.writeBlockPos(pos));
         }
         return ActionResult.PASS;
     }

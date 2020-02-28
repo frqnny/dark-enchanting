@@ -18,29 +18,35 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 
-public class DEGuiController extends CottonCraftingController{
-    private List<EnchDataContext> data;
-    private WListPanel<EnchDataContext, WEnchantment> listPanel;
+public class DEGuiController extends CottonCraftingController {
+    private static List<EnchDataContext> data;
+    private static WListPanel<EnchDataContext, WEnchantment> listPanel;
 
     public DEGuiController(int syncId, PlayerInventory playerInventory, BlockContext context) {
         super(RecipeType.SMELTING, syncId, playerInventory, getBlockInventory(context), getBlockPropertyDelegate(context));
-        WGridPanel rootPanel = (WGridPanel) getRootPanel();
+        WGridPanel rootPanel = new WGridPanel(27);
+        setRootPanel(rootPanel);
 
         rootPanel.add(new WLabel(new LiteralText("Dark Enchanter"), WLabel.DEFAULT_TEXT_COLOR), 0, 0);
 
-        WItemSlot slot = new WItemSlot(blockInventory, 0, 1,1,true, false);
+        WItemSlot slot = WItemSlot.outputOf(blockInventory, 0);
         rootPanel.add(slot, 1, 1);
 
-
+        //WButton loadEnchantments = new WButton();
+        //loadEnchantments.setOnClick(this::updateGUI);
+        //rootPanel.add(loadEnchantments, 1, 3);
 
         BiConsumer<EnchDataContext, WEnchantment> configurator = (EnchDataContext ctx, WEnchantment widget) ->
-            widget.set(ctx.getEnchantment(), ctx.getLevel(), context);
+                widget.set(ctx.getEnchantment(), ctx.getLevel(), context);
 
         data = EnchantingHelperEvent.getDataList(blockInventory.getInvStack(0));
-        listPanel = new WListPanel<>(data, new WEnchantment(Enchantments.SHARPNESS, context), configurator);
+        listPanel = new WListPanel<EnchDataContext, WEnchantment>(data, () -> new WEnchantment(Enchantments.SHARPNESS, context), configurator);
+        rootPanel.add(listPanel, 2, 1, 6, 3);
         listPanel.layout();
-        rootPanel.add(listPanel, 3, 1, 6,3);
+
+        listPanel.layout();
         rootPanel.add(this.createPlayerInventoryPanel(), 0, 5);
+        rootPanel.layout();
         rootPanel.validate(this);
 
     }
