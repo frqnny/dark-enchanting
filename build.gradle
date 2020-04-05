@@ -15,15 +15,17 @@ minecraft {
 
 dependencies {
 	//to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:1.15.2"
-	mappings "net.fabricmc:yarn:1.15.2+build.14:v2"
-	modCompile "net.fabricmc:fabric-loader:0.7.8+build.184"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc.fabric-api:fabric-api:0.4.32+build.292-1.15"
+	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Dependencies
 	modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
+	include "io.github.cottonmc:LibGui:${project.libgui_version}"
+
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2") { transitive = false }
 }
 
@@ -83,8 +85,10 @@ runClient {
 	jvmArgs "-Xmx7G"
 }
 repositories {
-    maven {
-        name = "CottonMC"
-        url = "http://server.bbkr.space:8081/artifactory/libs-release"
-    }
+	maven {
+		name = "CottonMC"
+		url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+	}
 }
+
+

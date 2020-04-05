@@ -8,7 +8,7 @@ import net.minecraft.util.registry.Registry;
 public class ModItems {
     public static final Item ENCHANTED_GEM = new Item(new Item.Settings().group(DarkEnchanting.DARK_ENCHANTING));
 
-    public void registerItems() {
+    public static void registerItems() {
         Registry.register(Registry.ITEM, new Identifier("dark-enchanting:enchanted_gem"), ENCHANTED_GEM);
     }
 }

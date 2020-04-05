@@ -1,4 +1,4 @@
-package io.github.franiscoder.darkenchanting.gui;
+package io.github.franiscoder.darkenchanting.client.gui;
 
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import net.minecraft.entity.player.PlayerEntity;

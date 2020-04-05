@@ -1,4 +1,4 @@
-package io.github.franiscoder.darkenchanting.blockentity.renderer;
+package io.github.franiscoder.darkenchanting.client.renderer;
 
 import io.github.franiscoder.darkenchanting.blockentity.DEBlockEntity;
 import net.fabricmc.api.EnvType;
