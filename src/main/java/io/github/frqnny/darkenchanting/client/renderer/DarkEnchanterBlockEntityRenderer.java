@@ -1,6 +1,7 @@
-package io.github.franiscoder.darkenchanting.client.renderer;
+package io.github.frqnny.darkenchanting.client.renderer;
 
-import io.github.franiscoder.darkenchanting.blockentity.DEBlockEntity;
+import io.github.frqnny.darkenchanting.DarkEnchanting;
+import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
@@ -17,22 +18,23 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
-public class DEBlockEntityRenderer extends BlockEntityRenderer<DEBlockEntity> {
-    private static final SpriteIdentifier BOOK_TEX;
+public class DarkEnchanterBlockEntityRenderer extends BlockEntityRenderer<DarkEnchanterBlockEntity> {
+    public static final Identifier BOOK_ID = DarkEnchanting.id("entity/book1");
+    private static final SpriteIdentifier BOOK_TEX = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, BOOK_ID);
     private final BookModel book = new BookModel();
 
-    public DEBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
+    public DarkEnchanterBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public void render(DEBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(DarkEnchanterBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
         matrices.translate(0.5D, 0.75D, 0.5D);
         float g = (float) blockEntity.ticks + tickDelta;
         matrices.translate(0.0D, (0.1F + MathHelper.sin(g * 0.1F) * 0.01F), 0.0D);
 
-        float h = blockEntity.field_11964 - blockEntity.field_11963;
+        float h = blockEntity.bookRotation - blockEntity.bookRotationPrev;
         while (h >= 3.1415927F) {
             h -= 6.2831855F;
         }
@@ -41,7 +43,7 @@ public class DEBlockEntityRenderer extends BlockEntityRenderer<DEBlockEntity> {
             h += 6.2831855F;
         }
 
-        float k = blockEntity.field_11963 + h * tickDelta;
+        float k = blockEntity.bookRotationPrev + h * tickDelta;
         matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(-k));
         matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(80.0F));
         float l = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
@@ -52,10 +54,6 @@ public class DEBlockEntityRenderer extends BlockEntityRenderer<DEBlockEntity> {
         VertexConsumer vertexConsumer = BOOK_TEX.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
         this.book.method_24184(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
-    }
-
-    static {
-        BOOK_TEX = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, new Identifier("dark-enchanting:entity/book1"));
     }
 
 }

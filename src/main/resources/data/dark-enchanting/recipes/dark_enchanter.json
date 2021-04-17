@@ -1,26 +1,25 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "GPG",
-    "FEF",
-    "GPG"
+    "EGE",
+    "GDG",
+    "CCC"
   ],
   "key": {
-    "F": {
-      "item": "dark-enchanting:enchanted_gem"
+    "E": {
+      "item": "minecraft:emerald"
     },
     "G": {
-      "item": "minecraft:gold_nugget"
+      "item": "minecraft:gold_ingot"
     },
-    "P": {
-      "item": "minecraft:purple_wool"
-    },
-    "E": {
+    "D": {
       "item": "minecraft:enchanting_table"
+    },
+    "C": {
+      "item": "minecraft:crying_obsidian"
     }
   },
   "result": {
-    "item": "dark-enchanting:dark_enchanter",
-    "count": 1
+    "item": "dark-enchanting:dark_enchanter"
   }
 }

@@ -1,15 +1,14 @@
-package io.github.franiscoder.darkenchanting.block;
+package io.github.frqnny.darkenchanting.block;
 
-import io.github.franiscoder.darkenchanting.DarkEnchanting;
-import io.github.franiscoder.darkenchanting.blockentity.DEBlockEntity;
+import io.github.frqnny.darkenchanting.DarkEnchanting;
+import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -21,37 +20,35 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class DarkEnchanter extends BlockWithEntity implements BlockEntityProvider {
+public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
 
-    public DarkEnchanter(Settings settings) {
+    public DarkEnchanterBlock(Settings settings) {
         super(settings);
     }
 
-    @Override
-    public float getHardness(BlockState blockState, BlockView blockView, BlockPos pos) {
-        return 2.0F;
-    }
 
     @Override
     public BlockEntity createBlockEntity(BlockView blockView) {
-        return new DEBlockEntity();
+        return new DarkEnchanterBlockEntity();
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
-        if (world.isClient) return ActionResult.SUCCESS;
-        BlockEntity be = world.getBlockEntity(pos);
-        if (be != null && be instanceof DEBlockEntity) {
-            ContainerProviderRegistry.INSTANCE.openContainer(ID, player, (buf) -> buf.writeBlockPos(pos));
+        if (!world.isClient) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof DarkEnchanterBlockEntity) {
+                player.openHandledScreen((NamedScreenHandlerFactory) be);
+            }
         }
-        return ActionResult.PASS;
+
+        return ActionResult.SUCCESS;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext entityContext_1) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
