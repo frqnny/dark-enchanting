@@ -17,28 +17,23 @@ public class XPUtil {
             Enchantment enchantment = entry.getKey();
             int power = entry.getIntValue();
 
-            if (stackEnchantments.containsKey(enchantment) && stackEnchantments.getInt(enchantment) == power) {
+            if (stackEnchantments.containsKey(enchantment) && stackEnchantments.getInt(enchantment) >= power) {
                 continue;
             }
-            // Base cost is equal to roughly 2.5 levels of EXP.
             float cost = config.baseCost;
 
-            // Cost is multiplied up to 10, based on rarity of the enchant.
-            // Rarer the enchant, higher the cost.
-            cost *= Math.max(11 - enchantment.getRarity().getWeight(), 1);
 
-            // Linear cost increase based on level.
+            cost *= Math.max((11.0F - enchantment.getRarity().getWeight())/config.weightDivisor, 1F);
+
             cost *= power;
 
-            // The cost factor is applied. Default is 1.5.
 
             cost *= config.costFactor;
 
-            // Curses cost even more to apply
             if (enchantment.isCursed()) {
 
                 cost *= config.curseFactor;
-            } else if (enchantment.isTreasure()) {// Treasures cost more to apply
+            } else if (enchantment.isTreasure()) {
 
                 cost *= config.treasureFactor;
             }
@@ -52,68 +47,48 @@ public class XPUtil {
             int power = entry.getIntValue();
 
             if (!map.containsKey(enchantment)) {
-                // Base cost is equal to roughly 2.5 levels of EXP.
                 float cost = config.baseCost;
 
-                // Cost is multiplied up to 10, based on rarity of the enchant.
-                // Rarer the enchant, higher the cost.
-                cost *= Math.max(11 - enchantment.getRarity().getWeight(), 1);
+                cost *= Math.max((11 - enchantment.getRarity().getWeight())/config.weightDivisor, 1);
 
-                // Linear cost increase based on level.
                 cost *= power;
-
-                // The cost factor is applied. Default is 1.5.
 
                 cost *= config.costFactor;
 
-                // Curses cost even more to apply
                 if (enchantment.isCursed()) {
 
                     cost *= config.curseFactor;
-                } else if (enchantment.isTreasure()) {  // Treasures cost more to apply
+                } else if (enchantment.isTreasure()) {
 
                     cost *= config.treasureFactor;
                 }
 
-                if (cost > 2) {
-                    cost--;
-                }
+
                 level -= cost;
             } else if (map.getInt(enchantment) < power) {
                 int powerOnApply = map.getInt(enchantment);
                 int powerToApply =  power - powerOnApply;
-                // Base cost is equal to roughly 2.5 levels of EXP.
                 float cost = config.baseCost;
 
-                // Cost is multiplied up to 10, based on rarity of the enchant.
-                // Rarer the enchant, higher the cost.
-                cost *= Math.max(11 - enchantment.getRarity().getWeight(), 1);
+                cost *= Math.max((11 - enchantment.getRarity().getWeight())/config.weightDivisor, 1);
 
-                // Linear cost increase based on level.
                 cost *= powerToApply;
-
-                // The cost factor is applied. Default is 1.5.
 
                 cost *= config.costFactor;
 
-                // Curses cost even more to apply
                 if (enchantment.isCursed()) {
 
                     cost *= config.curseFactor;
-                } else if (enchantment.isTreasure()) {  // Treasures cost more to apply
+                } else if (enchantment.isTreasure()) {
 
                     cost *= config.treasureFactor;
                 }
 
-                if (cost > 2) {
-                    cost--;
-                }
                 level -= cost;
             }
         }
 
-
-            return Math.round(level);
+        return Math.round(level);
 
     }
 

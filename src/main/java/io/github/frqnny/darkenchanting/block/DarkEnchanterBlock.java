@@ -2,6 +2,7 @@ package io.github.frqnny.darkenchanting.block;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
+import io.github.frqnny.darkenchanting.util.BookEnum;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -9,6 +10,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -23,10 +26,11 @@ import java.util.Random;
 public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
-
+    public static final EnumProperty<BookEnum> BOOK_TYPE = EnumProperty.of("book_type", BookEnum.class);
 
     public DarkEnchanterBlock(Settings settings) {
         super(settings);
+        this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookEnum.DEFAULT));
     }
 
 
@@ -85,6 +89,11 @@ public class DarkEnchanterBlock extends BlockWithEntity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(BOOK_TYPE);
     }
 }
 

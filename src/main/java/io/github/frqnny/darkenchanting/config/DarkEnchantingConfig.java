@@ -1,5 +1,6 @@
 package io.github.frqnny.darkenchanting.config;
 
+import draylar.omegaconfig.api.Comment;
 import draylar.omegaconfig.api.Config;
 import draylar.omegaconfig.api.Syncing;
 import net.minecraft.util.Identifier;
@@ -14,6 +15,10 @@ public class DarkEnchantingConfig implements Config {
 
     public float treasureFactor = 4.0F;
 
+    @Comment("Makes rare enchantments less cheap. Decrease the value increase the cost of Rare & Very Rare enchantments.")
+    public float weightDivisor = 2.0F;
+
+    @Comment("Not used yet! Will work in a future update.")
     public Identifier[] blacklist;
 
     @Override

@@ -1,14 +1,11 @@
 package io.github.frqnny.darkenchanting.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
-import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.Axis;
 import io.github.frqnny.darkenchanting.blockentity.inventory.DarkEnchanterInventory;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
-import io.github.frqnny.darkenchanting.util.ScreenUtil;
 import io.github.frqnny.darkenchanting.util.XPUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
@@ -66,7 +63,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         //main enchanting slot
         WItemSlot slot = WItemSlot.of(inv, 0);
-        slot.setFilter((stack)-> inv.isValid(0, stack));
+        slot.setFilter((stack) -> inv.isValid(0, stack));
         root.add(slot, 37, 17);
 
         //creates the box and scrollpanel
@@ -89,10 +86,10 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 } else {
                     string = "Receive: " + -level + " levels";
                 }
-                screen.renderTooltip(matrices, new LiteralText(string), x,y);
+                screen.renderTooltip(matrices, new LiteralText(string), x, y);
             }
         };
-        root.add(label, -100, 43);
+        root.add(label, -120, 43);
         //everything else
         root.add(this.createPlayerInventoryPanel(true), 36, 91);
 
@@ -184,46 +181,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public WLabeledSlider addNewWidgetToList(int value, Enchantment enchantment) {
-        WLabeledSlider slider = new WLabeledSlider(0, enchantment.getMaxLevel()) {
-            @Override
-            public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
-                int aWidth = axis == Axis.HORIZONTAL ? width : height;
-                int aHeight = axis == Axis.HORIZONTAL ? height : width;
-                int rotMouseX = axis == Axis.HORIZONTAL
-                        ? (direction == Direction.LEFT ? width - mouseX : mouseX)
-                        : (direction == Direction.UP ? height - mouseY : mouseY);
-                int rotMouseY = axis == Axis.HORIZONTAL ? mouseY : mouseX;
-
-                RenderSystem.pushMatrix();
-                RenderSystem.translatef(x, y, 0);
-                if (axis == Axis.VERTICAL) {
-                    RenderSystem.translatef(0, height, 0);
-                    RenderSystem.rotatef(270, 0, 0, 1);
-                }
-                ScreenUtil.drawButton(0, 0, 0, aWidth);
-
-                // 1: regular, 2: hovered, 0: disabled/dragging
-                int thumbX = Math.round(coordToValueRatio * (value - min));
-                int thumbY = 0;
-                int thumbWidth = getThumbWidth();
-                int thumbHeight = aHeight;
-                boolean hovering = rotMouseX >= thumbX && rotMouseX <= thumbX + thumbWidth && rotMouseY >= thumbY && rotMouseY <= thumbY + thumbHeight;
-                int thumbState = dragging || hovering ? 2 : 1;
-
-                ScreenUtil.drawButton(thumbX, thumbY, thumbState, thumbWidth);
-
-                if (thumbState == 1 && isFocused()) {
-                    float px = 1 / 32f;
-                    ScreenDrawing.texturedRect(thumbX, thumbY, thumbWidth, thumbHeight, WSlider.LIGHT_TEXTURE, 24*px, 0*px, 32*px, 20*px, 0xFFFFFFFF);
-                }
-
-                if (getLabel() != null) {
-                    int color = isMouseInsideBounds(mouseX, mouseY) ? 0xFFFFA0 : 0xE0E0E0;
-                    ScreenDrawing.drawStringWithShadow(matrices, getLabel().asOrderedText(), getLabelAlignment(), 2, aHeight / 2 - 4, aWidth - 4, color);
-                }
-                RenderSystem.popMatrix();
-            }
-        };
+        WLabeledSlider slider = new WLabeledSlider(0, enchantment.getMaxLevel());
         slider.setLabel(getLabel(enchantment, value));
         slider.setLabelUpdater((power) -> getLabel(enchantment, power));
         slider.setValue(value);
@@ -253,7 +211,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
 
-            enchantButton.setEnabled((playerLevel > level && level != 0) || playerInventory.player.isCreative());
+
+            enchantButton.setEnabled((playerLevel >= level && level != 0) || playerInventory.player.isCreative());
         });
 
     }
@@ -285,5 +244,4 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             this.dropInventory(player, player.world, this.inv);
         });
     }
-
 }
