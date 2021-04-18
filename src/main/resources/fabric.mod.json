@@ -5,7 +5,7 @@
   "name": "Dark Enchanting",
   "description": "Adding Dark Enchantments, Dark Enchanter, and many other cool things since 2019.",
   "authors": [
-    "Me!"
+    "Frqnny"
   ],
   "contact": {
     "homepage": "https://github.com/frqnny/dark-enchanting",
@@ -13,7 +13,6 @@
   },
   "license": "LGPL-3.0",
   "icon": "assets/dark-enchanting/icon.png",
-  "environment": "*",
   "entrypoints": {
     "main": [
       "io.github.frqnny.darkenchanting.DarkEnchanting"
@@ -23,6 +22,6 @@
     ]
   },
   "depends": {
-    "libgui": ">=3.3.5"
+    "libgui": ">=3.4.0"
   }
 }
