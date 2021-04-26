@@ -6,13 +6,14 @@ import io.github.frqnny.darkenchanting.client.renderer.DarkEnchanterBlockEntityR
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.registry.Registry;
 
 public class ModBlocks {
-    public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.of(Material.METAL).hardness(2.0F));
+    public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE));
 
     public static BlockEntityType<DarkEnchanterBlockEntity> DE_BLOCK_ENTITY = BlockEntityType.Builder.create(DarkEnchanterBlockEntity::new, DARK_ENCHANTER).build(null);
 
