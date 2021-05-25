@@ -4,11 +4,13 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.Axis;
 import io.github.frqnny.darkenchanting.blockentity.inventory.DarkEnchanterInventory;
+import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
 import io.github.frqnny.darkenchanting.util.XPUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,6 +31,7 @@ import net.minecraft.util.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final DarkEnchanterInventory inv;
@@ -137,10 +140,23 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         enchantmentSliders.clear();
         //get the stack
         ItemStack stack = inv.getActualStack();
+        //avoid iterating over the list if empty
+        if (stack.isEmpty()) {
+            return;
+        }
         //its enchantments
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
         //This iterates though every enchantment in the game
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
+            Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+
+            if (configEnchantmentOptional.isPresent()) {
+                ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
+                if (!configEnchantment.activated) {
+                    continue;
+                }
+            }
+
             if (enchantment.isAcceptableItem(stack)) {
                 WLabeledSlider enchantmentSlider;
                 if (enchantmentsToApply.containsKey(enchantment)) {
@@ -211,8 +227,26 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
 
+            boolean enchantmentsHaveChanged = true;
 
-            enchantButton.setEnabled((playerLevel >= level && level != 0) || playerInventory.player.isCreative());
+            for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsToApply.object2IntEntrySet()) {
+                Enchantment enchantment = entrySet.getKey();
+                int level = entrySet.getIntValue();
+
+                if (!(enchantmentsOnStack.containsKey(enchantment)) || !(enchantmentsOnStack.getInt(enchantment) == level)) {
+                    enchantmentsHaveChanged = false;
+                }
+            }
+            for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsOnStack.object2IntEntrySet()) {
+                Enchantment enchantment = entrySet.getKey();
+                int level = entrySet.getIntValue();
+
+                if (!(enchantmentsToApply.containsKey(enchantment)) || !(enchantmentsToApply.getInt(enchantment) == level)) {
+                    enchantmentsHaveChanged = false;
+                }
+            }
+
+            enchantButton.setEnabled((playerLevel >= level && !enchantmentsHaveChanged) || playerInventory.player.isCreative());
         });
 
     }

@@ -72,6 +72,8 @@ public class DarkEnchanterInventory implements Inventory {
     public void markDirty() {
         handler.fillBox();
         handler.enchantmentsOnStack.clear();
+        handler.enchantmentsToApply.clear();
+        handler.removedEnchantments.clear();
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(this.getStack(0));
         enchantments.forEach((enchantment, level) -> {
             if (!handler.enchantmentsToApply.containsKey(enchantment)) {

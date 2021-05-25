@@ -1,11 +1,14 @@
 package io.github.frqnny.darkenchanting.util;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
+import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
+
+import java.util.Optional;
 
 public class XPUtil {
 
@@ -38,6 +41,17 @@ public class XPUtil {
                 cost *= config.treasureFactor;
             }
 
+            Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+            if (configEnchantmentOptional.isPresent()) {
+                ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
+                if (!configEnchantment.activated) {
+                    continue;
+                }
+
+                cost *= configEnchantment.costFactorEnchantment;
+
+            }
+
             level += cost;
         }
 
@@ -62,8 +76,17 @@ public class XPUtil {
 
                     cost *= config.treasureFactor;
                 }
+                Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+                if (configEnchantmentOptional.isPresent()) {
+                    ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
+                    if (!configEnchantment.activated) {
+                        continue;
+                    }
 
+                    cost *= configEnchantment.discountFactorEnchantment;
 
+                }
+                cost *= config.discountFactor;
                 level -= cost;
             } else if (map.getInt(enchantment) < power) {
                 int powerOnApply = map.getInt(enchantment);
@@ -83,7 +106,17 @@ public class XPUtil {
 
                     cost *= config.treasureFactor;
                 }
+                Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+                if (configEnchantmentOptional.isPresent()) {
+                    ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
+                    if (!configEnchantment.activated) {
+                        continue;
+                    }
 
+                    cost *= configEnchantment.discountFactorEnchantment;
+
+                }
+                cost *= Math.min(1, config.discountFactor);
                 level -= cost;
             }
         }
