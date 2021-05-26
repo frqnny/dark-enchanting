@@ -89,6 +89,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 } else {
                     string = "Receive: " + -level + " levels";
                 }
+
                 screen.renderTooltip(matrices, new LiteralText(string), x, y);
             }
         };
@@ -130,9 +131,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         recalculateEnchantmentCost();
         root.layout();
-        root.setHost(this);
-        scrollPanel.setHost(this);
-        box.setHost(this);
+        box.layout();
+        scrollPanel.layout();
     }
 
     public void populateList() {
@@ -150,6 +150,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
+            //Check if the Config has disabled it
             if (configEnchantmentOptional.isPresent()) {
                 ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
                 if (!configEnchantment.activated) {
@@ -157,6 +158,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 }
             }
 
+            //If enchantment can be put on stack, put it on the stack
             if (enchantment.isAcceptableItem(stack)) {
                 WLabeledSlider enchantmentSlider;
                 if (enchantmentsToApply.containsKey(enchantment)) {
@@ -172,8 +174,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
                 }
 
-
-                enchantments.forEach((enchantmentOnStack, level) -> {
+                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                    Enchantment enchantmentOnStack = entry.getKey();
                     //enchantment is Smite
                     //enchantmentOnStack is Sharpness
                     //if sharpness will be removed, we do not remove smite
@@ -182,15 +184,15 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                             enchantmentSliders.remove(enchantmentSlider);
                         }
                     }
+                }
 
-                });
+                for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
+                    Enchantment enchantmentOnStack = entry.getKey();
 
-
-                enchantmentsToApply.forEach((enchantmentOnStack, level) -> {
                     if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
                         enchantmentSliders.remove(enchantmentSlider);
                     }
-                });
+                }
 
             }
         }
@@ -262,7 +264,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 buf.writeIdentifier(Registry.ENCHANTMENT.getId(enchantment));
                 buf.writeInt(level);
             });
-            this.getPacketSender().sendPacket(ModPackets.APPLY_SINGLE_ENCHANTMENT, buf);
+            this.getPacketSender().sendPacket(ModPackets.APPLY_ENCHANTMENTS, buf);
             XPUtil.applyXp(playerInventory.player, enchantmentsToApply, enchantmentsOnStack);
             this.inv.markDirty();
         }));

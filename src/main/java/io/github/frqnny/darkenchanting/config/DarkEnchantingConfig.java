@@ -4,10 +4,8 @@ import com.google.common.collect.Lists;
 import draylar.omegaconfig.api.Comment;
 import draylar.omegaconfig.api.Config;
 import draylar.omegaconfig.api.Syncing;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Syncing
 public class DarkEnchantingConfig implements Config {
@@ -30,7 +28,7 @@ public class DarkEnchantingConfig implements Config {
     @Comment("Makes rare enchantments less cheap. Decrease the value increase the cost of Rare & Very Rare enchantments.")
     public float weightDivisor = 2.0F;
 
-    @Comment("Not used yet! Will work in a future update. The following is an example entry. This entry represents an entry for sharpness in its default form. The Id of the enchantments, factors to multiply during enchanting (discount is when taking off enchantments, cost is when putting on),  and activated decides whether the enchantment can be used")
+    @Comment("This is where people can write specific enchantment data for this mod. The following is an example entry. This entry represents an entry for sharpness in its default form. The Id of the enchantments, factors to multiply during enchanting (discount is when taking off enchantments, cost is when putting on),  and activated decides whether the enchantment can be used")
     public ArrayList<ConfigEnchantment> configEnchantments = Lists.newArrayList(ConfigEnchantment.of("minecraft:sharpness", 1.0F, 1.0F, true));
 
     @Override

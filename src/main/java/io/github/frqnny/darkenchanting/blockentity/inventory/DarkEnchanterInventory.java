@@ -15,8 +15,8 @@ public class DarkEnchanterInventory implements Inventory {
     private final DefaultedList<ItemStack> stacks;
     private final DarkEnchanterGUI handler;
 
-    public DarkEnchanterInventory(DarkEnchanterGUI handler) {
-        this.handler = handler;
+    public DarkEnchanterInventory(DarkEnchanterGUI h) {
+        this.handler = h;
         stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
     }
 

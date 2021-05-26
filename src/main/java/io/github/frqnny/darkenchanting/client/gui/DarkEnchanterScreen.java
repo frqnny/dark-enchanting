@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 public class DarkEnchanterScreen extends CottonInventoryScreen<DarkEnchanterGUI> {
-    public DarkEnchanterScreen(DarkEnchanterGUI container, PlayerEntity player, Text title) {
-        super(container, player, title);
+    public DarkEnchanterScreen(DarkEnchanterGUI c, PlayerEntity p, Text t) {
+        super(c, p, t);
     }
 }

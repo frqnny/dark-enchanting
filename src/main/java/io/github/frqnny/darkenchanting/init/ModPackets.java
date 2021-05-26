@@ -16,10 +16,10 @@ import net.minecraft.util.registry.Registry;
 import java.util.Map;
 
 public class ModPackets {
-    public static final Identifier APPLY_SINGLE_ENCHANTMENT = DarkEnchanting.id("apply_enchantments");
+    public static final Identifier APPLY_ENCHANTMENTS = DarkEnchanting.id("apply_enchantments");
 
     public static void init() {
-        ServerPlayNetworking.registerGlobalReceiver(APPLY_SINGLE_ENCHANTMENT, ((server, player, handler, buf, responseSender) -> {
+        ServerPlayNetworking.registerGlobalReceiver(APPLY_ENCHANTMENTS, ((server, player, handler, buf, responseSender) -> {
             int size = buf.readInt();
             ServerPlayerEntity serverPlayer = handler.player;
             Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(size);

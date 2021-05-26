@@ -8,17 +8,17 @@ import net.minecraft.util.registry.Registry;
 import java.util.Optional;
 
 public class ConfigEnchantment {
+    public final String enchantmentId;
+    public final float discountFactorEnchantment;
+    public final float costFactorEnchantment;
+    public final boolean activated;
+
     private ConfigEnchantment(String enchantmentId, float discountFactor, float costFactor, boolean activated) {
         this.enchantmentId = enchantmentId;
         this.discountFactorEnchantment = discountFactor;
         this.costFactorEnchantment = costFactor;
         this.activated = activated;
     }
-
-    public String enchantmentId;
-    public float discountFactorEnchantment;
-    public float costFactorEnchantment;
-    public boolean activated;
 
     public static ConfigEnchantment of(String enchantmentId, float discountFactor, float costFactor, boolean activated) {
         return new ConfigEnchantment(enchantmentId, discountFactor, costFactor, activated);

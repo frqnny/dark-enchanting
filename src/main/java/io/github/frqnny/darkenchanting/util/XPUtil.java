@@ -26,7 +26,7 @@ public class XPUtil {
             float cost = config.baseCost;
 
 
-            cost *= Math.max((11.0F - enchantment.getRarity().getWeight())/config.weightDivisor, 1F);
+            cost *= Math.max((11.0F - enchantment.getRarity().getWeight()) / config.weightDivisor, 1F);
 
             cost *= power;
 
@@ -63,7 +63,7 @@ public class XPUtil {
             if (!map.containsKey(enchantment)) {
                 float cost = config.baseCost;
 
-                cost *= Math.max((11 - enchantment.getRarity().getWeight())/config.weightDivisor, 1);
+                cost *= Math.max((11 - enchantment.getRarity().getWeight()) / config.weightDivisor, 1);
 
                 cost *= power;
 
@@ -90,10 +90,10 @@ public class XPUtil {
                 level -= cost;
             } else if (map.getInt(enchantment) < power) {
                 int powerOnApply = map.getInt(enchantment);
-                int powerToApply =  power - powerOnApply;
+                int powerToApply = power - powerOnApply;
                 float cost = config.baseCost;
 
-                cost *= Math.max((11 - enchantment.getRarity().getWeight())/config.weightDivisor, 1);
+                cost *= Math.max((11 - enchantment.getRarity().getWeight()) / config.weightDivisor, 1);
 
                 cost *= powerToApply;
 

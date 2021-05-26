@@ -25,11 +25,11 @@ import java.util.Random;
 
 public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
-    private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
     public static final EnumProperty<BookEnum> BOOK_TYPE = EnumProperty.of("book_type", BookEnum.class);
+    private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
-    public DarkEnchanterBlock(Settings settings) {
-        super(settings);
+    public DarkEnchanterBlock(Settings s) {
+        super(s);
         this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookEnum.DEFAULT));
     }
 

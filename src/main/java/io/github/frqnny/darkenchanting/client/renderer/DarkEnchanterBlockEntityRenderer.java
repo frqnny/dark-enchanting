@@ -23,8 +23,8 @@ public class DarkEnchanterBlockEntityRenderer extends BlockEntityRenderer<DarkEn
     private static final SpriteIdentifier BOOK_TEX = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, BOOK_ID);
     private final BookModel book = new BookModel();
 
-    public DarkEnchanterBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
-        super(dispatcher);
+    public DarkEnchanterBlockEntityRenderer(BlockEntityRenderDispatcher d) {
+        super(d);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DarkEnchanterBlockEntityRenderer extends BlockEntityRenderer<DarkEn
         float o = MathHelper.lerp(tickDelta, blockEntity.pageTurningSpeed, blockEntity.nextPageTurningSpeed);
         this.book.setPageAngles(g, MathHelper.clamp(m, 0.0F, 1.0F), MathHelper.clamp(n, 0.0F, 1.0F), o);
         VertexConsumer vertexConsumer = BOOK_TEX.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
-        this.book.method_24184(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.book.render(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
     }
 

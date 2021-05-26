@@ -21,8 +21,8 @@ public class BlockEntityWithBook extends BlockEntity implements Tickable {
     public float bookRotationPrev;
     public float offset;
 
-    public BlockEntityWithBook(BlockEntityType<?> type) {
-        super(type);
+    public BlockEntityWithBook(BlockEntityType<?> t) {
+        super(t);
     }
 
     @Override
@@ -78,7 +78,6 @@ public class BlockEntityWithBook extends BlockEntity implements Tickable {
         ++this.ticks;
         this.pageAngle = this.nextPageAngle;
         float h = (this.flipRandom - this.nextPageAngle) * 0.4F;
-        float i = 0.2F;
         h = MathHelper.clamp(h, -0.2F, 0.2F);
         this.flipTurn += (h - this.flipTurn) * 0.9F;
         this.nextPageAngle += this.flipTurn;
