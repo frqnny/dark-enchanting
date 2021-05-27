@@ -79,11 +79,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         enchantButton.setLabel(new LiteralText("E"));
         enchantButton.setOnClick(this::enchant);
 
+        /*
         WButton repairButton = new WButton();
         root.add(repairButton, 35, 85, 20, 20);
         repairButton.setLabel(new LiteralText("R"));
         //enchantButton.setOnClick(this::enchant);
-
+         */
         WWidget label = new WWidget() {
             @Override
             public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
@@ -281,8 +282,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     @Override
     public void close(PlayerEntity player) {
         super.close(player);
-        this.context.run((world, blockPos) -> {
-            this.dropInventory(player, this.inv);
-        });
+        this.context.run((world, blockPos) -> this.dropInventory(player, this.inv));
     }
 }
