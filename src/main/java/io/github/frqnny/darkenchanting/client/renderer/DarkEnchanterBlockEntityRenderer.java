@@ -7,24 +7,25 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.BookModel;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(EnvType.CLIENT)
-public class DarkEnchanterBlockEntityRenderer extends BlockEntityRenderer<DarkEnchanterBlockEntity> {
+public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<DarkEnchanterBlockEntity> {
     public static final Identifier BOOK_ID = DarkEnchanting.id("entity/book1");
     private static final SpriteIdentifier BOOK_TEX = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, BOOK_ID);
-    private final BookModel book = new BookModel();
+    private final BookModel book;
 
-    public DarkEnchanterBlockEntityRenderer(BlockEntityRenderDispatcher d) {
-        super(d);
+    public DarkEnchanterBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
+        this.book = new BookModel(ctx.getLayerModelPart(EntityModelLayers.BOOK));
     }
 
     @Override
@@ -44,8 +45,8 @@ public class DarkEnchanterBlockEntityRenderer extends BlockEntityRenderer<DarkEn
         }
 
         float k = blockEntity.bookRotationPrev + h * tickDelta;
-        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(-k));
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(80.0F));
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(-k));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(80.0F));
         float l = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
         float m = MathHelper.fractionalPart(l + 0.25F) * 1.6F - 0.3F;
         float n = MathHelper.fractionalPart(l + 0.75F) * 1.6F - 0.3F;

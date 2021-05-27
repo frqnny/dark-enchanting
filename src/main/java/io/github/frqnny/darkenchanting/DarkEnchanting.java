@@ -20,7 +20,7 @@ public class DarkEnchanting implements ModInitializer {
             .icon(() -> new ItemStack(ModBlocks.DARK_ENCHANTER))
             .build();
 
-    public static DarkEnchantingConfig config;
+    public static DarkEnchantingConfig config = OmegaConfig.register(DarkEnchantingConfig.class);
 
     public static Identifier id(String namespace) {
         return new Identifier(MODID, namespace);
@@ -32,8 +32,5 @@ public class DarkEnchanting implements ModInitializer {
         ModBlocks.init();
         ModGUIs.init();
         ModPackets.init();
-
-        config = OmegaConfig.register(DarkEnchantingConfig.class);
-
     }
 }

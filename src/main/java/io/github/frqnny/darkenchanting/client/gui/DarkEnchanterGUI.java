@@ -62,7 +62,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         //set to 1 so pixel so we have per-pixel panels
         root = new WGridPanel(1);
         this.setRootPanel(root);
-        root.setSize(235, 182);
+        root.setSize(235, 250);
 
         //main enchanting slot
         WItemSlot slot = WItemSlot.of(inv, 0);
@@ -72,12 +72,17 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         //creates the box and scrollpanel
         box = new WBox(Axis.VERTICAL);
         scrollPanel = new WScrollPanel(box);
-        root.add(scrollPanel, 65, 12, 150, 75);
+        root.add(scrollPanel, 65, 12, 150, 135);
 
         enchantButton = new WButton();
         root.add(enchantButton, 35, 60, 20, 20);
         enchantButton.setLabel(new LiteralText("E"));
         enchantButton.setOnClick(this::enchant);
+
+        WButton repairButton = new WButton();
+        root.add(repairButton, 35, 85, 20, 20);
+        repairButton.setLabel(new LiteralText("R"));
+        //enchantButton.setOnClick(this::enchant);
 
         WWidget label = new WWidget() {
             @Override
@@ -95,7 +100,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         };
         root.add(label, -120, 43);
         //everything else
-        root.add(this.createPlayerInventoryPanel(true), 36, 91);
+        root.add(this.createPlayerInventoryPanel(true), 36, 150);
 
         root.validate(this);
     }
@@ -277,7 +282,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void close(PlayerEntity player) {
         super.close(player);
         this.context.run((world, blockPos) -> {
-            this.dropInventory(player, player.world, this.inv);
+            this.dropInventory(player, this.inv);
         });
     }
 }

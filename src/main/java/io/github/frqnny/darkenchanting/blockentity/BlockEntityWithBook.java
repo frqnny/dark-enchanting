@@ -1,14 +1,17 @@
 package io.github.frqnny.darkenchanting.blockentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Tickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockEntityWithBook extends BlockEntity implements Tickable {
+public class BlockEntityWithBook extends BlockEntity implements BlockEntityTicker<DarkEnchanterBlockEntity> {
     private static final Random RANDOM = new Random();
     public int ticks;
     public float nextPageAngle;
@@ -21,12 +24,13 @@ public class BlockEntityWithBook extends BlockEntity implements Tickable {
     public float bookRotationPrev;
     public float offset;
 
-    public BlockEntityWithBook(BlockEntityType<?> t) {
-        super(t);
+    public BlockEntityWithBook(BlockEntityType<?> t, BlockPos pos, BlockState state) {
+        super(t, pos, state);
     }
 
+
     @Override
-    public void tick() {
+    public void tick(World world, BlockPos pos, BlockState state, DarkEnchanterBlockEntity blockEntity) {
         this.pageTurningSpeed = this.nextPageTurningSpeed;
         this.bookRotationPrev = this.bookRotation;
         PlayerEntity playerEntity = this.world.getClosestPlayer((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D, 3.0D, false);

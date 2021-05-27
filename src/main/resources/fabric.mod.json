@@ -22,7 +22,7 @@
     ]
   },
   "depends": {
-    "libgui": ">=3.4.0",
-    "minecraft": "1.16.x"
+    "libgui": ">=4.0.0-alpha.2",
+    "minecraft": "1.17.x"
   }
 }

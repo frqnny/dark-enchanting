@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -34,9 +35,10 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     }
 
 
+    @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockView blockView) {
-        return new DarkEnchanterBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new DarkEnchanterBlockEntity(pos, state);
     }
 
     @Override
