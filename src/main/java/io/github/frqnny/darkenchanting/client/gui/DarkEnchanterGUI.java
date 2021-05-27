@@ -72,7 +72,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         //creates the box and scrollpanel
         box = new WBox(Axis.VERTICAL);
         scrollPanel = new WScrollPanel(box);
-        root.add(scrollPanel, 65, 12, 150, 135);
+        root.add(scrollPanel, 65, 17, 150, 135);
 
         enchantButton = new WButton();
         root.add(enchantButton, 35, 60, 20, 20);
