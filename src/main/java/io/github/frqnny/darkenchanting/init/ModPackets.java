@@ -17,9 +17,10 @@ import java.util.Map;
 
 public class ModPackets {
     public static final Identifier APPLY_ENCHANTMENTS = DarkEnchanting.id("apply_enchantments");
+    public static final Identifier APPLY_REPAIR = DarkEnchanting.id("apply_repair");
 
     public static void init() {
-        ServerPlayNetworking.registerGlobalReceiver(APPLY_ENCHANTMENTS, ((server, player, handler, buf, responseSender) -> {
+        ServerPlayNetworking.registerGlobalReceiver(APPLY_ENCHANTMENTS, (server, player, handler, buf, responseSender) -> {
             int size = buf.readInt();
             ServerPlayerEntity serverPlayer = handler.player;
             Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(size);
@@ -36,9 +37,9 @@ public class ModPackets {
                 ScreenHandler screen = serverPlayer.currentScreenHandler;
 
                 if (screen instanceof DarkEnchanterGUI) {
-                    ItemStack stack = ((DarkEnchanterGUI) screen).inv.getStack(0);
+                    ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
                     Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.get(stack);
-                    if (XPUtil.applyXp(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments))) {
+                    if (XPUtil.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments))) {
                         EnchantmentHelper.set(enchantmentsToApply, stack);
                     }
 
@@ -46,6 +47,18 @@ public class ModPackets {
 
                 }
             });
+        });
+        ServerPlayNetworking.registerGlobalReceiver(APPLY_REPAIR, (server, player, handler, buf, responseSender) -> server.execute(() -> {
+            ScreenHandler screen = player.currentScreenHandler;
+
+            if (screen instanceof DarkEnchanterGUI) {
+                ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
+                System.out.println("Hi");
+                stack.setDamage(0);
+            }
+
+            player.closeHandledScreen();
+
         }));
     }
 

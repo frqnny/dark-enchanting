@@ -7,6 +7,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 
 import java.util.Optional;
 
@@ -125,7 +127,29 @@ public class XPUtil {
 
     }
 
-    public static boolean applyXp(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack) {
+    public static int getRepairCostFromItemStack(ItemStack stack) {
+        float cost = 0;
+        if (stack.isDamaged()) {
+            //Cost is initially XP amount
+            cost += stack.getDamage();
+
+            //turn them into levels
+            cost /= 17;
+
+
+            //tools don't scale up well, compared to armor
+            if (stack.getItem() instanceof ToolItem) {
+                cost *= 0.4;
+            }
+
+            cost *= DarkEnchanting.config.repairFactor;
+            return (int) Math.max(1, cost);
+
+        }
+        return (int) cost;
+    }
+
+    public static boolean applyEnchantXP(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack) {
         int currentPlayerLevel = player.experienceLevel;
         int level = getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
 
@@ -136,4 +160,17 @@ public class XPUtil {
         }
         return canApplyXp;
     }
+
+    public static boolean applyRepairXP(PlayerEntity player, ItemStack stack) {
+        int currentPlayerLevel = player.experienceLevel;
+        int cost = getRepairCostFromItemStack(stack);
+        boolean canApplyXp = currentPlayerLevel >= cost || player.isCreative();
+        if (canApplyXp) {
+            player.addExperienceLevels(-cost);
+
+        }
+
+        return canApplyXp;
+    }
 }
+

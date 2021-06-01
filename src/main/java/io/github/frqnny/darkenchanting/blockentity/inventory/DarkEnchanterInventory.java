@@ -82,7 +82,7 @@ public class DarkEnchanterInventory implements Inventory {
             handler.enchantmentsOnStack.put(enchantment, (int) level);
 
         });
-        handler.level = 0;
+        handler.enchantCost = 0;
     }
 
     @Override

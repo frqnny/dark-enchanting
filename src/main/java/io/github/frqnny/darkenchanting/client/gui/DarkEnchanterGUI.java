@@ -28,15 +28,11 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final DarkEnchanterInventory inv;
     public final WBox box;
-    public final WScrollPanel scrollPanel;
     public final WGridPanel root;
     public final List<WLabeledSlider> enchantmentSliders;
     public final ScreenHandlerContext context;
@@ -44,7 +40,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack;
     public final List<Enchantment> removedEnchantments;
     public final WButton enchantButton;
-    public int level = 0;
+    public final WButton repairButton;
+    public int enchantCost = 0;
+    public int repairCost = 0;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
@@ -71,7 +69,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         //creates the box and scrollpanel
         box = new WBox(Axis.VERTICAL);
-        scrollPanel = new WScrollPanel(box);
+        WScrollPanel scrollPanel = new WScrollPanel(box);
         root.add(scrollPanel, 65, 17, 150, 135);
 
         enchantButton = new WButton();
@@ -79,27 +77,37 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         enchantButton.setLabel(new LiteralText("E"));
         enchantButton.setOnClick(this::enchant);
 
-        /*
-        WButton repairButton = new WButton();
+
+        repairButton = new WButton();
         root.add(repairButton, 35, 85, 20, 20);
         repairButton.setLabel(new LiteralText("R"));
-        //enchantButton.setOnClick(this::enchant);
-         */
-        WWidget label = new WWidget() {
+        repairButton.setOnClick(this::repair);
+        recalculateRepairCost();
+
+        WWidget enchantCost = new WWidget() {
             @Override
             public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
                 Screen screen = MinecraftClient.getInstance().currentScreen;
                 String string;
-                if (level > 0) {
-                    string = "Pay: " + level + " levels";
+                if (DarkEnchanterGUI.this.enchantCost > 0) {
+                    string = "Pay: " + DarkEnchanterGUI.this.enchantCost + " levels";
                 } else {
-                    string = "Receive: " + -level + " levels";
+                    string = "Receive: " + -DarkEnchanterGUI.this.enchantCost + " levels";
                 }
 
-                screen.renderTooltip(matrices, new LiteralText(string), x, y);
+                screen.renderTooltip(matrices, Arrays.asList(new LiteralText("Enchant Cost:"), new LiteralText(string)), x, y);
             }
         };
-        root.add(label, -120, 43);
+        WWidget repairCost = new WWidget() {
+            @Override
+            public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
+                Screen screen = MinecraftClient.getInstance().currentScreen;
+                String string = "Pay: " + DarkEnchanterGUI.this.repairCost + " levels";
+                screen.renderTooltip(matrices, Arrays.asList(new LiteralText("Repair Cost:"), new LiteralText(string)), x, y);
+            }
+        };
+        root.add(enchantCost, -120, 43);
+        root.add(repairCost, -120, 80);
         //everything else
         root.add(this.createPlayerInventoryPanel(true), 36, 150);
 
@@ -136,9 +144,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
 
         recalculateEnchantmentCost();
+        recalculateRepairCost();
         root.layout();
-        box.layout();
-        scrollPanel.layout();
     }
 
     public void populateList() {
@@ -231,7 +238,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateEnchantmentCost() {
-        level = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
+        enchantCost = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
 
@@ -245,25 +252,31 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     enchantmentsHaveChanged = false;
                 }
             }
-            for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsOnStack.object2IntEntrySet()) {
-                Enchantment enchantment = entrySet.getKey();
-                int level = entrySet.getIntValue();
 
-                if (!(enchantmentsToApply.containsKey(enchantment)) || !(enchantmentsToApply.getInt(enchantment) == level)) {
-                    enchantmentsHaveChanged = false;
+            //If false already, we do not need to check
+            if (enchantmentsHaveChanged) {
+                for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsOnStack.object2IntEntrySet()) {
+                    Enchantment enchantment = entrySet.getKey();
+                    int level = entrySet.getIntValue();
+
+                    if (!(enchantmentsToApply.containsKey(enchantment)) || !(enchantmentsToApply.getInt(enchantment) == level)) {
+                        enchantmentsHaveChanged = false;
+                    }
                 }
             }
 
-            enchantButton.setEnabled((playerLevel >= level && !enchantmentsHaveChanged) || playerInventory.player.isCreative());
+            enchantButton.setEnabled((playerLevel >= enchantCost && !enchantmentsHaveChanged) || playerInventory.player.isCreative());
         });
 
     }
 
-    public void enchant() {
-        this.context.run(((world1, blockPos) -> {
-            ItemStack stack = inv.getStack(0);
-            EnchantmentHelper.set(enchantmentsToApply, stack);
+    public void recalculateRepairCost() {
+        repairCost = XPUtil.getRepairCostFromItemStack(inv.getActualStack());
+        repairButton.setEnabled(inv.getActualStack().isDamaged());
+    }
 
+    public void enchant() {
+        this.context.run((world1, blockPos) -> {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeInt(enchantmentsToApply.size());
             enchantmentsToApply.forEach((enchantment, level) -> {
@@ -271,12 +284,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 buf.writeInt(level);
             });
             this.getPacketSender().sendPacket(ModPackets.APPLY_ENCHANTMENTS, buf);
-            XPUtil.applyXp(playerInventory.player, enchantmentsToApply, enchantmentsOnStack);
             this.inv.markDirty();
-        }));
+        });
+    }
 
-        enchantmentsToApply.clear();
-        fillBox();
+    public void repair() {
+        this.context.run((world, blockPos) -> this.getPacketSender().sendPacket(ModPackets.APPLY_REPAIR, new PacketByteBuf(Unpooled.buffer())));
     }
 
     @Override
