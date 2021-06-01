@@ -24,8 +24,7 @@ dependencies {
 
 	modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
 
-	modImplementation "com.github.Draylar.omega-config:omega-config-base:${project.config_version}"
-	include "com.github.Draylar.omega-config:omega-config-base:${project.config_version}:min"
+	modImplementation include("com.github.Draylar.omega-config:omega-config-base:${project.config_version}")
 
 }
 repositories {
