@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -41,6 +42,7 @@ public class ModPackets {
                     Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.get(stack);
                     if (XPUtil.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments))) {
                         EnchantmentHelper.set(enchantmentsToApply, stack);
+                        player.incrementStat(Stats.ENCHANT_ITEM);
                     }
 
                     player.closeHandledScreen();
@@ -53,8 +55,9 @@ public class ModPackets {
 
             if (screen instanceof DarkEnchanterGUI) {
                 ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
-                System.out.println("Hi");
-                stack.setDamage(0);
+                if (XPUtil.applyRepairXP(player, stack)) {
+                    stack.setDamage(0);
+                }
             }
 
             player.closeHandledScreen();

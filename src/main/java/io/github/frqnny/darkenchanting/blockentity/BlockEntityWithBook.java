@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockEntityWithBook extends BlockEntity implements BlockEntityTicker<DarkEnchanterBlockEntity> {
+public class BlockEntityWithBook extends BlockEntity {
     private static final Random RANDOM = new Random();
     public int ticks;
     public float nextPageAngle;
@@ -29,47 +29,46 @@ public class BlockEntityWithBook extends BlockEntity implements BlockEntityTicke
     }
 
 
-    @Override
-    public void tick(World world, BlockPos pos, BlockState state, DarkEnchanterBlockEntity blockEntity) {
-        this.pageTurningSpeed = this.nextPageTurningSpeed;
-        this.bookRotationPrev = this.bookRotation;
-        PlayerEntity playerEntity = this.world.getClosestPlayer((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D, 3.0D, false);
+    public static void tick(World world, BlockPos pos, BlockState state, DarkEnchanterBlockEntity be) {
+        be.pageTurningSpeed = be.nextPageTurningSpeed;
+        be.bookRotationPrev = be.bookRotation;
+        PlayerEntity playerEntity = world.getClosestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3.0D, false);
         if (playerEntity != null) {
-            double d = playerEntity.getX() - ((double) this.pos.getX() + 0.5D);
-            double e = playerEntity.getZ() - ((double) this.pos.getZ() + 0.5D);
-            this.offset = (float) MathHelper.atan2(e, d);
-            this.nextPageTurningSpeed += 0.1F;
-            if (this.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
-                float f = this.flipRandom;
+            double d = playerEntity.getX() - ((double) pos.getX() + 0.5D);
+            double e = playerEntity.getZ() - ((double) pos.getZ() + 0.5D);
+            be.offset = (float) MathHelper.atan2(e, d);
+            be.nextPageTurningSpeed += 0.1F;
+            if (be.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
+                float f = be.flipRandom;
 
                 do {
-                    this.flipRandom += (float) (RANDOM.nextInt(4) - RANDOM.nextInt(4));
-                } while (f == this.flipRandom);
+                    be.flipRandom += (float) (RANDOM.nextInt(4) - RANDOM.nextInt(4));
+                } while (f == be.flipRandom);
             }
         } else {
-            this.offset += 0.02F;
-            this.nextPageTurningSpeed -= 0.1F;
+            be.offset += 0.02F;
+            be.nextPageTurningSpeed -= 0.1F;
         }
 
-        while (this.bookRotation >= 3.1415927F) {
-            this.bookRotation -= 6.2831855F;
+        while (be.bookRotation >= 3.1415927F) {
+            be.bookRotation -= 6.2831855F;
         }
 
-        while (this.bookRotation < -3.1415927F) {
-            this.bookRotation += 6.2831855F;
+        while (be.bookRotation < -3.1415927F) {
+            be.bookRotation += 6.2831855F;
         }
 
-        while (this.offset >= 3.1415927F) {
-            this.offset -= 6.2831855F;
+        while (be.offset >= 3.1415927F) {
+            be.offset -= 6.2831855F;
         }
 
-        while (this.offset < -3.1415927F) {
-            this.offset += 6.2831855F;
+        while (be.offset < -3.1415927F) {
+            be.offset += 6.2831855F;
         }
 
         float g;
 
-        for (g = this.offset - this.bookRotation; g >= 3.1415927F; ) {
+        for (g = be.offset - be.bookRotation; g >= 3.1415927F; ) {
             g -= 6.2831855F;
         }
 
@@ -77,13 +76,13 @@ public class BlockEntityWithBook extends BlockEntity implements BlockEntityTicke
             g += 6.2831855F;
         }
 
-        this.bookRotation += g * 0.4F;
-        this.nextPageTurningSpeed = MathHelper.clamp(this.nextPageTurningSpeed, 0.0F, 1.0F);
-        ++this.ticks;
-        this.pageAngle = this.nextPageAngle;
-        float h = (this.flipRandom - this.nextPageAngle) * 0.4F;
+        be.bookRotation += g * 0.4F;
+        be.nextPageTurningSpeed = MathHelper.clamp(be.nextPageTurningSpeed, 0.0F, 1.0F);
+        ++be.ticks;
+        be.pageAngle = be.nextPageAngle;
+        float h = (be.flipRandom - be.nextPageAngle) * 0.4F;
         h = MathHelper.clamp(h, -0.2F, 0.2F);
-        this.flipTurn += (h - this.flipTurn) * 0.9F;
-        this.nextPageAngle += this.flipTurn;
+        be.flipTurn += (h - be.flipTurn) * 0.9F;
+        be.nextPageAngle += be.flipTurn;
     }
 }

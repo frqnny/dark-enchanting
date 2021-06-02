@@ -11,6 +11,7 @@ import io.github.frqnny.darkenchanting.util.XPUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -26,7 +27,9 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -43,6 +46,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final WButton repairButton;
     public int enchantCost = 0;
     public int repairCost = 0;
+    public double bookshelfDiscount = 0.0F;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
@@ -106,10 +110,19 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 screen.renderTooltip(matrices, Arrays.asList(new LiteralText("Repair Cost:"), new LiteralText(string)), x, y);
             }
         };
+        WWidget bookshelfDiscount = new WWidget() {
+            @Override
+            public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
+                Screen screen = MinecraftClient.getInstance().currentScreen;
+
+                screen.renderTooltip(matrices, Arrays.asList(new LiteralText("Bookshelf Discount:"), new LiteralText(DarkEnchanterGUI.this.bookshelfDiscount + " %")), x, y);
+            }
+        };
         root.add(enchantCost, -120, 43);
         root.add(repairCost, -120, 80);
+        root.add(bookshelfDiscount, -120, 117);
         //everything else
-        root.add(this.createPlayerInventoryPanel(true), 36, 150);
+        root.add(this.createPlayerInventoryPanel(true), 36, 153);
 
         root.validate(this);
     }
@@ -238,9 +251,15 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateEnchantmentCost() {
-        enchantCost = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
+            enchantCost = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
+            double bookshelfDiscountNotPercentage = getBookshelfCount(world,blockPos)/15D * 0.4;
+            bookshelfDiscount = (int) (bookshelfDiscountNotPercentage * 100);
+            enchantCost *= (1D-bookshelfDiscountNotPercentage);
+
+            //apply discount on bookshelves
+            //enchantCost *= bookshelfDiscount;
 
             boolean enchantmentsHaveChanged = true;
 
@@ -265,6 +284,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 }
             }
 
+
             enchantButton.setEnabled((playerLevel >= enchantCost && !enchantmentsHaveChanged) || playerInventory.player.isCreative());
         });
 
@@ -272,7 +292,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public void recalculateRepairCost() {
         repairCost = XPUtil.getRepairCostFromItemStack(inv.getActualStack());
-        repairButton.setEnabled(inv.getActualStack().isDamaged());
+        repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
     }
 
     public void enchant() {
@@ -296,5 +316,44 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void close(PlayerEntity player) {
         super.close(player);
         this.context.run((world, blockPos) -> this.dropInventory(player, this.inv));
+    }
+
+    public static int getBookshelfCount(World world, BlockPos blockPos) {
+        int bookshelves = 0;
+
+        int j;
+        for(j = -1; j <= 1; ++j) {
+            for(int k = -1; k <= 1; ++k) {
+                if ((j != 0 || k != 0) && world.isAir(blockPos.add(k, 0, j)) && world.isAir(blockPos.add(k, 1, j))) {
+                    if (world.getBlockState(blockPos.add(k * 2, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                        ++bookshelves;
+                    }
+
+                    if (world.getBlockState(blockPos.add(k * 2, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                        ++bookshelves;
+                    }
+
+                    if (k != 0 && j != 0) {
+                        if (world.getBlockState(blockPos.add(k * 2, 0, j)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k * 2, 1, j)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Math.min(15, bookshelves);
     }
 }

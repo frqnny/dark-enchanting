@@ -1,12 +1,16 @@
 package io.github.frqnny.darkenchanting.block;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
+import io.github.frqnny.darkenchanting.blockentity.BlockEntityWithBook;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
+import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.util.BookEnum;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -96,6 +100,12 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(BOOK_TYPE);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, ModBlocks.DE_BLOCK_ENTITY, BlockEntityWithBook::tick);
     }
 }
 
