@@ -1,8 +1,8 @@
 package io.github.frqnny.darkenchanting.init;
 
+import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
-import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterScreen;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -17,8 +17,8 @@ public class ModGUIs {
 
     }
 
+    @SuppressWarnings("all") // IDEA warns me about unneeded cast but that's not true.
     public static void clientInit() {
-        ScreenRegistry.Factory<DarkEnchanterGUI, DarkEnchanterScreen> DARK_ENCHANTING_SCREEN = (gui, inventory, title) -> new DarkEnchanterScreen(gui, inventory.player, title);
-        ScreenRegistry.register(DARK_ENCHANTER_GUI, DARK_ENCHANTING_SCREEN);
+        ScreenRegistry.<DarkEnchanterGUI, CottonInventoryScreen<DarkEnchanterGUI>>register(DARK_ENCHANTER_GUI, (gui, inventory, title) -> new CottonInventoryScreen<>(gui, inventory.player, title));
     }
 }

@@ -142,6 +142,7 @@ public class XPUtil {
                 cost *= 0.4;
             }
 
+            //TODO add config about that stuff
             cost *= DarkEnchanting.config.repairFactor;
             return (int) Math.max(1, cost);
 

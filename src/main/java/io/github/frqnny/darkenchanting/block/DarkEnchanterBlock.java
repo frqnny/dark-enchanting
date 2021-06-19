@@ -11,9 +11,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
@@ -47,14 +47,12 @@ public class DarkEnchanterBlock extends BlockWithEntity {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
-        if (!world.isClient) {
-            BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof DarkEnchanterBlockEntity) {
-                player.openHandledScreen((NamedScreenHandlerFactory) be);
-            }
+        if (world.isClient) {
+            return ActionResult.SUCCESS;
+        } else {
+            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+            return ActionResult.CONSUME;
         }
-
-        return ActionResult.SUCCESS;
     }
 
     @Override
@@ -106,6 +104,10 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, ModBlocks.DE_BLOCK_ENTITY, BlockEntityWithBook::tick);
+    }
+
+    public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
+        return false;
     }
 }
 

@@ -142,6 +142,45 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         return mutableText;
     }
 
+    public static int getBookshelfCount(World world, BlockPos blockPos) {
+        int bookshelves = 0;
+
+        int j;
+        for (j = -1; j <= 1; ++j) {
+            for (int k = -1; k <= 1; ++k) {
+                if ((j != 0 || k != 0) && world.isAir(blockPos.add(k, 0, j)) && world.isAir(blockPos.add(k, 1, j))) {
+                    if (world.getBlockState(blockPos.add(k * 2, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                        ++bookshelves;
+                    }
+
+                    if (world.getBlockState(blockPos.add(k * 2, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                        ++bookshelves;
+                    }
+
+                    if (k != 0 && j != 0) {
+                        if (world.getBlockState(blockPos.add(k * 2, 0, j)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k * 2, 1, j)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+
+                        if (world.getBlockState(blockPos.add(k, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
+                            ++bookshelves;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Math.min(15, bookshelves);
+    }
+
     //Called by DarkEnchanterInventory#markDirty
     public void fillBox() {
         //remove all sliders
@@ -254,9 +293,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
             enchantCost = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
-            double bookshelfDiscountNotPercentage = getBookshelfCount(world,blockPos)/15D * 0.4;
+            double bookshelfDiscountNotPercentage = getBookshelfCount(world, blockPos) / 15D * 0.4;
             bookshelfDiscount = (int) (bookshelfDiscountNotPercentage * 100);
-            enchantCost *= (1D-bookshelfDiscountNotPercentage);
+            enchantCost *= (1D - bookshelfDiscountNotPercentage);
 
             //apply discount on bookshelves
             //enchantCost *= bookshelfDiscount;
@@ -316,44 +355,5 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void close(PlayerEntity player) {
         super.close(player);
         this.context.run((world, blockPos) -> this.dropInventory(player, this.inv));
-    }
-
-    public static int getBookshelfCount(World world, BlockPos blockPos) {
-        int bookshelves = 0;
-
-        int j;
-        for(j = -1; j <= 1; ++j) {
-            for(int k = -1; k <= 1; ++k) {
-                if ((j != 0 || k != 0) && world.isAir(blockPos.add(k, 0, j)) && world.isAir(blockPos.add(k, 1, j))) {
-                    if (world.getBlockState(blockPos.add(k * 2, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                        ++bookshelves;
-                    }
-
-                    if (world.getBlockState(blockPos.add(k * 2, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                        ++bookshelves;
-                    }
-
-                    if (k != 0 && j != 0) {
-                        if (world.getBlockState(blockPos.add(k * 2, 0, j)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k * 2, 1, j)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-                    }
-                }
-            }
-        }
-
-        return Math.min(15, bookshelves);
     }
 }
