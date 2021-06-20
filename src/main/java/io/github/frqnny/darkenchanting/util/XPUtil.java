@@ -142,7 +142,6 @@ public class XPUtil {
                 cost *= 0.4;
             }
 
-            //TODO add config about that stuff
             cost *= DarkEnchanting.config.repairFactor;
             return (int) Math.max(1, cost);
 
@@ -150,9 +149,10 @@ public class XPUtil {
         return (int) cost;
     }
 
-    public static boolean applyEnchantXP(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack) {
+    public static boolean applyEnchantXP(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack, double discount) {
         int currentPlayerLevel = player.experienceLevel;
-        int level = getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
+        int level = BookcaseUtils.applyDiscount(getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack), discount);
+
 
         boolean canApplyXp = currentPlayerLevel >= level || player.isCreative();
         if (canApplyXp) {
@@ -162,9 +162,9 @@ public class XPUtil {
         return canApplyXp;
     }
 
-    public static boolean applyRepairXP(PlayerEntity player, ItemStack stack) {
+    public static boolean applyRepairXP(PlayerEntity player, ItemStack stack, double discount) {
         int currentPlayerLevel = player.experienceLevel;
-        int cost = getRepairCostFromItemStack(stack);
+        int cost = BookcaseUtils.applyDiscount(getRepairCostFromItemStack(stack), discount);
         boolean canApplyXp = currentPlayerLevel >= cost || player.isCreative();
         if (canApplyXp) {
             player.addExperienceLevels(-cost);

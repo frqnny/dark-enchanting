@@ -7,11 +7,11 @@ import io.github.frqnny.darkenchanting.blockentity.inventory.DarkEnchanterInvent
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
+import io.github.frqnny.darkenchanting.util.BookcaseUtils;
 import io.github.frqnny.darkenchanting.util.XPUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -27,9 +27,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -140,45 +138,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         }
 
         return mutableText;
-    }
-
-    public static int getBookshelfCount(World world, BlockPos blockPos) {
-        int bookshelves = 0;
-
-        int j;
-        for (j = -1; j <= 1; ++j) {
-            for (int k = -1; k <= 1; ++k) {
-                if ((j != 0 || k != 0) && world.isAir(blockPos.add(k, 0, j)) && world.isAir(blockPos.add(k, 1, j))) {
-                    if (world.getBlockState(blockPos.add(k * 2, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                        ++bookshelves;
-                    }
-
-                    if (world.getBlockState(blockPos.add(k * 2, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                        ++bookshelves;
-                    }
-
-                    if (k != 0 && j != 0) {
-                        if (world.getBlockState(blockPos.add(k * 2, 0, j)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k * 2, 1, j)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k, 0, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-
-                        if (world.getBlockState(blockPos.add(k, 1, j * 2)).isOf(Blocks.BOOKSHELF)) {
-                            ++bookshelves;
-                        }
-                    }
-                }
-            }
-        }
-
-        return Math.min(15, bookshelves);
     }
 
     //Called by DarkEnchanterInventory#markDirty
@@ -292,13 +251,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void recalculateEnchantmentCost() {
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
-            enchantCost = XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack);
-            double bookshelfDiscountNotPercentage = getBookshelfCount(world, blockPos) / 15D * 0.4;
-            bookshelfDiscount = (int) (bookshelfDiscountNotPercentage * 100);
-            enchantCost *= (1D - bookshelfDiscountNotPercentage);
-
-            //apply discount on bookshelves
-            //enchantCost *= bookshelfDiscount;
+            enchantCost = BookcaseUtils.applyDiscount(XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
+            bookshelfDiscount = BookcaseUtils.getDiscount(world, blockPos) * 100;
 
             boolean enchantmentsHaveChanged = true;
 
@@ -337,6 +291,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void enchant() {
         this.context.run((world1, blockPos) -> {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeBlockPos(blockPos);
             buf.writeInt(enchantmentsToApply.size());
             enchantmentsToApply.forEach((enchantment, level) -> {
                 buf.writeIdentifier(Registry.ENCHANTMENT.getId(enchantment));
@@ -348,7 +303,11 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void repair() {
-        this.context.run((world, blockPos) -> this.getPacketSender().sendPacket(ModPackets.APPLY_REPAIR, new PacketByteBuf(Unpooled.buffer())));
+        this.context.run((world, blockPos) -> {
+            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeBlockPos(blockPos);
+            this.getPacketSender().sendPacket(ModPackets.APPLY_REPAIR, buf);
+        });
     }
 
     @Override
