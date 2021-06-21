@@ -48,28 +48,21 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
-        //special inventory designed to be like a crafting table's inventory so multiple people can use it at a time
-        //this special inventory gets this gui, so when markDirty is called, fillBox is called to update the box's widgets
         this.inv = new DarkEnchanterInventory(this);
         this.context = context;
-        //empty list, updated when markUpdate is called
         enchantmentSliders = new ArrayList<>(15);
-        //empty list, also updated when markUpdate is called
         enchantmentsToApply = new Object2IntLinkedOpenHashMap<>();
         enchantmentsOnStack = new Object2IntLinkedOpenHashMap<>();
         removedEnchantments = new ArrayList<>(5);
 
-        //set to 1 so pixel so we have per-pixel panels
         root = new WGridPanel(1);
         this.setRootPanel(root);
         root.setSize(235, 250);
 
-        //main enchanting slot
         WItemSlot slot = WItemSlot.of(inv, 0);
         slot.setFilter((stack) -> inv.isValid(0, stack));
-        root.add(slot, 37, 17);
+        root.add(slot, 35, 17);
 
-        //creates the box and scrollpanel
         box = new WBox(Axis.VERTICAL);
         WScrollPanel scrollPanel = new WScrollPanel(box);
         root.add(scrollPanel, 65, 17, 150, 135);
@@ -112,16 +105,13 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             @Override
             public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
                 Screen screen = MinecraftClient.getInstance().currentScreen;
-
                 screen.renderTooltip(matrices, Arrays.asList(new LiteralText("Bookshelf Discount:"), new LiteralText(DarkEnchanterGUI.this.bookshelfDiscount + " %")), x, y);
             }
         };
         root.add(enchantCost, -120, 43);
         root.add(repairCost, -120, 80);
         root.add(bookshelfDiscount, -120, 117);
-        //everything else
         root.add(this.createPlayerInventoryPanel(true), 36, 153);
-
         root.validate(this);
     }
 
@@ -140,19 +130,14 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         return mutableText;
     }
 
-    //Called by DarkEnchanterInventory#markDirty
     public void fillBox() {
-        //remove all sliders
         for (WLabeledSlider slider : enchantmentSliders) {
             box.remove(slider);
         }
-        //repopulate the list of widgets
         populateList();
-        //read new sliders
         for (WLabeledSlider slider : enchantmentSliders) {
             box.add(slider, 140, 18);
         }
-
 
         recalculateEnchantmentCost();
         recalculateRepairCost();
@@ -160,21 +145,15 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void populateList() {
-        //finally get rid of old widgets
         enchantmentSliders.clear();
-        //get the stack
         ItemStack stack = inv.getActualStack();
-        //avoid iterating over the list if empty
         if (stack.isEmpty()) {
             return;
         }
-        //its enchantments
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
-        //This iterates though every enchantment in the game
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
-            //Check if the Config has disabled it
             if (configEnchantmentOptional.isPresent()) {
                 ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
                 if (!configEnchantment.activated) {
@@ -182,7 +161,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 }
             }
 
-            //If enchantment can be put on stack, put it on the stack
             if (enchantment.isAcceptableItem(stack)) {
                 WLabeledSlider enchantmentSlider;
                 if (enchantmentsToApply.containsKey(enchantment)) {
@@ -200,9 +178,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
                 for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                     Enchantment enchantmentOnStack = entry.getKey();
-                    //enchantment is Smite
-                    //enchantmentOnStack is Sharpness
-                    //if sharpness will be removed, we do not remove smite
                     if (!removedEnchantments.contains(enchantmentOnStack)) {
                         if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
                             enchantmentSliders.remove(enchantmentSlider);
@@ -265,7 +240,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 }
             }
 
-            //If false already, we do not need to check
             if (enchantmentsHaveChanged) {
                 for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsOnStack.object2IntEntrySet()) {
                     Enchantment enchantment = entrySet.getKey();
@@ -284,7 +258,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateRepairCost() {
-        repairCost = XPUtil.getRepairCostFromItemStack(inv.getActualStack());
+        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(XPUtil.getRepairCostFromItemStack(inv.getActualStack()), world, pos));
         repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
     }
 

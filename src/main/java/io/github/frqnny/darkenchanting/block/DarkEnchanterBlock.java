@@ -70,8 +70,8 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     }
 
     @Environment(EnvType.CLIENT)
-    public void randomDisplayTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1) {
-        super.randomDisplayTick(blockState_1, world_1, blockPos_1, random_1);
+    public void randomDisplayTick(BlockState state, World world, BlockPos blockPos, Random random) {
+        super.randomDisplayTick(state, world, blockPos, random);
 
         for (int int_1 = -2; int_1 <= 2; ++int_1) {
             for (int int_2 = -2; int_2 <= 2; ++int_2) {
@@ -79,15 +79,15 @@ public class DarkEnchanterBlock extends BlockWithEntity {
                     int_2 = 2;
                 }
 
-                if (random_1.nextInt(16) == 0) {
+                if (random.nextInt(16) == 0) {
                     for (int int_3 = 0; int_3 <= 1; ++int_3) {
-                        BlockPos blockPos_2 = blockPos_1.add(int_1, int_3, int_2);
-                        if (world_1.getBlockState(blockPos_2).getBlock() == Blocks.BOOKSHELF) {
-                            if (!world_1.isAir(blockPos_1.add(int_1 / 2, 0, int_2 / 2))) {
+                        BlockPos blockPos_2 = blockPos.add(int_1, int_3, int_2);
+                        if (world.getBlockState(blockPos_2).getBlock() == Blocks.BOOKSHELF) {
+                            if (!world.isAir(blockPos.add(int_1 / 2, 0, int_2 / 2))) {
                                 break;
                             }
 
-                            world_1.addParticle(ParticleTypes.ENCHANT, (double) blockPos_1.getX() + 0.5D, (double) blockPos_1.getY() + 2.0D, (double) blockPos_1.getZ() + 0.5D, (double) ((float) int_1 + random_1.nextFloat()) - 0.5D, (float) int_3 - random_1.nextFloat() - 1.0F, (double) ((float) int_2 + random_1.nextFloat()) - 0.5D);
+                            world.addParticle(ParticleTypes.ENCHANT, (double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 2.0D, (double) blockPos.getZ() + 0.5D, (double) ((float) int_1 + random.nextFloat()) - 0.5D, (float) int_3 - random.nextFloat() - 1.0F, (double) ((float) int_2 + random.nextFloat()) - 0.5D);
                         }
                     }
                 }
