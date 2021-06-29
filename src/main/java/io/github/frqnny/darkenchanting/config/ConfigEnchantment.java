@@ -26,7 +26,7 @@ public class ConfigEnchantment {
     }
 
     public static Optional<ConfigEnchantment> getConfigEnchantmentFor(Identifier id) {
-        DarkEnchantingConfig config = DarkEnchanting.config;
+        DarkEnchantingConfig config = DarkEnchanting.CONFIG;
 
         for (ConfigEnchantment configEnchantment : config.configEnchantments) {
             if (id.toString().equals(configEnchantment.enchantmentId)) {
