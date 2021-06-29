@@ -266,11 +266,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         this.context.run((world1, blockPos) -> {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeBlockPos(blockPos);
-            buf.writeInt(enchantmentsToApply.size());
-            enchantmentsToApply.forEach((enchantment, level) -> {
-                buf.writeIdentifier(Registry.ENCHANTMENT.getId(enchantment));
-                buf.writeInt(level);
-            });
+            buf.writeVarInt(enchantmentsToApply.size());
+            for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
+                buf.writeIdentifier(Registry.ENCHANTMENT.getId(entry.getKey()));
+                buf.writeVarInt(entry.getIntValue());
+            }
+
             this.getPacketSender().sendPacket(ModPackets.APPLY_ENCHANTMENTS, buf);
             this.inv.markDirty();
         });

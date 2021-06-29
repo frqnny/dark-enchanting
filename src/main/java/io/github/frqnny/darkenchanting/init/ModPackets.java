@@ -25,14 +25,14 @@ public class ModPackets {
     public static void init() {
         ServerPlayNetworking.registerGlobalReceiver(APPLY_ENCHANTMENTS, (server, player, handler, buf, responseSender) -> {
             BlockPos pos = buf.readBlockPos();
-            int size = buf.readInt();
+            int size = buf.readVarInt();
             ServerPlayerEntity serverPlayer = handler.player;
             Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(size);
 
             for (int i = 0; i < size; i++) {
                 Identifier id = buf.readIdentifier();
                 Enchantment enchantment = Registry.ENCHANTMENT.get(id);
-                int level = buf.readInt();
+                int level = buf.readVarInt();
                 enchantmentsToApply.put(enchantment, level);
             }
 
