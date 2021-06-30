@@ -23,7 +23,7 @@ public class DarkEnchantingConfig implements Config {
     public float treasureFactor = 4.0F;
 
     @Comment("How much the discount should be worth. Cannot be more than 1.0 or it will create a loop. It has been disabled in the code.")
-    public float discountFactor = 0.75F;
+    public float discountFactor = 0.6F;
 
     @Comment("Makes rare enchantments less cheap. Decrease the value increase the cost of Rare & Very Rare enchantments.")
     public float weightDivisor = 2.0F;

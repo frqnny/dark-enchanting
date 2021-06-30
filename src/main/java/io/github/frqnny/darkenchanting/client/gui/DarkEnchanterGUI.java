@@ -44,7 +44,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final WButton repairButton;
     public int enchantCost = 0;
     public int repairCost = 0;
-    public double bookshelfDiscount = 0.0F;
+    public int bookshelfDiscount = 0;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
@@ -227,7 +227,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         this.context.run((world, blockPos) -> {
             int playerLevel = playerInventory.player.experienceLevel;
             enchantCost = BookcaseUtils.applyDiscount(XPUtil.getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
-            bookshelfDiscount = BookcaseUtils.getDiscount(world, blockPos) * 100;
+            bookshelfDiscount = (int) (BookcaseUtils.getDiscount(world, blockPos)* 100) ;
 
             boolean enchantmentsHaveChanged = true;
 
