@@ -12,12 +12,11 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.Map;
 
 public class DarkEnchanterInventory implements Inventory {
-    private final DefaultedList<ItemStack> stacks;
+    private final DefaultedList<ItemStack> stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private final DarkEnchanterGUI handler;
 
     public DarkEnchanterInventory(DarkEnchanterGUI h) {
         this.handler = h;
-        stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
     }
 
     @Override
@@ -76,13 +75,12 @@ public class DarkEnchanterInventory implements Inventory {
         handler.removedEnchantments.clear();
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(this.getStack(0));
         enchantments.forEach((enchantment, level) -> {
-            if (!handler.enchantmentsToApply.containsKey(enchantment)) {
-                handler.enchantmentsToApply.put(enchantment, (int) level);
-            }
+            handler.enchantmentsToApply.putIfAbsent(enchantment, (int) level);
             handler.enchantmentsOnStack.put(enchantment, (int) level);
 
         });
-        handler.enchantCost = 0;
+        handler.recalculateEnchantmentCost();
+        handler.recalculateRepairCost();
     }
 
     @Override

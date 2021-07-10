@@ -14,11 +14,24 @@ import java.util.Optional;
 
 public class XPUtil {
 
-    public static int getLevelCostFromMap(Object2IntLinkedOpenHashMap<Enchantment> map, Object2IntLinkedOpenHashMap<Enchantment> stackEnchantments) {
+    public static int getXpCostFromMap(Object2IntLinkedOpenHashMap<Enchantment> map, Object2IntLinkedOpenHashMap<Enchantment> stackEnchantments) {
+        int cost = getLevelCostFromMap(map, stackEnchantments);
+        if (cost < 30) {
+            cost *= 17;
+        } else if (cost < 50) {
+            cost *= 18;
+        } else {
+            cost *= 19;
+        }
+        cost *= 2; // this *has* to be done because it cost so fucking little
+        return cost;
+    }
+
+    public static int getLevelCostFromMap(Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> stackEnchantments) {
         float level = 0;
 
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
-        for (Object2IntMap.Entry<Enchantment> entry : map.object2IntEntrySet()) {
+        for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             int power = entry.getIntValue();
 
@@ -27,6 +40,7 @@ public class XPUtil {
             }
             float cost = getLevelCostFromEnchantment(enchantment, power, true);
             if (cost != -1000) {
+                System.out.println(enchantment.getTranslationKey() + ": " + cost);
                 level += cost;
             }
         }
@@ -36,18 +50,22 @@ public class XPUtil {
             Enchantment enchantment = entry.getKey();
             int power = entry.getIntValue();
 
-            if (!map.containsKey(enchantment)) {
-                float cost = getLevelCostFromEnchantment(enchantment, power, false);
+            if (!enchantmentsToApply.containsKey(enchantment)) {
+
+
+                float cost = getLevelDiscounting(enchantment, power, false);
                 if (cost != -1000) {
-                    cost *= Math.min(1, config.discountFactor);
+                    cost *= Math.min(1F, config.discountFactor);
+                    System.out.println(enchantment.getTranslationKey() + ": " + cost);
                     level -= cost;
                 }
-            } else if (map.getInt(enchantment) < power) {
-                int powerOnApply = map.getInt(enchantment);
+            } else if (enchantmentsToApply.getInt(enchantment) < power) {
+                int powerOnApply = enchantmentsToApply.getInt(enchantment);
                 int powerToApply = power - powerOnApply;
-                float cost = getLevelCostFromEnchantment(enchantment, powerToApply, false);
+                float cost = getLevelDiscounting(enchantment, powerToApply, false);
                 if (cost != -1000) {
-                    cost *= Math.min(1, config.discountFactor);
+                    cost *= Math.min(1F, config.discountFactor);
+                    System.out.println(enchantment.getTranslationKey() + ": " + cost);
                     level -= cost;
                 }
             }
@@ -57,7 +75,7 @@ public class XPUtil {
 
     }
 
-    public static int getRepairCostFromItemStack(ItemStack stack) {
+    public static int getRepairXpFromStack(ItemStack stack) {
         float cost = 0;
         if (stack.isDamaged()) {
             //Cost is initially XP amount
@@ -65,12 +83,10 @@ public class XPUtil {
 
             //TODO cost += stack.getEnchantments().size();
             //turn them into levels
-            cost /= 17;
-
 
             //tools don't scale up well, compared to armor
             if (stack.getItem() instanceof ToolItem) {
-                cost *= 0.4;
+                cost *= 0.7F;
             }
 
             cost *= DarkEnchanting.CONFIG.repairFactor;
@@ -81,24 +97,24 @@ public class XPUtil {
     }
 
     public static boolean applyEnchantXP(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack, double discount) {
-        int currentPlayerLevel = player.experienceLevel;
-        int level = BookcaseUtils.applyDiscount(getLevelCostFromMap(enchantmentsToApply, enchantmentsOnStack), discount);
+        int totalExperience = player.totalExperience;
+        int xp = BookcaseUtils.applyDiscount(getXpCostFromMap(enchantmentsToApply, enchantmentsOnStack), discount);
 
 
-        boolean canApplyXp = currentPlayerLevel >= level || player.isCreative();
+        boolean canApplyXp = totalExperience >= xp || player.isCreative();
         if (canApplyXp) {
-            player.addExperienceLevels(-level);
+            player.addExperience(-xp);
 
         }
         return canApplyXp;
     }
 
     public static boolean applyRepairXP(PlayerEntity player, ItemStack stack, double discount) {
-        int currentPlayerLevel = player.experienceLevel;
-        int cost = BookcaseUtils.applyDiscount(getRepairCostFromItemStack(stack), discount);
-        boolean canApplyXp = currentPlayerLevel >= cost || player.isCreative();
+        int totalExperience = player.totalExperience;
+        int xpCost = BookcaseUtils.applyDiscount(getRepairXpFromStack(stack), discount);
+        boolean canApplyXp = totalExperience >= xpCost || player.isCreative();
         if (canApplyXp) {
-            player.addExperienceLevels(-cost);
+            player.addExperience(-xpCost);
 
         }
 
@@ -131,10 +147,39 @@ public class XPUtil {
                 return -1000;
             }
 
-            cost *= isCost? configEnchantment.costFactorEnchantment : configEnchantment.discountFactorEnchantment;
+            cost *= isCost ? configEnchantment.costFactorEnchantment : configEnchantment.discountFactorEnchantment;
 
         }
 
+        return cost;
+    }
+
+    public static float getLevelDiscounting(Enchantment enchantment, int power, boolean isCost) {
+        float cost;
+        if (enchantment.isTreasure()) {
+            cost = 3F;
+        } else if (enchantment.isCursed()) {
+            cost = 2F;
+        } else {
+            cost = 1F;
+        }
+
+        float percentage = ((float) power) / enchantment.getMaxLevel();
+        cost *= Math.min(1.0F, percentage);
+
+        Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+        if (configEnchantmentOptional.isPresent()) {
+            ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
+            if (!configEnchantment.activated) {
+                return -1000F;
+            }
+
+            cost *= isCost ? configEnchantment.costFactorEnchantment : configEnchantment.discountFactorEnchantment;
+
+        }
+
+        cost *= 17; // turn it into xp
+        cost /= 2; // it can still be way too high so to avoid loops
         return cost;
     }
 }

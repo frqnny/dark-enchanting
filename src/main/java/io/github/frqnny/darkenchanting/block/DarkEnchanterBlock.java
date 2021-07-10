@@ -60,6 +60,7 @@ public class DarkEnchanterBlock extends BlockWithEntity {
         return SHAPE;
     }
 
+    @Override
     public BlockRenderType getRenderType(BlockState blockState_1) {
         return BlockRenderType.MODEL;
     }
@@ -70,6 +71,7 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     }
 
     @Environment(EnvType.CLIENT)
+    @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos blockPos, Random random) {
         super.randomDisplayTick(state, world, blockPos, random);
 
@@ -103,9 +105,10 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlocks.DE_BLOCK_ENTITY, BlockEntityWithBook::tick);
+        return checkType(type, ModBlocks.DE_BLOCK_ENTITY, (world1, pos, state1, be) -> BlockEntityWithBook.tick(world1, pos, be));
     }
 
+    @Override
     public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
         return false;
     }

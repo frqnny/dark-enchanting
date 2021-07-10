@@ -9,7 +9,6 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 
 public class ModGUIs {
-
     public static ScreenHandlerType<DarkEnchanterGUI> DARK_ENCHANTER_GUI;
 
     public static void init() {

@@ -27,13 +27,13 @@ public class BlockEntityWithBook extends BlockEntity {
         super(t, pos, state);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, DarkEnchanterBlockEntity be) {
+    public static void tick(World world, BlockPos pos, DarkEnchanterBlockEntity be) {
         be.pageTurningSpeed = be.nextPageTurningSpeed;
         be.bookRotationPrev = be.bookRotation;
-        PlayerEntity playerEntity = world.getClosestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3.0D, false);
-        if (playerEntity != null) {
-            double d = playerEntity.getX() - ((double) pos.getX() + 0.5D);
-            double e = playerEntity.getZ() - ((double) pos.getZ() + 0.5D);
+        PlayerEntity player = world.getClosestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3.0D, false);
+        if (player != null) {
+            double d = player.getX() - ((double) pos.getX() + 0.5D);
+            double e = player.getZ() - ((double) pos.getZ() + 0.5D);
             be.offset = (float) MathHelper.atan2(e, d);
             be.nextPageTurningSpeed += 0.1F;
             if (be.nextPageTurningSpeed < 0.5F || RANDOM.nextInt(40) == 0) {
