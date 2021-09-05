@@ -16,14 +16,7 @@ public class XPUtil {
 
     public static int getXpCostFromMap(Object2IntLinkedOpenHashMap<Enchantment> map, Object2IntLinkedOpenHashMap<Enchantment> stackEnchantments) {
         int cost = getLevelCostFromMap(map, stackEnchantments);
-        if (cost < 30) {
-            cost *= 17;
-        } else if (cost < 50) {
-            cost *= 18;
-        } else {
-            cost *= 19;
-        }
-        cost *= 2; // this *has* to be done because it cost so fucking little
+        cost *= 17; // turn it into XP; 17 xp in a level
         return cost;
     }
 
@@ -40,7 +33,7 @@ public class XPUtil {
             }
             float cost = getLevelCostFromEnchantment(enchantment, power, true);
             if (cost != -1000) {
-                System.out.println(enchantment.getTranslationKey() + ": " + cost);
+                cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.0005x^2  for help. this is needed because level xp also increases
                 level += cost;
             }
         }
@@ -56,7 +49,6 @@ public class XPUtil {
                 float cost = getLevelDiscounting(enchantment, power, false);
                 if (cost != -1000) {
                     cost *= Math.min(1F, config.discountFactor);
-                    System.out.println(enchantment.getTranslationKey() + ": " + cost);
                     level -= cost;
                 }
             } else if (enchantmentsToApply.getInt(enchantment) < power) {
@@ -65,7 +57,6 @@ public class XPUtil {
                 float cost = getLevelDiscounting(enchantment, powerToApply, false);
                 if (cost != -1000) {
                     cost *= Math.min(1F, config.discountFactor);
-                    System.out.println(enchantment.getTranslationKey() + ": " + cost);
                     level -= cost;
                 }
             }

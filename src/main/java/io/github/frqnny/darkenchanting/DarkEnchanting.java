@@ -16,11 +16,11 @@ public class DarkEnchanting implements ModInitializer {
     public static final String MODID = "dark-enchanting";
 
     public static final ItemGroup DARK_ENCHANTING = FabricItemGroupBuilder.create(
-            new Identifier(MODID, "dark_enchanting_group"))
+                    new Identifier(MODID, "dark_enchanting_group"))
             .icon(() -> new ItemStack(ModBlocks.DARK_ENCHANTER))
             .build();
 
-    public static DarkEnchantingConfig CONFIG = OmegaConfig.register(DarkEnchantingConfig.class);
+    public static final DarkEnchantingConfig CONFIG = OmegaConfig.register(DarkEnchantingConfig.class);
 
     public static Identifier id(String namespace) {
         return new Identifier(MODID, namespace);

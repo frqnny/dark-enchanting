@@ -86,16 +86,20 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             }
 
             return ImmutableList.of(
-                    new LiteralText("Enchant Cost:"),
+                    new LiteralText("Enchant Cost:").formatted(Formatting.DARK_GREEN),
                     new LiteralText(string),
                     new LiteralText(""),
-                    new LiteralText("Repair Cost:"),
+                    new LiteralText(""),
+                    new LiteralText("Repair Cost:").formatted(Formatting.BLUE),
                     new LiteralText("Pay: " + DarkEnchanterGUI.this.repairCost + " XP"),
                     new LiteralText(""),
-                    new LiteralText("Bookshelf Discount:"),
+                    new LiteralText(""),
+                    new LiteralText("Bookshelf Discount:").formatted(Formatting.DARK_PURPLE),
                     new LiteralText(DarkEnchanterGUI.this.bookshelfDiscount + " %"),
                     new LiteralText(""),
-                    new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP"),
+                    new LiteralText(""),
+                    new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP").formatted(Formatting.GOLD),
+                    new LiteralText(""),
                     new LiteralText("")
             );
         });
