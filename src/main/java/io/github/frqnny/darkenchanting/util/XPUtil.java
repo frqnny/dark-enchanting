@@ -33,7 +33,7 @@ public class XPUtil {
             }
             float cost = getLevelCostFromEnchantment(enchantment, power, true);
             if (cost != -1000) {
-                cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.0005x^2  for help. this is needed because level xp also increases
+                cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.1x^2  for help. this is needed because level xp also increases
                 level += cost;
             }
         }
