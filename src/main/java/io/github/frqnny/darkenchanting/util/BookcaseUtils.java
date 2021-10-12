@@ -1,5 +1,7 @@
 package io.github.frqnny.darkenchanting.util;
 
+import io.github.frqnny.darkenchanting.DarkEnchanting;
+import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import net.minecraft.block.Block;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
@@ -8,7 +10,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BookcaseUtils {
-    public static int getBookshelfCount(World world, BlockPos blockPos) {
+    public static int getBookshelfCount(World world, BlockPos blockPos) 
+    {
         int bookshelves = 0;
 
         Tag<Block> bookshelvesTag = world.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier("c", "bookshelves"), id -> new RuntimeException("Could not load tag: " + id.toString()));
@@ -58,6 +61,7 @@ public class BookcaseUtils {
     }
 
     public static double getDiscount(World world, BlockPos pos) {
-        return (getBookshelfCount(world, pos) / 15D * 0.4);
+        DarkEnchantingConfig config = DarkEnchanting.CONFIG;
+        return (getBookshelfCount(world, pos) / 15D * config.bookshelvesDiscount);
     }
 }
