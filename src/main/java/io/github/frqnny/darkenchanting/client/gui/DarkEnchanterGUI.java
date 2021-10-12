@@ -152,6 +152,10 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     continue;
                 }
             }
+            if (enchantment.getMaxLevel() < 1)
+            {
+                continue;
+            }
 
             if (enchantment.isAcceptableItem(stack)) {
                 WLabeledSlider enchantmentSlider;
