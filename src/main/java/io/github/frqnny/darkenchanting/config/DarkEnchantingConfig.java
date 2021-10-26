@@ -31,6 +31,9 @@ public class DarkEnchantingConfig implements Config {
     @Comment("This number gets multiplied by the repair cost. Increase it to make repair cost more.")
     public float repairFactor = 1.0F;
 
+    @Comment("This number (in percent) will be converted into the cost discount when surrounded by bookshelves. (default: 40 % / 0.4")
+    public float bookshelvesDiscount = 0.4F;
+
     @Comment("This is where people can write specific enchantment data for this mod. The following is an example entry. This entry represents an entry for sharpness in its default form. The Id of the enchantments, factors to multiply during enchanting (discount is when taking off enchantments, cost is when putting on),  and activated decides whether the enchantment can be used")
     public ArrayList<ConfigEnchantment> configEnchantments = Lists.newArrayList(ConfigEnchantment.of("minecraft:sharpness", 1.0F, 1.0F, true));
 
