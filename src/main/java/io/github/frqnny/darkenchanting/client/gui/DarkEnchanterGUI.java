@@ -47,6 +47,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public int bookshelfDiscount = 0;
     public String bookcase_stats_1;
     public String bookcase_stats_2;
+    public String bookcase_stats_3;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
@@ -97,7 +98,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     new LiteralText(""),
                     new LiteralText(""),
                     new LiteralText("Bookshelf Discount:").formatted(Formatting.DARK_PURPLE),
-                    new LiteralText(DarkEnchanterGUI.this.bookcase_stats_1 + DarkEnchanterGUI.this.bookcase_stats_2 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
+                    new LiteralText(DarkEnchanterGUI.this.bookcase_stats_1 + DarkEnchanterGUI.this.bookcase_stats_2 + DarkEnchanterGUI.this.bookcase_stats_3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
                     new LiteralText(""),
                     new LiteralText(""),
                     new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP").formatted(Formatting.GOLD),
@@ -242,6 +243,15 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             else
             {
                 bookcase_stats_2 = "";
+            }
+
+            if(BookcaseUtils.getconduits(world, blockPos))
+            {
+                bookcase_stats_3 = "☆";
+            }
+            else
+            {
+                bookcase_stats_3 = "";
             }
             bookshelfDiscount = (int) (BookcaseUtils.getDiscount(world, blockPos) * 100);
 

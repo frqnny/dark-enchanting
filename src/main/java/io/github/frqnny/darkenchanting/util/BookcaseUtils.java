@@ -3,6 +3,7 @@ package io.github.frqnny.darkenchanting.util;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
+import io.github.frqnny.darkenchanting.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.tag.Tag;
@@ -321,6 +322,59 @@ public class BookcaseUtils
 
         double bookcase_1 = getBookshelfCount(world, pos) / 15D * HalfDiscount;
         double bookcase_2 = getBookshelfCount_2(world, pos) / 29D * HalfDiscount;
-        return (bookcase_1 + bookcase_2); 
+        return (bookcase_1 + bookcase_2 + getconduitdiscount(world,pos)); 
+    }
+
+    public static double getconduitdiscount(World world, BlockPos pos)  {
+        if (getBookshelfCount(world, pos) == 15D && getBookshelfCount_2(world, pos) == 29D && getconduits(world,pos))
+        {
+            return 0.1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    //Conduit Counter
+    public static boolean getconduits(World world, BlockPos blockPos) 
+    {
+        int conduit_count = 0;
+        int y = 6;
+        
+        if (world.getBlockState(blockPos.add(4, y, 4)).isOf(ModBlocks.DARK_TORCH)) 
+        {
+            //System.out.println("obsidian found at :" + 4 +","+y+","+z);
+            ++conduit_count;
+        }
+        if (world.getBlockState(blockPos.add(-4, y, -4)).isOf(ModBlocks.DARK_TORCH)) 
+        {
+            //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
+            ++conduit_count;
+        }
+        if (world.getBlockState(blockPos.add(-4, y, 4)).isOf(ModBlocks.DARK_TORCH)) 
+        {
+            //System.out.println("obsidian found at :" + 4 +","+y+","+z);
+            ++conduit_count;
+        }
+        if (world.getBlockState(blockPos.add(4, y, -4)).isOf(ModBlocks.DARK_TORCH)) 
+        {
+            //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
+            ++conduit_count;
+        }            
+        
+        //System.out.println("Dark Enchanter Obsidian Ring Count :" + base_obsidian_2);
+        if (Math.min(4, conduit_count) == 4)
+        {
+            
+            return true;
+        }
+        else
+        {
+            conduit_count = 0;
+            return false;
+
+        }
+        
     }
 }

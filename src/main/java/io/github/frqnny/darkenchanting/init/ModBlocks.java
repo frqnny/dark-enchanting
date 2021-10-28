@@ -11,15 +11,17 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.registry.Registry;
 
 public class ModBlocks {
     
     public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).breakByTool(FabricToolTags.PICKAXES));
-    public static final DarkEnchanterBlock DARK_TORCH = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.TORCH));
-    public static final DarkEnchanterBlock DARK_TORCH_WALL = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.WALL_TORCH));
+    public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.of(Material.DECORATION).nonOpaque().noCollision().luminance(8), ParticleTypes.SOUL_FIRE_FLAME);
+    public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.of(Material.DECORATION).nonOpaque().noCollision().luminance(8), ParticleTypes.SOUL_FIRE_FLAME);
     public static void init()
     {
         Registry.register(Registry.BLOCK, DarkConduitBlock.ID, DARK_TORCH);
