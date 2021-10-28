@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SES",
+    "GWG",
+    "CTC"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:end_crystal"
+    },
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "S": {
+      "item": "minecraft:skeleton_skull"
+    },
+    "W": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    "T": {
+      "item": "minecraft:torch"
+    },
+    "C": {
+      "item": "minecraft:air"
+    }
+  },
+  "result": {
+    "item": "dark-enchanting:dark_conduit"
+  }
+}
