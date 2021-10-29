@@ -21,8 +21,8 @@ import net.minecraft.util.registry.Registry;
 public class ModBlocks {
     
     public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).breakByTool(FabricToolTags.PICKAXES));
-    public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.copyOf(Blocks.TORCH).nonOpaque(), ParticleTypes.SOUL_FIRE_FLAME);
-    public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.copyOf(Blocks.WALL_TORCH).nonOpaque(), ParticleTypes.SOUL_FIRE_FLAME);
+    public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.copyOf(Blocks.TORCH), ParticleTypes.DRAGON_BREATH);
+    public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.copyOf(Blocks.WALL_TORCH), ParticleTypes.DRAGON_BREATH);
     public static void init()
     {
         Registry.register(Registry.BLOCK, DarkConduitBlock.ID, DARK_TORCH);

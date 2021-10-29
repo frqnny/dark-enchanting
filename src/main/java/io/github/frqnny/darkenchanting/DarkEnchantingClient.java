@@ -4,8 +4,10 @@ import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModItems;
 import io.github.frqnny.darkenchanting.init.ModPackets;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 
