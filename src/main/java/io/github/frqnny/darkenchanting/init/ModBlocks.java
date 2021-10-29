@@ -5,13 +5,14 @@ import io.github.frqnny.darkenchanting.block.DarkEnchanterBlock;
 import io.github.frqnny.darkenchanting.block.WallDarkConduitBlock;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import io.github.frqnny.darkenchanting.client.renderer.DarkEnchanterBlockEntityRenderer;
+
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.particle.ParticleTypes;
@@ -20,8 +21,8 @@ import net.minecraft.util.registry.Registry;
 public class ModBlocks {
     
     public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).breakByTool(FabricToolTags.PICKAXES));
-    public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.of(Material.DECORATION).nonOpaque().noCollision().luminance(8), ParticleTypes.SOUL_FIRE_FLAME);
-    public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.of(Material.DECORATION).nonOpaque().noCollision().luminance(8), ParticleTypes.SOUL_FIRE_FLAME);
+    public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.copyOf(Blocks.TORCH).nonOpaque(), ParticleTypes.SOUL_FIRE_FLAME);
+    public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.copyOf(Blocks.WALL_TORCH).nonOpaque(), ParticleTypes.SOUL_FIRE_FLAME);
     public static void init()
     {
         Registry.register(Registry.BLOCK, DarkConduitBlock.ID, DARK_TORCH);
@@ -35,6 +36,5 @@ public class ModBlocks {
         BlockEntityRendererRegistry.register(ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
     }
-
 
 }

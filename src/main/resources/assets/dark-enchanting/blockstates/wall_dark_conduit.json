@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=east": {
-      "model": "minecraft:block/wall_dark_conduit"
+      "model": "dark-enchanting:block/wall_dark_conduit"
     },
     "facing=north": {
-      "model": "minecraft:block/wall_dark_conduit",
+      "model": "dark-enchanting:block/wall_dark_conduit",
       "y": 270
     },
     "facing=south": {
-      "model": "minecraft:block/wall_dark_conduit",
+      "model": "dark-enchanting:block/wall_dark_conduit",
       "y": 90
     },
     "facing=west": {
-      "model": "minecraft:block/wall_dark_conduit",
+      "model": "dark-enchanting:block/wall_dark_conduit",
       "y": 180
     }
   }

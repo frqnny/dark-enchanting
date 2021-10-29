@@ -152,14 +152,14 @@ public class BookcaseUtils
                 -4 0 2,
                 -4 0 3                       
                 */
-                if (world.getBlockState(blockPos.add(4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) 
+                if (world.getBlockState(blockPos.add(4, y, z)).isOf(Blocks.ANCIENT_DEBRIS)) 
                 {
                     //System.out.println("obsidian found at :" + 4 +","+y+","+z);
                     ++base_obsidian_2;
                 }
                 if (z != 4)
                 {
-                    if (world.getBlockState(blockPos.add(-4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) 
+                    if (world.getBlockState(blockPos.add(-4, y, z)).isOf(Blocks.ANCIENT_DEBRIS)) 
                     {
                         //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
                         ++base_obsidian_2;
@@ -184,14 +184,14 @@ public class BookcaseUtils
                 -3 0 -4                                                  -3 0 4
                 -4 0 -4,                                                 -4 0 4                         
                 */
-                if (world.getBlockState(blockPos.add(x, y, 4)).isOf(Blocks.CRYING_OBSIDIAN)) 
+                if (world.getBlockState(blockPos.add(x, y, 4)).isOf(Blocks.ANCIENT_DEBRIS)) 
                 {
                     //System.out.println("obsidian found at :" + x +","+y+","+4);
                     ++base_obsidian_2;
                 }
                 if (x != 4)
                 {
-                    if (world.getBlockState(blockPos.add(x, y, -4)).isOf(Blocks.CRYING_OBSIDIAN)) 
+                    if (world.getBlockState(blockPos.add(x, y, -4)).isOf(Blocks.ANCIENT_DEBRIS)) 
                     {
                         //System.out.println("obsidian found at :" + x +","+y+","+-4);
                         ++base_obsidian_2;

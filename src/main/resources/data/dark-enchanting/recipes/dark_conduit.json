@@ -1,31 +1,29 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "SES",
-    "GWG",
-    "CTC"
+      "#E#",
+      "WGW",
+      " S "
   ],
   "key": {
-    "E": {
-      "item": "minecraft:end_crystal"
-    },
-    "G": {
-      "item": "minecraft:ghast_tear"
-    },
-    "S": {
-      "item": "minecraft:skeleton_skull"
-    },
-    "W": {
-      "item": "minecraft:wither_skeleton_skull"
-    },
-    "T": {
-      "item": "minecraft:torch"
-    },
-    "C": {
-      "item": "minecraft:air"
-    }
+      "#": {
+          "item": "minecraft:skeleton_skull"
+      },
+      "E": {
+          "item": "minecraft:end_crystal"
+      },
+      "W": {
+          "item": "minecraft:wither_skeleton_skull"
+      },
+      "G": {
+          "item": "minecraft:ghast_tear"
+      },
+      "S": {
+          "item": "minecraft:soul_torch"
+      }
   },
   "result": {
-    "item": "dark-enchanting:dark_conduit"
+      "item": "dark-enchanting:dark_conduit",
+      "count": 1
   }
 }
