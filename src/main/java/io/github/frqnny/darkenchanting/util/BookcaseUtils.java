@@ -10,8 +10,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BookcaseUtils {
-    public static int getBookshelfCount(World world, BlockPos blockPos) 
-    {
+    public static int getBookshelfCount(World world, BlockPos blockPos) {
         int bookshelves = 0;
 
         Tag<Block> bookshelvesTag = world.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier("c", "bookshelves"), id -> new RuntimeException("Could not load tag: " + id.toString()));
@@ -57,7 +56,7 @@ public class BookcaseUtils {
     }
 
     public static int applyDiscount(int originalCost, double discount) {
-        return (int) (originalCost * (1D - discount));
+        return (int) Math.ceil((originalCost * (1D - discount)));
     }
 
     public static double getDiscount(World world, BlockPos pos) {
