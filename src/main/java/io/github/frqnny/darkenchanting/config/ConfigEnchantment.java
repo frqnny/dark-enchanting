@@ -10,19 +10,17 @@ import java.util.Optional;
 //Config class object so it sadly cannot be a Record class ;-;
 public class ConfigEnchantment {
     public final String enchantmentId;
-    public final float discountFactorEnchantment;
-    public final float costFactorEnchantment;
+    public final float personalFactor;
     public final boolean activated;
 
-    private ConfigEnchantment(String enchantmentId, float discountFactor, float costFactor, boolean activated) {
+    private ConfigEnchantment(String enchantmentId, float personalFactor, boolean activated) {
         this.enchantmentId = enchantmentId;
-        this.discountFactorEnchantment = discountFactor;
-        this.costFactorEnchantment = costFactor;
+        this.personalFactor = personalFactor;
         this.activated = activated;
     }
 
-    public static ConfigEnchantment of(String enchantmentId, float discountFactor, float costFactor, boolean activated) {
-        return new ConfigEnchantment(enchantmentId, discountFactor, costFactor, activated);
+    public static ConfigEnchantment of(String enchantmentId, float personalFactor, boolean activated) {
+        return new ConfigEnchantment(enchantmentId, personalFactor, activated);
     }
 
     public static Optional<ConfigEnchantment> getConfigEnchantmentFor(Identifier id) {

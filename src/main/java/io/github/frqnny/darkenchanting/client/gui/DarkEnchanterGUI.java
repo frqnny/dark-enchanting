@@ -9,7 +9,7 @@ import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
-import io.github.frqnny.darkenchanting.util.XPUtil;
+import io.github.frqnny.darkenchanting.util.EnchHelp;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -39,7 +39,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final ScreenHandlerContext context;
     public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply;
     public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack;
-    public final List<Enchantment> removedEnchantments;
     public final WButton enchantButton;
     public final WButton repairButton;
     public int enchantCost = 0;
@@ -51,12 +50,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
+        playerInventory.player.addExperienceLevels(0); // this is supposed to help sync enchantments
         this.inv = new DarkEnchanterInventory(this);
         this.context = context;
         enchantmentSliders = new ArrayList<>(15);
         enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(15);
         enchantmentsOnStack = new Object2IntLinkedOpenHashMap<>(15);
-        removedEnchantments = new ArrayList<>(5);
 
         WPlainPanel root = new WPlainPanel();
         this.setRootPanel(root);
@@ -155,8 +154,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     continue;
                 }
             }
-            if (enchantment.getMaxLevel() < 1)
-            {
+
+            if (enchantment.getMaxLevel() < 1) {
+
                 continue;
             }
 
@@ -165,7 +165,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 if (enchantmentsToApply.containsKey(enchantment)) {
                     enchantmentSlider = addNewWidgetToList(enchantmentsToApply.getInt(enchantment), enchantment);
                 } else if (enchantments.containsKey(enchantment)) {
-                    if (!removedEnchantments.contains(enchantment)) {
+                    if (!this.isEnchantmentRemoved(enchantment)) {
                         enchantmentSlider = addNewWidgetToList(enchantments.get(enchantment), enchantment);
                     } else {
                         enchantmentSlider = addNewWidgetToList(0, enchantment);
@@ -177,7 +177,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
                 for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                     Enchantment enchantmentOnStack = entry.getKey();
-                    if (!removedEnchantments.contains(enchantmentOnStack)) {
+                    if (!this.isEnchantmentRemoved(enchantmentOnStack)) {
                         if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
                             enchantmentSliders.remove(enchantmentSlider);
                         }
@@ -187,7 +187,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
                     Enchantment enchantmentOnStack = entry.getKey();
 
-                    if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
+                    if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment) && entry.getIntValue() > 0) {
                         enchantmentSliders.remove(enchantmentSlider);
                     }
                 }
@@ -213,10 +213,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         } else {
             enchantmentsToApply.put(enchantment, level);
         }
+        /*
         if (level == 0) {
             enchantmentsToApply.removeInt(enchantment);
             removedEnchantments.add(enchantment);
         }
+         */
 
         fillBox();
         recalculateEnchantmentCost();
@@ -225,7 +227,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void recalculateEnchantmentCost() {
         this.context.run((world, blockPos) -> {
             int totalExperience = playerInventory.player.totalExperience;
-            enchantCost = BookcaseUtils.applyDiscount(XPUtil.getXpCostFromMap(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
+            enchantCost = BookcaseUtils.applyDiscount(EnchHelp.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
 
             if(BookcaseUtils.getObsidianCount(world, blockPos))
             {
@@ -253,6 +255,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             {
                 bookcase_stats_3 = "";
             }
+
             bookshelfDiscount = (int) (BookcaseUtils.getDiscount(world, blockPos) * 100);
 
             boolean enchantmentsHaveChanged = true;
@@ -283,7 +286,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateRepairCost() {
-        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(XPUtil.getRepairXpFromStack(inv.getActualStack()), world, pos));
+        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(EnchHelp.getRepairCost(inv.getActualStack()), world, pos));
         repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
     }
 
@@ -314,5 +317,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void close(PlayerEntity player) {
         super.close(player);
         this.context.run((world, pos) -> this.dropInventory(player, this.inv));
+    }
+
+    public boolean isEnchantmentRemoved(Enchantment enchantment) {
+        return this.enchantmentsToApply.getInt(enchantment) <= 0;
     }
 }

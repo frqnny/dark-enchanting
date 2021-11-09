@@ -31,10 +31,11 @@ public class ModBlocks {
         Registry.register(Registry.BLOCK_ENTITY_TYPE, DarkEnchanterBlock.ID, DE_BLOCK_ENTITY);
     }    
     public static final BlockEntityType<DarkEnchanterBlockEntity> DE_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(DarkEnchanterBlockEntity::new, DARK_ENCHANTER).build();
+    }
 
     public static void clientInit() {
         BlockEntityRendererRegistry.register(ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
     }
 
-}
+

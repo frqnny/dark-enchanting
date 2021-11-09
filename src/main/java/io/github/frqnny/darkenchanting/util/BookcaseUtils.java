@@ -309,9 +309,8 @@ public class BookcaseUtils
         return applyDiscount(originalCost, getDiscount(world, pos));
     }
 
-    public static int applyDiscount(int originalCost, double discount) 
-    {
-        return (int) (originalCost * (1D - discount));
+    public static int applyDiscount(int originalCost, double discount) {
+        return (int) Math.ceil((originalCost * (1D - discount)));
     }
 
     public static double getDiscount(World world, BlockPos pos) 
@@ -376,5 +375,7 @@ public class BookcaseUtils
 
         }
         
-    }
+    
+
+    
 }

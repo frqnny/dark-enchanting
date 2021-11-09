@@ -72,7 +72,6 @@ public class DarkEnchanterInventory implements Inventory {
         handler.fillBox();
         handler.enchantmentsOnStack.clear();
         handler.enchantmentsToApply.clear();
-        handler.removedEnchantments.clear();
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(this.getStack(0));
         enchantments.forEach((enchantment, level) -> {
             handler.enchantmentsToApply.putIfAbsent(enchantment, (int) level);

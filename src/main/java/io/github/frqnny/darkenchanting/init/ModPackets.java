@@ -3,7 +3,7 @@ package io.github.frqnny.darkenchanting.init;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
-import io.github.frqnny.darkenchanting.util.XPUtil;
+import io.github.frqnny.darkenchanting.util.EnchHelp;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.Enchantment;
@@ -43,8 +43,8 @@ public class ModPackets {
                     ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
                     Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.get(stack);
 
-                    if (XPUtil.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments), BookcaseUtils.getDiscount(player.world, pos))) {
-                        EnchantmentHelper.set(enchantmentsToApply, stack);
+                    if (EnchHelp.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments), BookcaseUtils.getDiscount(player.world, pos))) {
+                        EnchHelp.set(enchantmentsToApply, stack);
                         player.incrementStat(Stats.ENCHANT_ITEM);
                     }
 
@@ -61,7 +61,7 @@ public class ModPackets {
                 ScreenHandler screen = player.currentScreenHandler;
                 if (screen instanceof DarkEnchanterGUI) {
                     ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
-                    if (XPUtil.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.world, pos))) {
+                    if (EnchHelp.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.world, pos))) {
                         stack.setDamage(0);
                     }
                 }
