@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+      "#E#",
+      "WGW",
+      " S "
+  ],
+  "key": {
+      "#": {
+          "item": "minecraft:skeleton_skull"
+      },
+      "E": {
+          "item": "minecraft:end_crystal"
+      },
+      "W": {
+          "item": "minecraft:wither_skeleton_skull"
+      },
+      "G": {
+          "item": "minecraft:ghast_tear"
+      },
+      "S": {
+          "item": "minecraft:soul_torch"
+      }
+  },
+  "result": {
+      "item": "dark-enchanting:dark_conduit",
+      "count": 1
+  }
+}
