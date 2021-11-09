@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 //TODO CHECK ALL INSTANCSE OF CAST AND MAKE IT ROUND UPWARDS ALWAYS
+//TODO FIX DISCOUNT LOOP
 public class EnchHelp {
 
     public static int getXpCost(Object2IntMap<Enchantment> map, Object2IntMap<Enchantment> stackEnchantments) {

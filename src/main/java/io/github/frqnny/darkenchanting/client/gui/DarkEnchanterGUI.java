@@ -213,12 +213,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         } else {
             enchantmentsToApply.put(enchantment, level);
         }
-        /*
-        if (level == 0) {
-            enchantmentsToApply.removeInt(enchantment);
-            removedEnchantments.add(enchantment);
-        }
-         */
 
         fillBox();
         recalculateEnchantmentCost();
@@ -229,30 +223,21 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             int totalExperience = playerInventory.player.totalExperience;
             enchantCost = BookcaseUtils.applyDiscount(EnchHelp.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
 
-            if(BookcaseUtils.getObsidianCount(world, blockPos))
-            {
+            if (BookcaseUtils.getObsidianCount(world, blockPos)) {
                 bookcase_stats_1 = "☆";
-            }
-            else
-            {
+            } else {
                 bookcase_stats_1 = "";
             }
 
-            if( BookcaseUtils.getObsidianCount_2(world, blockPos))
-            {
+            if (BookcaseUtils.getObsidianCount_2(world, blockPos)) {
                 bookcase_stats_2 = "☆";
-            }
-            else
-            {
+            } else {
                 bookcase_stats_2 = "";
             }
 
-            if(BookcaseUtils.getconduits(world, blockPos))
-            {
+            if (BookcaseUtils.getConduits(world, blockPos)) {
                 bookcase_stats_3 = "☆";
-            }
-            else
-            {
+            } else {
                 bookcase_stats_3 = "";
             }
 

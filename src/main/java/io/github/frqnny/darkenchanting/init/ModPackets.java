@@ -70,7 +70,4 @@ public class ModPackets {
         });
     }
 
-    public static void clientInit() {
-
-    }
 }

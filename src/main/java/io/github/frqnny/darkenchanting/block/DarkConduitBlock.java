@@ -1,5 +1,6 @@
 package io.github.frqnny.darkenchanting.block;
 
+import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.particle.ParticleEffect;
@@ -10,23 +11,19 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-import io.github.frqnny.darkenchanting.DarkEnchanting;
-
-public class DarkConduitBlock extends TorchBlock 
-{
+public class DarkConduitBlock extends TorchBlock {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_conduit");
-    
-    public DarkConduitBlock(Settings settings, ParticleEffect particle)
-    {
+
+    public DarkConduitBlock(Settings settings, ParticleEffect particle) {
         super(settings, particle);
     }
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        double d = (double)pos.getX() + 0.5D;
-        double e = (double)pos.getY() + 0.8D;
-        double f = (double)pos.getZ() + 0.5D;
+        double d = (double) pos.getX() + 0.5D;
+        double e = (double) pos.getY() + 0.8D;
+        double f = (double) pos.getZ() + 0.5D;
         world.addParticle(ParticleTypes.ENCHANT, d, e, f, 0.0D, -0.3D, 0.0D);
         world.addParticle(this.particle, d, e, f, 0.0D, 0.0D, 0.0D);
-     }
+    }
 }
