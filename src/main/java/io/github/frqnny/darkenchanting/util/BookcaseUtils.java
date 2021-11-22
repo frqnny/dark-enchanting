@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-//TODO get penta towers working
 public class BookcaseUtils {
 
     //Inner ring
@@ -169,14 +168,7 @@ public class BookcaseUtils {
             }
         }
         //System.out.println("Dark Enchanter Obsidian Ring Count :" + base_obsidian_2);
-        if (Math.min(30, base_obsidian_2) == 30) {
-
-            return true;
-        } else {
-            base_obsidian_2 = 0;
-            return false;
-
-        }
+        return Math.min(30, base_obsidian_2) == 30;
 
     }
 
@@ -288,25 +280,39 @@ public class BookcaseUtils {
         int y = 5;
 
         if (world.getBlockState(blockPos.add(4, y, 4)).isOf(ModBlocks.DARK_TORCH)) {
-            //System.out.println("obsidian found at :" + 4 +","+y+","+z);
-            ++conduitCount;
+            if (checkObsidianTower(world, blockPos, 4, 4)) {
+                ++conduitCount;
+            }
         }
         if (world.getBlockState(blockPos.add(-4, y, -4)).isOf(ModBlocks.DARK_TORCH)) {
-            //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
-            ++conduitCount;
+            if (checkObsidianTower(world, blockPos, -4, -4)) {
+                ++conduitCount;
+            }
         }
         if (world.getBlockState(blockPos.add(-4, y, 4)).isOf(ModBlocks.DARK_TORCH)) {
-            //System.out.println("obsidian found at :" + 4 +","+y+","+z);
-            ++conduitCount;
+            if (checkObsidianTower(world, blockPos, -4, 4)) {
+                ++conduitCount;
+            }
         }
         if (world.getBlockState(blockPos.add(4, y, -4)).isOf(ModBlocks.DARK_TORCH)) {
-            //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
-            ++conduitCount;
+            if (checkObsidianTower(world, blockPos, 4, -4)) {
+                ++conduitCount;
+            }
         }
 
         //System.out.println("Dark Enchanter Obsidian Ring Count :" + base_obsidian_2);
         return conduitCount == 4;
 
 
+    }
+
+    public static boolean checkObsidianTower(World world, BlockPos pos, int x, int z) {
+        for (int i = 0; i < 5; i++) {
+            if (!world.getBlockState(pos.add(x, i, z)).isOf(Blocks.OBSIDIAN)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

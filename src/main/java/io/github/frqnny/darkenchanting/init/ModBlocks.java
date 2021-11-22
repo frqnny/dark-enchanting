@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.texture.SpriteAtlasTexture;
@@ -18,7 +17,7 @@ import net.minecraft.util.registry.Registry;
 
 public class ModBlocks {
 
-    public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).breakByTool(FabricToolTags.PICKAXES));
+    public static final DarkEnchanterBlock DARK_ENCHANTER = new DarkEnchanterBlock(FabricBlockSettings.copyOf(Blocks.ENCHANTING_TABLE).requiresTool());
     public static final DarkConduitBlock DARK_TORCH = new DarkConduitBlock(FabricBlockSettings.copyOf(Blocks.TORCH), ParticleTypes.DRAGON_BREATH);
     public static final WallDarkConduitBlock DARK_TORCH_WALL = new WallDarkConduitBlock(FabricBlockSettings.copyOf(Blocks.WALL_TORCH), ParticleTypes.DRAGON_BREATH);
 

@@ -50,6 +50,7 @@ public class EnchHelp {
             if (cost != -1000) {
                 cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.1x^2  for help. this is needed because level xp also increases
                 if (takingOff) {
+                    cost *= 0.49;
                     level -= cost;
                 } else {
                     level += cost;
