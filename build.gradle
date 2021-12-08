@@ -26,9 +26,6 @@ dependencies {
 
 	modImplementation include("com.github.Draylar.omega-config:omega-config-base:${project.config_version}")
 
-	implementation include("io.github.juuxel:libninepatch:1.1.0")
-
-
 }
 repositories {
 

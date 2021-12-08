@@ -16,8 +16,6 @@ import net.minecraft.nbt.NbtList;
 import java.util.Map;
 import java.util.Optional;
 
-//TODO CHECK ALL INSTANCSE OF CAST AND MAKE IT ROUND UPWARDS ALWAYS
-//TODO FIX DISCOUNT LOOP
 public class EnchHelp {
 
     public static int getXpCost(Object2IntMap<Enchantment> map, Object2IntMap<Enchantment> stackEnchantments) {
@@ -101,9 +99,6 @@ public class EnchHelp {
             //Cost is initially XP amount
             cost += stack.getDamage();
 
-            //TODO cost += stack.getEnchantments().size();
-            //turn them into levels
-
             //tools don't scale up well, compared to armor
             if (stack.getItem() instanceof ToolItem) {
                 cost *= 0.7F;
@@ -146,7 +141,8 @@ public class EnchHelp {
             Enchantment enchantment = entry.getKey();
             if (enchantment != null) {
                 int i = entry.getValue();
-                if (i > 0) {
+
+                if (i > 0 && i <= enchantment.getMaxLevel()) {
                     nbtList.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), i));
                 }
 
