@@ -75,21 +75,23 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     public void randomDisplayTick(BlockState state, World world, BlockPos blockPos, Random random) {
         super.randomDisplayTick(state, world, blockPos, random);
 
-        for (int int_1 = -2; int_1 <= 2; ++int_1) {
-            for (int int_2 = -2; int_2 <= 2; ++int_2) {
-                if (int_1 > -2 && int_1 < 2 && int_2 == -1) {
-                    int_2 = 2;
+        //inner circle
+        for (int x = -2; x <= 2; ++x) {
+            for (int z = -2; z <= 2; ++z) {
+
+                if (x > -2 && x < 2 && z == -1) {
+                    z = 2;
                 }
 
                 if (random.nextInt(16) == 0) {
-                    for (int int_3 = 0; int_3 <= 1; ++int_3) {
-                        BlockPos blockPos_2 = blockPos.add(int_1, int_3, int_2);
+                    for (int y = 0; y <= 1; ++y) {
+                        BlockPos blockPos_2 = blockPos.add(x, y, z);
                         if (world.getBlockState(blockPos_2).getBlock() == Blocks.BOOKSHELF) {
-                            if (!world.isAir(blockPos.add(int_1 / 2, 0, int_2 / 2))) {
+                            if (!world.isAir(blockPos.add(x / 2, 0, z / 2))) {
                                 break;
                             }
 
-                            world.addParticle(ParticleTypes.ENCHANT, (double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 2.0D, (double) blockPos.getZ() + 0.5D, (double) ((float) int_1 + random.nextFloat()) - 0.5D, (float) int_3 - random.nextFloat() - 1.0F, (double) ((float) int_2 + random.nextFloat()) - 0.5D);
+                            world.addParticle(ParticleTypes.ENCHANT, (double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 2.0D, (double) blockPos.getZ() + 0.5D, (double) ((float) x + random.nextFloat()) - 0.5D, (float) y - random.nextFloat() - 1.5F, (double) ((float) z + random.nextFloat()) - 0.5D);
                         }
                     }
                 }

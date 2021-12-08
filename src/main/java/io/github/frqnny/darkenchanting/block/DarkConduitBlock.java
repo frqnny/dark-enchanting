@@ -7,6 +7,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -20,10 +21,23 @@ public class DarkConduitBlock extends TorchBlock {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        double d = (double) pos.getX() + 0.5D;
-        double e = (double) pos.getY() + 0.8D;
-        double f = (double) pos.getZ() + 0.5D;
-        world.addParticle(ParticleTypes.ENCHANT, d, e, f, 0.0D, -0.3D, 0.0D);
-        world.addParticle(this.particle, d, e, f, 0.0D, 0.0D, 0.0D);
+        if (DarkEnchanting.CONFIG.hasFancyShrineParticle) {
+            int i = pos.getX();
+            int j = pos.getY();
+            int k = pos.getZ();
+            double d = (double) i + random.nextDouble();
+            double e = (double) j + 0.7D;
+            double f = (double) k + random.nextDouble();
+            world.addParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR, d, e, f, 0.0D, 0.0D, 0.0D);
+            BlockPos.Mutable mutable = new BlockPos.Mutable();
+
+            for (int l = 0; l < 5; ++l) {
+                mutable.set(i + MathHelper.nextInt(random, -4, 4), j - random.nextInt(5), k + MathHelper.nextInt(random, -4, 4));
+                BlockState blockState = world.getBlockState(mutable);
+                if (!blockState.isFullCube(world, mutable)) {
+                    world.addParticle(ParticleTypes.ENCHANT, (double) mutable.getX() + random.nextDouble(), (double) mutable.getY() + random.nextDouble(), (double) mutable.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+                }
+            }
+        }
     }
 }
