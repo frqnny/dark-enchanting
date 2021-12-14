@@ -267,8 +267,9 @@ public class BookcaseUtils {
     }
 
     public static double getConduitDiscount(World world, BlockPos pos) {
+        DarkEnchantingConfig config = DarkEnchanting.CONFIG;
         if (getBookshelfCount(world, pos) == 15D && getBookshelfCount_2(world, pos) == 29D && getConduits(world, pos)) {
-            return 0.1;
+            return config.conduitDiscount;
         } else {
             return 0;
         }

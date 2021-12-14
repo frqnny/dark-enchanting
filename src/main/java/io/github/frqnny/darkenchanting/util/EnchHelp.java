@@ -36,19 +36,19 @@ public class EnchHelp {
                 int powerOnStack = stackEnchantments.getInt(enchantment);
                 int powerToApply = power - powerOnStack; //positive if putting on, neg if taking off some/all, 0 if the ench wasn't touched (and should behave as such)
                 if (powerToApply > 0) { //putting on more, then powerToApply to get some of that tasty discount in there
-                    cost = getEnchantmentCost(enchantment, powerToApply);
+                    cost = getEnchantmentCost(enchantment, powerToApply, takingOff);
                 } else if (powerToApply < 0) { //taking off some/all.
-                    cost = getEnchantmentCost(enchantment, Math.absExact(powerToApply));
                     takingOff = true;
+                    cost = getEnchantmentCost(enchantment, Math.absExact(powerToApply), takingOff);
                 }
             } else {
-                cost = getEnchantmentCost(enchantment, power);
+                cost = getEnchantmentCost(enchantment, power, takingOff);
             }
 
             if (cost != -1000) {
                 cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.1x^2  for help. this is needed because level xp also increases
                 if (takingOff) {
-                    cost *= 0.49;
+                    cost *= DarkEnchanting.CONFIG.receiveFactor;
                     level -= cost;
                 } else {
                     level += cost;
@@ -61,7 +61,7 @@ public class EnchHelp {
     }
 
     //in levels
-    public static float getEnchantmentCost(Enchantment enchantment, int power) {
+    public static float getEnchantmentCost(Enchantment enchantment, int power, boolean takingOff) {
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
         float cost = config.baseCost;
 
@@ -87,6 +87,9 @@ public class EnchHelp {
             }
 
             cost *= configEnchantment.personalFactor;
+            if (takingOff) {
+                cost *= configEnchantment.personalReceiveFactor;
+            }
 
         }
 
