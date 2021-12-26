@@ -52,6 +52,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
         playerInventory.player.addExperienceLevels(0); // this is supposed to help sync enchantments
         this.inv = new DarkEnchanterInventory(this);
+        this.blockInventory = inv;
+
         this.context = context;
         enchantmentSliders = new ArrayList<>(15);
         enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(15);
