@@ -4,13 +4,8 @@ package io.github.frqnny.darkenchanting.util;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.Tag;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class BookcaseUtils {
