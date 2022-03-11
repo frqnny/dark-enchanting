@@ -1,5 +1,6 @@
 package io.github.frqnny.darkenchanting;
 
+import draylar.omegaconfiggui.OmegaConfigGui;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import net.fabricmc.api.ClientModInitializer;
@@ -15,6 +16,8 @@ public class DarkEnchantingClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        OmegaConfigGui.registerConfigScreen(DarkEnchanting.CONFIG);
+
         ModGUIs.clientInit();
         ModBlocks.clientInit();
 

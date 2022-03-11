@@ -16,26 +16,27 @@ public class BookcaseUtils {
 
     //Inner ring
     public static boolean getObsidianCount(World world, BlockPos blockPos) {
+        Tag<Block> obsidianTag = world.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(DarkEnchanting.MODID, "crying_obsidian"), id -> new RuntimeException("Could not load tag: " + id.toString()));
         int base_obsidian = 0;
         int z;
         for (z = -1; z <= 1; ++z) { // LOOP for Y level
             for (int x = -1; x <= 1; ++x) { // LOOP for Z level
                 if ((z != 0 || x != 0) && world.isAir(blockPos.add(x, 0, z)) && world.isAir(blockPos.add(x, 1, z))) //check if block not center
                 {
-                    /* 
+                    /*
                     check block on Coords:
                     relative to dark enchanter btw,
                     */
-                    if (world.getBlockState(blockPos.add(x * 2, -1, z * 2)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                    if (world.getBlockState(blockPos.add(x * 2, -1, z * 2)).isIn(obsidianTag)) {
                         ++base_obsidian;
                     }
 
                     if (x != 0 && z != 0) {
-                        if (world.getBlockState(blockPos.add(x * 2, -1, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                        if (world.getBlockState(blockPos.add(x * 2, -1, z)).isIn(obsidianTag)) {
                             ++base_obsidian;
                         }
 
-                        if (world.getBlockState(blockPos.add(x, -1, z * 2)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                        if (world.getBlockState(blockPos.add(x, -1, z * 2)).isIn(obsidianTag)) {
                             ++base_obsidian;
                         }
                     }
@@ -59,7 +60,7 @@ public class BookcaseUtils {
                         if ((z != 0 || x != 0) && world.isAir(blockPos.add(x, 0, z)) && world.isAir(blockPos.add(x, 1, z))) //check if block not center
                         {
                             // Y level is hardcoded, only check for y lvl 0,1
-                            /* 
+                            /*
                             check block on:
                             relative to dark enchanter btw,
                             everything that is labeled 1
@@ -72,7 +73,7 @@ public class BookcaseUtils {
                             if (world.getBlockState(blockPos.add(x * 2, y, z * 2)).isIn(bookshelvesTag)) {
                                 ++bookshelves;
                             }
-                            /* 
+                            /*
                             check block on:
                             relative to dark enchanter btw,
                             everything that is labeled 0
@@ -103,6 +104,7 @@ public class BookcaseUtils {
 
     //outer ring
     public static boolean getObsidianCount_2(World world, BlockPos blockPos) {
+        Tag<Block> obsidianTag = world.getTagManager().getTag(Registry.BLOCK_KEY, new Identifier(DarkEnchanting.MODID, "crying_obsidian"), id -> new RuntimeException("Could not load tag: " + id.toString()));
         int base_obsidian_2 = 0;
         int z;
         int x;
@@ -127,12 +129,12 @@ public class BookcaseUtils {
                 -4 0 2,
                 -4 0 3
                 */
-                if (world.getBlockState(blockPos.add(4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                if (world.getBlockState(blockPos.add(4, y, z)).isIn(obsidianTag)) {
                     //System.out.println("obsidian found at :" + 4 +","+y+","+z);
                     ++base_obsidian_2;
                 }
                 if (z != 4) {
-                    if (world.getBlockState(blockPos.add(-4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                    if (world.getBlockState(blockPos.add(-4, y, z)).isIn(obsidianTag)) {
                         //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
                         ++base_obsidian_2;
                     }
@@ -155,12 +157,12 @@ public class BookcaseUtils {
                 -3 0 -4                                                  -3 0 4
                 -4 0 -4,                                                 -4 0 4
                 */
-                if (world.getBlockState(blockPos.add(x, y, 4)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                if (world.getBlockState(blockPos.add(x, y, 4)).isIn(obsidianTag)) {
                     //System.out.println("obsidian found at :" + x +","+y+","+4);
                     ++base_obsidian_2;
                 }
                 if (x != 4) {
-                    if (world.getBlockState(blockPos.add(x, y, -4)).isOf(Blocks.CRYING_OBSIDIAN)) {
+                    if (world.getBlockState(blockPos.add(x, y, -4)).isIn(obsidianTag)) {
                         //System.out.println("obsidian found at :" + x +","+y+","+-4);
                         ++base_obsidian_2;
                     }
@@ -185,20 +187,20 @@ public class BookcaseUtils {
                     if (z != 0) { //check if block not center
                         /*
                         check Corners
-                        
-                         4 0 -3, 
-                         4 0 -2, 
+
+                         4 0 -3,
+                         4 0 -2,
                          4 0 - 1
-                         4 0 0, 
-                         4 0 1, 
-                         4 0 2, 
+                         4 0 0,
+                         4 0 1,
+                         4 0 2,
                          4 0 3
                         -4 0 -3,
                         -4 0 -2,
                         -4 0 0,
                         -4 0 1,
                         -4 0 2,
-                        -4 0 3                       
+                        -4 0 3
                         */
                         if (world.getBlockState(blockPos.add(4, y, z)).isIn(bookshelvesTag)) {
                             //System.out.println("obsidian found at :" + 4 +","+y+","+z);
@@ -217,7 +219,7 @@ public class BookcaseUtils {
 
                         /*
                         check Corners
-                        
+
                         -4 0 -4                                                   4 0 4
                         3 0 -4                                                    3 0 4
                         2 0 -4                                                    2 0 4
@@ -226,7 +228,7 @@ public class BookcaseUtils {
                         -1 0 -4                                                  -1 0 4
                         -2 0 -4                                                  -2 0 4
                         -3 0 -4                                                  -3 0 4
-                        -4 0 -4,                                                 -4 0 4                         
+                        -4 0 -4,                                                 -4 0 4
                         */
                         if (world.getBlockState(blockPos.add(x, y, 4)).isIn(bookshelvesTag)) {
                             //System.out.println("obsidian found at :" + x +","+y+","+4);

@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:crying_obsidian",
+        {
+            "id": "betternether:blue_crying_obsidian",
+            "required": false
+        }
+    ]
+}

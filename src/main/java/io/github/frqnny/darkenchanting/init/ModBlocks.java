@@ -11,8 +11,8 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.registry.Registry;
 
 public class ModBlocks {
@@ -30,14 +30,10 @@ public class ModBlocks {
 
     public static void clientInit() {
         BlockEntityRendererRegistry.register(ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
-        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
     }
 
 
 
 
 }
-
-
-
-
