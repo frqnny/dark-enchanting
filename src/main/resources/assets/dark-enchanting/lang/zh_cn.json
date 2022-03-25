@@ -1,0 +1,8 @@
+{
+  "itemGroup.dark-enchanting.dark_enchanting_group": "暗黑附魔",
+  "block.dark-enchanting.dark_enchanter": "暗黑附魔台",
+  "block.dark-enchanting.dark_conduit": "暗黑支柱",
+  "block.dark-enchanting.wall_dark_conduit": "暗黑支柱",
+  "item.dark-enchanting.table_upgrade": "附魔台升级",
+  "message.dark-enchanting.table_upgrade": "你需要按住Shift+右键一个原版附魔台来升级！"
+}
