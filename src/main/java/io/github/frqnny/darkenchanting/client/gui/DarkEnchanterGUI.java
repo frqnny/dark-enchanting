@@ -26,6 +26,8 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public String bookcase_stats_1;
     public String bookcase_stats_2;
     public String bookcase_stats_3;
+    //sorry, I don't know how to program
+    public RegistryEntry<Enchantment> cachedRegistryEntry;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
@@ -150,15 +154,24 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
+
+            //Users' preference is preferred over modders'.
             if (configEnchantmentOptional.isPresent()) {
                 ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
                 if (!configEnchantment.activated) {
                     continue;
                 }
+
+            }
+
+            this.context.run((world, pos) -> cachedRegistryEntry = world.getRegistryManager().get(Registry.ENCHANTMENT_KEY).entryOf(RegistryKey.of(Registry.ENCHANTMENT_KEY, Registry.ENCHANTMENT.getId(enchantment))));
+            //if you are reading this, don't
+            boolean isMyTag = cachedRegistryEntry.streamTags().anyMatch((enchantmentTagKey -> enchantmentTagKey.id().toString().contains("dark-enchanting")));
+            if (isMyTag) {
+                continue;
             }
 
             if (enchantment.getMaxLevel() < 1) {
-
                 continue;
             }
 

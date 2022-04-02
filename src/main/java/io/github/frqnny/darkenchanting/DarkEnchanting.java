@@ -2,10 +2,7 @@ package io.github.frqnny.darkenchanting;
 
 import draylar.omegaconfig.OmegaConfig;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
-import io.github.frqnny.darkenchanting.init.ModBlocks;
-import io.github.frqnny.darkenchanting.init.ModGUIs;
-import io.github.frqnny.darkenchanting.init.ModItems;
-import io.github.frqnny.darkenchanting.init.ModPackets;
+import io.github.frqnny.darkenchanting.init.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
@@ -31,6 +28,7 @@ public class DarkEnchanting implements ModInitializer {
         ModItems.init();
         ModBlocks.init();
         ModGUIs.init();
+        ModTags.init();
         ModPackets.init();
     }
 }

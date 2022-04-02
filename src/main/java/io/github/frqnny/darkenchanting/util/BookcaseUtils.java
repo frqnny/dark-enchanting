@@ -4,6 +4,7 @@ package io.github.frqnny.darkenchanting.util;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
+import io.github.frqnny.darkenchanting.init.ModTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -64,7 +65,7 @@ public class BookcaseUtils {
                             [0]         [0]
                             [1][0][1][0][1]
                             */
-                            if (world.getBlockState(blockPos.add(x * 2, y, z * 2)).isIn(ModBlocks.BOOKSHELVES)) {
+                            if (world.getBlockState(blockPos.add(x * 2, y, z * 2)).isIn(ModTags.BOOKSHELVES)) {
                                 ++bookshelves;
                             }
                             /*
@@ -78,10 +79,10 @@ public class BookcaseUtils {
                             [1][0][1][0][1]
                             */
                             if (x != 0 && z != 0) {
-                                if (world.getBlockState(blockPos.add(x * 2, y, z)).isIn(ModBlocks.BOOKSHELVES)) {
+                                if (world.getBlockState(blockPos.add(x * 2, y, z)).isIn(ModTags.BOOKSHELVES)) {
                                     ++bookshelves;
                                 }
-                                if (world.getBlockState(blockPos.add(x, y, z * 2)).isIn(ModBlocks.BOOKSHELVES)) {
+                                if (world.getBlockState(blockPos.add(x, y, z * 2)).isIn(ModTags.BOOKSHELVES)) {
                                     ++bookshelves;
                                 }
                             }
@@ -194,12 +195,12 @@ public class BookcaseUtils {
                         -4 0 2,
                         -4 0 3
                         */
-                        if (world.getBlockState(blockPos.add(4, y, z)).isIn(ModBlocks.BOOKSHELVES)) {
+                        if (world.getBlockState(blockPos.add(4, y, z)).isIn(ModTags.BOOKSHELVES)) {
                             //System.out.println("obsidian found at :" + 4 +","+y+","+z);
                             ++bookshelves_2;
                         }
                         if (z != 4) {
-                            if (world.getBlockState(blockPos.add(-4, y, z)).isIn(ModBlocks.BOOKSHELVES)) {
+                            if (world.getBlockState(blockPos.add(-4, y, z)).isIn(ModTags.BOOKSHELVES)) {
                                 //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
                                 ++bookshelves_2;
                             }
@@ -222,12 +223,12 @@ public class BookcaseUtils {
                         -3 0 -4                                                  -3 0 4
                         -4 0 -4,                                                 -4 0 4
                         */
-                        if (world.getBlockState(blockPos.add(x, y, 4)).isIn(ModBlocks.BOOKSHELVES)) {
+                        if (world.getBlockState(blockPos.add(x, y, 4)).isIn(ModTags.BOOKSHELVES)) {
                             //System.out.println("obsidian found at :" + x +","+y+","+4);
                             ++bookshelves_2;
                         }
                         if (x != 4) {
-                            if (world.getBlockState(blockPos.add(x, y, -4)).isIn(ModBlocks.BOOKSHELVES)) {
+                            if (world.getBlockState(blockPos.add(x, y, -4)).isIn(ModTags.BOOKSHELVES)) {
                                 // System.out.println("obsidian found at :" + x +","+y+","+-4);
                                 ++bookshelves_2;
                             }
