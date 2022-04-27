@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dark-enchanting:table_upgrade"
+    ]
+  },
+  "criteria": {
+    "has_enchanting_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:enchanting_table"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dark-enchanting:table_upgrade"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_enchanting_table",
+      "has_the_recipe"
+    ]
+  ]
+}
