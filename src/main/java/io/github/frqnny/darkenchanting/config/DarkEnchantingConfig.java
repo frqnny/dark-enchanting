@@ -106,6 +106,18 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
+            As a security feature, the client can no longer send packets to the server requesting above
+            maximum enchantment levels.
+            
+            However, improper implementation from other mods can result in this check leading to undesirable effects.
+            For example, mods that remove the limit will likely want this config option off to ensure
+            compability.
+            Default: true
+            """)
+    public boolean shouldRejectEnchantmentAttemptsAboveMaxValue = true;
+
+    @Syncing
+    @Comment("""
 
             This list can be used to configure specific enchantments.
             The values are as follows:

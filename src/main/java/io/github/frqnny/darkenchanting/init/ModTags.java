@@ -10,6 +10,7 @@ import net.minecraft.util.registry.Registry;
 public class ModTags {
     public static final TagKey<Block> BOOKSHELVES = TagKey.of(Registry.BLOCK_KEY, new Identifier("c", "bookshelves"));
     public static final TagKey<Enchantment> DISABLED = TagKey.of(Registry.ENCHANTMENT_KEY, DarkEnchanting.id("enchantment/disabled"));
+    public static final TagKey<Block> CRYING_OBSIDIAN = TagKey.of(Registry.BLOCK_KEY, DarkEnchanting.id("crying_obsidian"));
 
     public static void init() {
     }

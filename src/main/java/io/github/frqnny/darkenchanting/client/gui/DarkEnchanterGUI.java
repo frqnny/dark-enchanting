@@ -9,7 +9,8 @@ import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
-import io.github.frqnny.darkenchanting.util.EnchHelp;
+import io.github.frqnny.darkenchanting.util.EnchantingUtils;
+import io.github.frqnny.darkenchanting.util.TagUtils;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -26,8 +27,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,33 +34,26 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DarkEnchanterGUI extends SyncedGuiDescription {
-    public final DarkEnchanterInventory inv;
-    public final WBox box;
-    public final List<WLabeledSlider> enchantmentSliders;
+    public final DarkEnchanterInventory inv = new DarkEnchanterInventory(this);
+    public final WBox box = new WBox(Axis.VERTICAL);
+    public final List<WLabeledSlider> enchantmentSliders  = new ArrayList<>(15);
     public final ScreenHandlerContext context;
-    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply;
-    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack;
-    public final WButton enchantButton;
-    public final WButton repairButton;
+    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(15);
+    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack = new Object2IntLinkedOpenHashMap<>(15);
+    public final WButton enchantButton = new WButton();
+    public final WButton repairButton = new WButton();
     public int enchantCost = 0;
     public int repairCost = 0;
     public int bookshelfDiscount = 0;
-    public String bookcase_stats_1;
-    public String bookcase_stats_2;
-    public String bookcase_stats_3;
-    //sorry, I don't know how to program
-    public RegistryEntry<Enchantment> cachedRegistryEntry;
+    public String bookcaseStats1;
+    public String bookcaseStats2;
+    public String bookcaseStats3;
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
         playerInventory.player.addExperienceLevels(0); // this is supposed to help sync enchantments
-        this.inv = new DarkEnchanterInventory(this);
         this.blockInventory = inv;
-
         this.context = context;
-        enchantmentSliders = new ArrayList<>(15);
-        enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(15);
-        enchantmentsOnStack = new Object2IntLinkedOpenHashMap<>(15);
 
         WPlainPanel root = new WPlainPanel();
         this.setRootPanel(root);
@@ -71,47 +63,20 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         slot.setFilter((stack) -> inv.isValid(0, stack));
         root.add(slot, 35, 17);
 
-        box = new WBox(Axis.VERTICAL);
         WScrollPanel scrollPanel = new WScrollPanel(box);
         root.add(scrollPanel, 65, 17, 150, 135);
 
-        enchantButton = new WButton();
         root.add(enchantButton, 35, 60, 20, 20);
         enchantButton.setLabel(new LiteralText("E"));
         enchantButton.setOnClick(this::enchant);
 
-        repairButton = new WButton();
         root.add(repairButton, 35, 85, 20, 20);
         repairButton.setLabel(new LiteralText("R"));
         repairButton.setOnClick(this::repair);
 
-        WDynamicTooltipLabel tooltip = new WDynamicTooltipLabel(() -> {
-            String string;
-            if (DarkEnchanterGUI.this.enchantCost > 0) {
-                string = "Pay: " + DarkEnchanterGUI.this.enchantCost + " XP";
-            } else {
-                string = "Receive: " + -DarkEnchanterGUI.this.enchantCost + " XP";
-            }
-
-            return ImmutableList.of(
-                    new LiteralText("Enchant Cost:").formatted(Formatting.DARK_GREEN),
-                    new LiteralText(string),
-                    new LiteralText(""),
-                    new LiteralText(""),
-                    new LiteralText("Repair Cost:").formatted(Formatting.BLUE),
-                    new LiteralText("Pay: " + DarkEnchanterGUI.this.repairCost + " XP"),
-                    new LiteralText(""),
-                    new LiteralText(""),
-                    new LiteralText("Bookshelf Discount:").formatted(Formatting.DARK_PURPLE),
-                    new LiteralText(DarkEnchanterGUI.this.bookcase_stats_1 + DarkEnchanterGUI.this.bookcase_stats_2 + DarkEnchanterGUI.this.bookcase_stats_3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
-                    new LiteralText(""),
-                    new LiteralText(""),
-                    new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP").formatted(Formatting.GOLD),
-                    new LiteralText(""),
-                    new LiteralText("")
-            );
-        });
+        WDynamicTooltipLabel tooltip = new WDynamicTooltipLabel(this::getTooltip);
         root.add(tooltip, -120, 43);
+
         root.add(this.createPlayerInventoryPanel(true), 36, 153);
         root.validate(this);
     }
@@ -164,10 +129,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
             }
 
-            this.context.run((world, pos) -> cachedRegistryEntry = world.getRegistryManager().get(Registry.ENCHANTMENT_KEY).entryOf(RegistryKey.of(Registry.ENCHANTMENT_KEY, Registry.ENCHANTMENT.getId(enchantment))));
-            //if you are reading this, don't
-            boolean isMyTag = cachedRegistryEntry.streamTags().anyMatch((enchantmentTagKey -> enchantmentTagKey.id().toString().contains("dark-enchanting")));
-            if (isMyTag) {
+            if (this.context.get((world, pos) -> TagUtils.isEnchantmentDisabled(world, enchantment), false)) {
                 continue;
             }
 
@@ -180,11 +142,12 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 if (enchantmentsToApply.containsKey(enchantment)) {
                     enchantmentSlider = addNewWidgetToList(enchantmentsToApply.getInt(enchantment), enchantment);
                 } else if (enchantments.containsKey(enchantment)) {
-                    if (!this.isEnchantmentRemoved(enchantment)) {
-                        enchantmentSlider = addNewWidgetToList(enchantments.get(enchantment), enchantment);
-                    } else {
+                    if (this.isEnchantmentRemoved(enchantment)) {
                         enchantmentSlider = addNewWidgetToList(0, enchantment);
+                    } else {
+                        enchantmentSlider = addNewWidgetToList(enchantments.get(enchantment), enchantment);
                     }
+
                 } else {
                     enchantmentSlider = addNewWidgetToList(0, enchantment);
 
@@ -236,24 +199,24 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     public void recalculateEnchantmentCost() {
         this.context.run((world, blockPos) -> {
             int totalExperience = playerInventory.player.totalExperience;
-            enchantCost = BookcaseUtils.applyDiscount(EnchHelp.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
+            enchantCost = BookcaseUtils.applyDiscount(EnchantingUtils.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
 
             if (BookcaseUtils.getObsidianCount(world, blockPos)) {
-                bookcase_stats_1 = "☆";
+                bookcaseStats1 = "☆";
             } else {
-                bookcase_stats_1 = "";
+                bookcaseStats1 = "";
             }
 
-            if (BookcaseUtils.getObsidianCount_2(world, blockPos)) {
-                bookcase_stats_2 = "☆";
+            if (BookcaseUtils.getObsidianCount2(world, blockPos)) {
+                bookcaseStats2 = "☆";
             } else {
-                bookcase_stats_2 = "";
+                bookcaseStats2 = "";
             }
 
             if (BookcaseUtils.getConduits(world, blockPos)) {
-                bookcase_stats_3 = "☆";
+                bookcaseStats3 = "☆";
             } else {
-                bookcase_stats_3 = "";
+                bookcaseStats3 = "";
             }
 
             bookshelfDiscount = (int) (BookcaseUtils.getDiscount(world, blockPos) * 100);
@@ -286,7 +249,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateRepairCost() {
-        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(EnchHelp.getRepairCost(inv.getActualStack()), world, pos));
+        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(EnchantingUtils.getRepairCost(inv.getActualStack()), world, pos));
         repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
     }
 
@@ -311,6 +274,46 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             buf.writeBlockPos(pos);
             this.getPacketSender().sendPacket(ModPackets.APPLY_REPAIR, buf);
         });
+    }
+
+    public List<Text> getTooltip() {
+        String string;
+        if (DarkEnchanterGUI.this.enchantCost > 0) {
+            string = "Pay: " + DarkEnchanterGUI.this.enchantCost + " XP";
+        } else {
+            string = "Receive: " + -DarkEnchanterGUI.this.enchantCost + " XP";
+        }
+
+        return ImmutableList.of(
+                new LiteralText("Enchant Cost:").formatted(Formatting.DARK_GREEN),
+                new LiteralText(string),
+                new LiteralText(""),
+                new LiteralText(""),
+                new LiteralText("Repair Cost:").formatted(Formatting.BLUE),
+                new LiteralText("Pay: " + DarkEnchanterGUI.this.repairCost + " XP"),
+                new LiteralText(""),
+                new LiteralText(""),
+                new LiteralText("Bookshelf Discount:").formatted(Formatting.DARK_PURPLE),
+                new LiteralText(DarkEnchanterGUI.this.bookcaseStats1 + DarkEnchanterGUI.this.bookcaseStats2 + DarkEnchanterGUI.this.bookcaseStats3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
+                new LiteralText(""),
+                new LiteralText(""),
+                new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP").formatted(Formatting.GOLD),
+                new LiteralText(""),
+                new LiteralText(""));
+    }
+
+    public void onStackUpdate(ItemStack stack) {
+        fillBox();
+
+        enchantmentsOnStack.clear();
+        enchantmentsToApply.clear();
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
+        enchantments.forEach((enchantment, level) -> {
+            enchantmentsToApply.putIfAbsent(enchantment, (int) level);
+            enchantmentsOnStack.put(enchantment, (int) level);
+        });
+        recalculateEnchantmentCost();
+        recalculateRepairCost();
     }
 
     @Override

@@ -7,7 +7,6 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
-//Config class object so it sadly cannot be a Record class ;-;
 public class ConfigEnchantment {
     public final String enchantmentId;
     public final boolean activated;

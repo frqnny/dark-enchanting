@@ -4,7 +4,6 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.blockentity.BlockEntityWithBook;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
-import io.github.frqnny.darkenchanting.util.BookEnum;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -19,6 +18,7 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -30,12 +30,12 @@ import java.util.Random;
 
 public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
-    public static final EnumProperty<BookEnum> BOOK_TYPE = EnumProperty.of("book_type", BookEnum.class);
+    public static final EnumProperty<BookType> BOOK_TYPE = EnumProperty.of("book_type", BookType.class);
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
     public DarkEnchanterBlock(Settings s) {
         super(s);
-        this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookEnum.DEFAULT));
+        this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookType.DEFAULT));
     }
 
 
@@ -114,6 +114,25 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     @Override
     public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
         return false;
+    }
+
+    //TODO make it render based on the ID on here
+    public enum BookType implements StringIdentifiable {
+        DEFAULT(DarkEnchanting.id("entity/book1"), "default"),
+        HELL(DarkEnchanting.id("entity/book2"), "hell");
+
+        final Identifier id;
+        final String string;
+
+        BookType(Identifier id, String string) {
+            this.id = id;
+            this.string = string;
+        }
+
+        @Override
+        public String asString() {
+            return string;
+        }
     }
 }
 

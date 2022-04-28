@@ -24,8 +24,6 @@ public class WallDarkConduitBlock extends WallTorchBlock {
         double d = (double) pos.getX() + 0.5D;
         double e = (double) pos.getY() + 0.8D;
         double f = (double) pos.getZ() + 0.5D;
-        double g = 0.22D;
-        double h = 0.27D;
         Direction direction2 = direction.getOpposite();
         world.addParticle(ParticleTypes.ENCHANT, d + 0.27D * (double) direction2.getOffsetX(), e + 0.22D, f + 0.27D * (double) direction2.getOffsetZ(), 0.0D, -0.3D, 0.0D);
         world.addParticle(this.particle, d + 0.27D * (double) direction2.getOffsetX(), e + 0.22D, f + 0.27D * (double) direction2.getOffsetZ(), 0.0D, 0.0D, 0.0D);

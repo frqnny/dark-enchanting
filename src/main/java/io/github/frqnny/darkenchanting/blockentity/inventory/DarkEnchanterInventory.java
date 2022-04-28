@@ -1,15 +1,11 @@
 package io.github.frqnny.darkenchanting.blockentity.inventory;
 
 import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
-
-import java.util.Map;
 
 public class DarkEnchanterInventory implements Inventory {
     private final DefaultedList<ItemStack> stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
@@ -69,17 +65,7 @@ public class DarkEnchanterInventory implements Inventory {
 
     @Override
     public void markDirty() {
-        handler.fillBox();
-        handler.enchantmentsOnStack.clear();
-        handler.enchantmentsToApply.clear();
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(this.getStack(0));
-        enchantments.forEach((enchantment, level) -> {
-            handler.enchantmentsToApply.putIfAbsent(enchantment, (int) level);
-            handler.enchantmentsOnStack.put(enchantment, (int) level);
-
-        });
-        handler.recalculateEnchantmentCost();
-        handler.recalculateRepairCost();
+        handler.onStackUpdate(this.getStack(0));
     }
 
     @Override

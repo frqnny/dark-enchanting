@@ -16,7 +16,7 @@ import net.minecraft.nbt.NbtList;
 import java.util.Map;
 import java.util.Optional;
 
-public class EnchHelp {
+public class EnchantingUtils {
 
     public static int getXpCost(Object2IntMap<Enchantment> map, Object2IntMap<Enchantment> stackEnchantments) {
         int cost = getLevelCost(map, stackEnchantments);
@@ -145,7 +145,8 @@ public class EnchHelp {
             if (enchantment != null) {
                 int i = entry.getValue();
 
-                if (i > 0 && i <= enchantment.getMaxLevel()) {
+                boolean shouldCheckMaxLevelEnch = DarkEnchanting.CONFIG.shouldRejectEnchantmentAttemptsAboveMaxValue;
+                if (i > 0 && (i <= enchantment.getMaxLevel() || shouldCheckMaxLevelEnch)) {
                     nbtList.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), i));
                 }
 

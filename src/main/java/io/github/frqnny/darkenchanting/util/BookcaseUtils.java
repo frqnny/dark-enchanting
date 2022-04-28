@@ -2,7 +2,6 @@ package io.github.frqnny.darkenchanting.util;
 
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
-import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.init.ModTags;
 import net.minecraft.block.Blocks;
@@ -13,7 +12,7 @@ public class BookcaseUtils {
 
     //Inner ring
     public static boolean getObsidianCount(World world, BlockPos blockPos) {
-        int base_obsidian = 0;
+        int baseObsidian = 0;
         int z;
         for (z = -1; z <= 1; ++z) { // LOOP for Y level
             for (int x = -1; x <= 1; ++x) { // LOOP for Z level
@@ -23,23 +22,23 @@ public class BookcaseUtils {
                     check block on Coords:
                     relative to dark enchanter btw,
                     */
-                    if (world.getBlockState(blockPos.add(x * 2, -1, z * 2)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                        ++base_obsidian;
+                    if (world.getBlockState(blockPos.add(x * 2, -1, z * 2)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                        ++baseObsidian;
                     }
 
                     if (x != 0 && z != 0) {
-                        if (world.getBlockState(blockPos.add(x * 2, -1, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                            ++base_obsidian;
+                        if (world.getBlockState(blockPos.add(x * 2, -1, z)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                            ++baseObsidian;
                         }
 
-                        if (world.getBlockState(blockPos.add(x, -1, z * 2)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                            ++base_obsidian;
+                        if (world.getBlockState(blockPos.add(x, -1, z * 2)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                            ++baseObsidian;
                         }
                     }
                 }
             }
         }
-        return base_obsidian == 16;
+        return baseObsidian == 16;
     }
 
     public static int getBookshelfCount(World world, BlockPos blockPos) {
@@ -98,8 +97,8 @@ public class BookcaseUtils {
     }
 
     //outer ring
-    public static boolean getObsidianCount_2(World world, BlockPos blockPos) {
-        int base_obsidian_2 = 0;
+    public static boolean getObsidianCount2(World world, BlockPos blockPos) {
+        int baseObsidian2 = 0;
         int z;
         int x;
         int y = -1;
@@ -123,14 +122,12 @@ public class BookcaseUtils {
                 -4 0 2,
                 -4 0 3
                 */
-                if (world.getBlockState(blockPos.add(4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                    //System.out.println("obsidian found at :" + 4 +","+y+","+z);
-                    ++base_obsidian_2;
+                if (world.getBlockState(blockPos.add(4, y, z)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                    ++baseObsidian2;
                 }
                 if (z != 4) {
-                    if (world.getBlockState(blockPos.add(-4, y, z)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                        //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
-                        ++base_obsidian_2;
+                    if (world.getBlockState(blockPos.add(-4, y, z)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                        ++baseObsidian2;
                     }
                 }
             }
@@ -151,30 +148,27 @@ public class BookcaseUtils {
                 -3 0 -4                                                  -3 0 4
                 -4 0 -4,                                                 -4 0 4
                 */
-                if (world.getBlockState(blockPos.add(x, y, 4)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                    //System.out.println("obsidian found at :" + x +","+y+","+4);
-                    ++base_obsidian_2;
+                if (world.getBlockState(blockPos.add(x, y, 4)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                    ++baseObsidian2;
                 }
                 if (x != 4) {
-                    if (world.getBlockState(blockPos.add(x, y, -4)).isOf(Blocks.CRYING_OBSIDIAN)) {
-                        //System.out.println("obsidian found at :" + x +","+y+","+-4);
-                        ++base_obsidian_2;
+                    if (world.getBlockState(blockPos.add(x, y, -4)).isIn(ModTags.CRYING_OBSIDIAN)) {
+                        ++baseObsidian2;
                     }
                 }
             }
         }
-        //System.out.println("Dark Enchanter Obsidian Ring Count :" + base_obsidian_2);
-        return Math.min(30, base_obsidian_2) == 30;
+        return Math.min(30, baseObsidian2) == 30;
 
     }
 
-    public static int getBookshelfCount_2(World world, BlockPos blockPos) {
-        int bookshelves_2 = 0;
+    public static int getBookshelfCount2(World world, BlockPos blockPos) {
+        int bookshelves2 = 0;
 
         int z;
         int x;
         int y;
-        if (getObsidianCount_2(world, blockPos)) {
+        if (getObsidianCount2(world, blockPos)) {
             for (y = 0; y <= 5; ++y) { // Loop Y level
                 for (z = -4; z <= 4; ++z) { // LOOP for Z level
                     if (z != 0) { //check if block not center
@@ -196,13 +190,11 @@ public class BookcaseUtils {
                         -4 0 3
                         */
                         if (world.getBlockState(blockPos.add(4, y, z)).isIn(ModTags.BOOKSHELVES)) {
-                            //System.out.println("obsidian found at :" + 4 +","+y+","+z);
-                            ++bookshelves_2;
+                            ++bookshelves2;
                         }
                         if (z != 4) {
                             if (world.getBlockState(blockPos.add(-4, y, z)).isIn(ModTags.BOOKSHELVES)) {
-                                //System.out.println("obsidian found at :" + -4 +","+y+","+ z);
-                                ++bookshelves_2;
+                                ++bookshelves2;
                             }
                         }
                     }
@@ -224,19 +216,17 @@ public class BookcaseUtils {
                         -4 0 -4,                                                 -4 0 4
                         */
                         if (world.getBlockState(blockPos.add(x, y, 4)).isIn(ModTags.BOOKSHELVES)) {
-                            //System.out.println("obsidian found at :" + x +","+y+","+4);
-                            ++bookshelves_2;
+                            ++bookshelves2;
                         }
                         if (x != 4) {
                             if (world.getBlockState(blockPos.add(x, y, -4)).isIn(ModTags.BOOKSHELVES)) {
-                                // System.out.println("obsidian found at :" + x +","+y+","+-4);
-                                ++bookshelves_2;
+                                ++bookshelves2;
                             }
                         }
                     }
                 }
             }
-            return Math.min(29, bookshelves_2);
+            return Math.min(29, bookshelves2);
         } else {
             return 0;
         }
@@ -252,19 +242,16 @@ public class BookcaseUtils {
     }
 
     public static double getDiscount(World world, BlockPos pos) {
-        DarkEnchantingConfig config = DarkEnchanting.CONFIG;
-        double configuredMaxDiscount = config.bookshelvesDiscount;
-        double halfDiscount = configuredMaxDiscount / 2D;
+        double halfDiscount = DarkEnchanting.CONFIG.bookshelvesDiscount / 2D;
 
         double bookcase1 = getBookshelfCount(world, pos) / 15D * halfDiscount;
-        double bookcase2 = getBookshelfCount_2(world, pos) / 29D * halfDiscount;
-        return (bookcase1 + bookcase2 + getConduitDiscount(world, pos));
+        double bookcase2 = getBookshelfCount2(world, pos) / 29D * halfDiscount;
+        return bookcase1 + bookcase2 + getConduitDiscount(world, pos);
     }
 
     public static double getConduitDiscount(World world, BlockPos pos) {
-        DarkEnchantingConfig config = DarkEnchanting.CONFIG;
-        if (getBookshelfCount(world, pos) == 15D && getBookshelfCount_2(world, pos) == 29D && getConduits(world, pos)) {
-            return config.conduitDiscount;
+        if (getBookshelfCount(world, pos) == 15D && getBookshelfCount2(world, pos) == 29D && getConduits(world, pos)) {
+            return DarkEnchanting.CONFIG.conduitDiscount;
         } else {
             return 0;
         }
@@ -296,7 +283,6 @@ public class BookcaseUtils {
             }
         }
 
-        //System.out.println("Dark Enchanter Obsidian Ring Count :" + base_obsidian_2);
         return conduitCount == 4;
 
 

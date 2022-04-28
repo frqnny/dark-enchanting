@@ -32,28 +32,28 @@ public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<Dar
     public void render(DarkEnchanterBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
         matrices.translate(0.5D, 0.75D, 0.5D);
-        float g = (float) blockEntity.ticks + tickDelta;
-        matrices.translate(0.0D, (0.1F + MathHelper.sin(g * 0.1F) * 0.01F), 0.0D);
+        float partialTicks = (float) blockEntity.ticks + tickDelta;
+        matrices.translate(0.0D, (0.1F + MathHelper.sin(partialTicks * 0.1F) * 0.01F), 0.0D);
 
-        float h = blockEntity.bookRotation - blockEntity.bookRotationPrev;
-        while (h >= 3.1415927F) {
-            h -= 6.2831855F;
+        float bookRotationChange = blockEntity.bookRotation - blockEntity.bookRotationPrev;
+        while (bookRotationChange >= 3.1415927F) {
+            bookRotationChange -= 6.2831855F;
         }
 
-        while (h < -3.1415927F) {
-            h += 6.2831855F;
+        while (bookRotationChange < -3.1415927F) {
+            bookRotationChange += 6.2831855F;
         }
 
-        float k = blockEntity.bookRotationPrev + h * tickDelta;
-        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(-k));
+        float newBookRotation = blockEntity.bookRotationPrev + bookRotationChange * tickDelta;
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(-newBookRotation));
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(80.0F));
-        float l = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
-        float m = MathHelper.fractionalPart(l + 0.25F) * 1.6F - 0.3F;
-        float n = MathHelper.fractionalPart(l + 0.75F) * 1.6F - 0.3F;
-        float o = MathHelper.lerp(tickDelta, blockEntity.pageTurningSpeed, blockEntity.nextPageTurningSpeed);
-        this.book.setPageAngles(g, MathHelper.clamp(m, 0.0F, 1.0F), MathHelper.clamp(n, 0.0F, 1.0F), o);
+        float newPageAngle = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
+        float m = MathHelper.fractionalPart(newPageAngle + 0.25F) * 1.6F - 0.3F;
+        float n = MathHelper.fractionalPart(newPageAngle + 0.75F) * 1.6F - 0.3F;
+        float newPageTurningSpeed = MathHelper.lerp(tickDelta, blockEntity.pageTurningSpeed, blockEntity.nextPageTurningSpeed);
+        this.book.setPageAngles(partialTicks, MathHelper.clamp(m, 0.0F, 1.0F), MathHelper.clamp(n, 0.0F, 1.0F), newPageTurningSpeed);
         VertexConsumer vertexConsumer = BOOK_TEX.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
-        this.book.render(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.book.renderBook(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
     }
 

@@ -64,9 +64,9 @@ public class BlockEntityWithBook extends BlockEntity {
             be.offset += 6.2831855F;
         }
 
-        float g;
+        float g = be.offset - be.bookRotation;
 
-        for (g = be.offset - be.bookRotation; g >= 3.1415927F; ) {
+        while (g >= 3.1415927F) {
             g -= 6.2831855F;
         }
 

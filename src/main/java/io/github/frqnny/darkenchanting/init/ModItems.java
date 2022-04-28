@@ -19,8 +19,6 @@ public class ModItems {
     public static void init() {
         Registry.register(Registry.ITEM, DarkEnchanterBlock.ID, DARK_ENCHANTER);
         Registry.register(Registry.ITEM, DarkConduitBlock.ID, DARK_TORCH);
-        Registry.register(Registry.ITEM, DarkEnchanting.id("table_upgrade"), TABLE_UPGRADE);
-
+        Registry.register(Registry.ITEM, TableUpgradeItem.ID, TABLE_UPGRADE);
     }
-
 }

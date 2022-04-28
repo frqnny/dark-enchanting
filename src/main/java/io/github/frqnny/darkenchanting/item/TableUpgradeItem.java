@@ -1,5 +1,6 @@
 package io.github.frqnny.darkenchanting.item;
 
+import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,15 +11,17 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TableUpgradeItem extends Item {
+    public static final Identifier ID = DarkEnchanting.id("table_upgrade");
+
     public TableUpgradeItem(Settings settings) {
         super(settings);
     }
-
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -34,7 +37,6 @@ public class TableUpgradeItem extends Item {
         }
         return ActionResult.PASS;
     }
-
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
