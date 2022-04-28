@@ -16,7 +16,6 @@ public class DarkEnchantingClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        OmegaConfigGui.registerConfigScreen(DarkEnchanting.CONFIG);
 
         ModGUIs.clientInit();
         ModBlocks.clientInit();
