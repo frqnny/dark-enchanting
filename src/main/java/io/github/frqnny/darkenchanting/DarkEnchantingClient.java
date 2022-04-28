@@ -1,6 +1,5 @@
 package io.github.frqnny.darkenchanting;
 
-import draylar.omegaconfiggui.OmegaConfigGui;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import net.fabricmc.api.ClientModInitializer;
