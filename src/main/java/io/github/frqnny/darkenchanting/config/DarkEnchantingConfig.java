@@ -71,9 +71,11 @@ public class DarkEnchantingConfig implements Config {
             Inverted weight is calculated through (11.0 - Weight),
             and we multiply the inverted weight with the cost,
             so that cost is affected by the rarity of the Enchantment.
-            This weightFactor allows you to modify the inverted weight. 
+            This weightFactor allows you to modify the inverted weight.
+            
+            Default: 3.0
             """)
-    public float weightFactor = 1.0F;
+    public float weightFactor = 3.0F;
 
     @Syncing
     @Comment("""
@@ -101,6 +103,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
+            
             As a security feature, the client can no longer send packets to the server requesting above
             maximum enchantment levels.
                         
@@ -131,7 +134,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Override
     public String getName() {
-        return "dark-enchanting";
+        return this.getModid();
     }
 
 
