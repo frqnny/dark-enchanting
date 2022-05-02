@@ -9,7 +9,8 @@ import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
 import io.github.frqnny.darkenchanting.init.ModPackets;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
-import io.github.frqnny.darkenchanting.util.EnchantingUtils;
+import io.github.frqnny.darkenchanting.util.CostUtils;
+import io.github.frqnny.darkenchanting.util.PlayerUtils;
 import io.github.frqnny.darkenchanting.util.TagUtils;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
@@ -51,7 +52,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public DarkEnchanterGUI(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(ModGUIs.DARK_ENCHANTER_GUI, syncId, playerInventory);
-        playerInventory.player.addExperienceLevels(0); // this is supposed to help sync enchantments
+        PlayerUtils.syncExperience(playerInventory.player);
         this.blockInventory = inv;
         this.context = context;
 
@@ -81,7 +82,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         root.validate(this);
     }
 
-    public static Text getLabel(Enchantment enchantment, int level) {
+    public Text getLabel(Enchantment enchantment, int level) {
         MutableText mutableText = new TranslatableText(enchantment.getTranslationKey());
         if (enchantment.isCursed()) {
             mutableText.formatted(Formatting.RED);
@@ -119,8 +120,6 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
-
-            //Users' preference is preferred over modders'.
             if (configEnchantmentOptional.isPresent()) {
                 ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
                 if (!configEnchantment.activated) {
@@ -129,11 +128,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
             }
 
-            if (this.context.get((world, pos) -> TagUtils.isEnchantmentDisabled(world, enchantment), false)) {
-                continue;
-            }
-
-            if (enchantment.getMaxLevel() < 1) {
+            if (this.context.get((world, pos) -> TagUtils.isEnchantmentDisabled(world, enchantment), false) || enchantment.getMaxLevel() < 1) {
                 continue;
             }
 
@@ -179,13 +174,13 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         slider.setLabel(getLabel(enchantment, value));
         slider.setLabelUpdater((power) -> getLabel(enchantment, power));
         slider.setValue(value);
-        slider.setValueChangeListener((power) -> changeInMap(enchantment, power));
+        slider.setValueChangeListener((power) -> onSliderValueChange(enchantment, power));
         slider.setHost(this);
         enchantmentSliders.add(slider);
         return slider;
     }
 
-    public void changeInMap(Enchantment enchantment, int level) {
+    public void onSliderValueChange(Enchantment enchantment, int level) {
         if (enchantmentsToApply.containsKey(enchantment)) {
             enchantmentsToApply.replace(enchantment, level);
         } else {
@@ -198,8 +193,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public void recalculateEnchantmentCost() {
         this.context.run((world, blockPos) -> {
-            int totalExperience = playerInventory.player.totalExperience;
-            enchantCost = BookcaseUtils.applyDiscount(EnchantingUtils.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
+            int totalExperience = PlayerUtils.getTotalExperience(playerInventory.player);
+            enchantCost = BookcaseUtils.applyDiscount(CostUtils.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
 
             if (BookcaseUtils.getObsidianCount(world, blockPos)) {
                 bookcaseStats1 = "☆";
@@ -249,7 +244,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateRepairCost() {
-        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(EnchantingUtils.getRepairCost(inv.getActualStack()), world, pos));
+        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(CostUtils.getRepairCost(inv.getActualStack()), world, pos));
         repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
     }
 
@@ -297,7 +292,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                 new LiteralText(DarkEnchanterGUI.this.bookcaseStats1 + DarkEnchanterGUI.this.bookcaseStats2 + DarkEnchanterGUI.this.bookcaseStats3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
                 new LiteralText(""),
                 new LiteralText(""),
-                new LiteralText("You have: " + DarkEnchanterGUI.this.playerInventory.player.totalExperience + " XP").formatted(Formatting.GOLD),
+                new LiteralText("You have: " + PlayerUtils.getTotalExperience(DarkEnchanterGUI.this.playerInventory.player) + " XP").formatted(Formatting.GOLD),
                 new LiteralText(""),
                 new LiteralText(""));
     }

@@ -4,6 +4,7 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.blockentity.BlockEntityWithBook;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
+import io.github.frqnny.darkenchanting.util.PlayerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -47,10 +48,10 @@ public class DarkEnchanterBlock extends BlockWithEntity {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
+        PlayerUtils.syncExperience(player);
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
-            player.addExperience(0);
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             return ActionResult.CONSUME;
         }

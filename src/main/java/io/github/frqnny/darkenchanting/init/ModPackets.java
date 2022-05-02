@@ -6,6 +6,7 @@ import io.github.frqnny.darkenchanting.util.BookcaseUtils;
 import io.github.frqnny.darkenchanting.util.EnchantingUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,7 @@ public class ModPackets {
                     if (EnchantingUtils.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments), BookcaseUtils.getDiscount(player.world, pos))) {
                         EnchantingUtils.set(enchantmentsToApply, stack);
                         player.incrementStat(Stats.ENCHANT_ITEM);
+                        Criteria.ENCHANTED_ITEM.trigger(player, stack, 1);
                     }
 
                     player.closeHandledScreen();

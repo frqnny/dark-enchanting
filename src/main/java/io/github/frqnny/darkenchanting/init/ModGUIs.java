@@ -16,7 +16,8 @@ public class ModGUIs {
         Registry.register(Registry.SCREEN_HANDLER, DarkEnchanting.id("dark_enchanter_gui"), DARK_ENCHANTER_GUI);
     }
 
+    @SuppressWarnings("all")
     public static void clientInit() {
-        HandledScreens.register(DARK_ENCHANTER_GUI, (gui, inventory, title) -> new CottonInventoryScreen<>(gui, inventory.player, title));
+        HandledScreens.<DarkEnchanterGUI, CottonInventoryScreen<DarkEnchanterGUI>>register(DARK_ENCHANTER_GUI, (gui, inventory, title) -> new CottonInventoryScreen<>(gui, inventory.player, title));
     }
 }
