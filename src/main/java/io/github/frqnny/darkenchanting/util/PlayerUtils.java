@@ -35,7 +35,7 @@ public class PlayerUtils {
         int experienceFromFullLevels = 0;
 
         //calculate all full level experience
-        for (int currentLevel = (experienceLevel -1); currentLevel >= 0; currentLevel--) {
+        for (int currentLevel = (experienceLevel - 1); currentLevel >= 0; currentLevel--) {
             if (currentLevel >= 30) {
                 experienceFromFullLevels += 112 + (currentLevel - 30) * 9;
             } else {

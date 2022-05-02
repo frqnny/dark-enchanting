@@ -4,7 +4,8 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
 import io.github.frqnny.darkenchanting.util.EnchantingUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.Enchantment;
@@ -17,8 +18,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
-import java.util.Map;
-
 public class ModPackets {
     public static final Identifier APPLY_ENCHANTMENTS = DarkEnchanting.id("apply_enchantments");
     public static final Identifier APPLY_REPAIR = DarkEnchanting.id("apply_repair");
@@ -28,7 +27,7 @@ public class ModPackets {
             BlockPos pos = buf.readBlockPos();
             int size = buf.readVarInt();
             ServerPlayerEntity serverPlayer = handler.player;
-            Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(size);
+            Object2IntMap<Enchantment> enchantmentsToApply = new Object2IntOpenHashMap<>(size);
 
             for (int i = 0; i < size; i++) {
                 Identifier id = buf.readIdentifier();
@@ -42,9 +41,9 @@ public class ModPackets {
 
                 if (screen instanceof DarkEnchanterGUI) {
                     ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
-                    Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.get(stack);
+                    Object2IntMap<Enchantment> currentEnchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
 
-                    if (EnchantingUtils.applyEnchantXP(serverPlayer, enchantmentsToApply, new Object2IntLinkedOpenHashMap<>(currentEnchantments), BookcaseUtils.getDiscount(player.world, pos))) {
+                    if (EnchantingUtils.applyEnchantXP(serverPlayer, enchantmentsToApply, currentEnchantments, BookcaseUtils.getDiscount(player.world, pos))) {
                         EnchantingUtils.set(enchantmentsToApply, stack);
                         player.incrementStat(Stats.ENCHANT_ITEM);
                         Criteria.ENCHANTED_ITEM.trigger(player, stack, 1);
@@ -58,7 +57,6 @@ public class ModPackets {
 
         ServerPlayNetworking.registerGlobalReceiver(APPLY_REPAIR, (server, player, handler, buf, responseSender) -> {
             BlockPos pos = buf.readBlockPos();
-
 
             server.execute(() -> {
                 ScreenHandler screen = player.currentScreenHandler;

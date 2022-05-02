@@ -11,54 +11,46 @@ import net.minecraft.item.ToolItem;
 import java.util.Optional;
 
 public class CostUtils {
-    public static int getXpCost(Object2IntMap<Enchantment> map, Object2IntMap<Enchantment> stackEnchantments) {
-        int cost = getLevelCost(map, stackEnchantments);
-        cost *= 17; // turn it into XP; 17 xp in a level
-        return cost;
-    }
 
-    public static int getLevelCost(Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> stackEnchantments) {
-        float level = 0;
+    public static int getExperienceCost(Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> stackEnchantments) {
+        int totalCost = 0;
 
-        for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
+        for (var entry : enchantmentsToApply.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             int power = entry.getIntValue();
-            float cost = 0F;
+            int individualCost = 0;
             boolean takingOff = false;
             if (stackEnchantments.containsKey(enchantment)) {
                 int powerOnStack = stackEnchantments.getInt(enchantment);
                 int powerToApply = power - powerOnStack; //positive if putting on, neg if taking off some/all, 0 if the ench wasn't touched (and should behave as such)
                 if (powerToApply > 0) { //putting on more, then powerToApply to get some of that tasty discount in there
-                    cost = getEnchantmentCost(enchantment, powerToApply, false);
+                    individualCost = getEnchantmentCost(enchantment, powerToApply, false);
                 } else if (powerToApply < 0) { //taking off some/all.
                     takingOff = true;
-                    cost = getEnchantmentCost(enchantment, Math.absExact(powerToApply), true);
+                    individualCost = getEnchantmentCost(enchantment, Math.absExact(powerToApply), true);
                 }
             } else {
-                cost = getEnchantmentCost(enchantment, power, false);
+                individualCost = getEnchantmentCost(enchantment, power, false);
             }
 
-            if (cost != -1000) {
-                cost += (cost * cost) / 10; // increase the value as more cost, look up the equation  0.1x^2  for help. this is needed because level xp also increases
+            if (individualCost != -1000) {
                 if (takingOff) {
-                    cost *= DarkEnchanting.CONFIG.receiveFactor;
-                    level -= cost;
+                    individualCost *= DarkEnchanting.CONFIG.receiveFactor;
+                    totalCost -= individualCost;
                 } else {
-                    level += cost;
+                    totalCost += individualCost;
                 }
             }
-
         }
 
-        return Math.round(level);
+        return totalCost;
     }
 
-    //in levels
-    public static float getEnchantmentCost(Enchantment enchantment, int power, boolean takingOff) {
+    public static int getEnchantmentCost(Enchantment enchantment, int power, boolean takingOff) {
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
-        float cost = config.baseCost;
 
-        cost *= Math.max((11.0F - enchantment.getRarity().getWeight()) / config.weightDivisor, 1F);
+        int cost = config.baseExperienceCost;
+        cost *= Math.max((11.0F - enchantment.getRarity().getWeight()) * config.weightFactor, 1F);
 
         cost *= power;
 
@@ -86,8 +78,10 @@ public class CostUtils {
 
         }
 
+
         return cost;
     }
+
 
     public static int getRepairCost(ItemStack stack) {
         float cost = 0;

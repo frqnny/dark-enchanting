@@ -1,7 +1,7 @@
 package io.github.frqnny.darkenchanting.util;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,12 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 
-import java.util.Map;
-
 public class EnchantingUtils {
-    public static boolean applyEnchantXP(PlayerEntity player, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply, Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack, double discount) {
+    public static boolean applyEnchantXP(PlayerEntity player, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> enchantmentsOnStack, double discount) {
         int totalExperience = PlayerUtils.syncAndGetTotalExperience(player);
-        int xpCost = BookcaseUtils.applyDiscount(CostUtils.getXpCost(enchantmentsToApply, enchantmentsOnStack), discount);
+        int xpCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(enchantmentsToApply, enchantmentsOnStack), discount);
 
         boolean canApplyXp = totalExperience >= xpCost || player.isCreative();
         if (canApplyXp) {
@@ -36,13 +34,13 @@ public class EnchantingUtils {
         return canApplyXp;
     }
 
-    public static void set(Map<Enchantment, Integer> enchantments, ItemStack stack) {
+    public static void set(Object2IntMap<Enchantment> enchantments, ItemStack stack) {
         NbtList nbtList = new NbtList();
 
-        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+        for (var entry : enchantments.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             if (enchantment != null) {
-                int i = entry.getValue();
+                int i = entry.getIntValue();
 
                 boolean shouldCheckMaxLevelEnch = DarkEnchanting.CONFIG.shouldRejectEnchantmentAttemptsAboveMaxValue;
                 if (i > 0 && (i <= enchantment.getMaxLevel() || shouldCheckMaxLevelEnch)) {

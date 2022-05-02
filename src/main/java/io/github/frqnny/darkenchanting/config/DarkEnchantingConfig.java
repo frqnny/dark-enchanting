@@ -21,10 +21,11 @@ public class DarkEnchantingConfig implements Config {
     @Syncing
     @Comment("""
 
-            Enchantments will cost this many levels for any transactions.
-            Default: 3.0
+            Base experience cost for each enchantment.
+            All enchantments will be worth at least this much.
+            Default: 30
             """)
-    public float baseCost = 3.0F;
+    public int baseExperienceCost = 30;
 
     @Syncing
     @Comment("""
@@ -46,7 +47,7 @@ public class DarkEnchantingConfig implements Config {
     @Syncing
     @Comment("""
 
-            Each CURSE enchantment's cost is multiplied by this value.
+            Each curse enchantment's cost is multiplied by this value.
             Curse Enchantments will show up as red on the Dark Enchanter.
             Default: 3.0
             """)
@@ -63,22 +64,16 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
-
-            Enchantments contain a certain weight, viewable in the Minecraft Wiki.
-            Weight Divisor is used to determine a specialWeightFactor.
-            We perform the calculation:
-
-            (11 - weight) / weightDivisor = specialWeightFactor
-
-            specialWeightFactor will ALWAYS be greater than 1. Meaning, if the calculation provides a specialWeightFactor less than 1, we will just use 1 instead.
-
-            For example, Sharpness has a weight of 10, while Mending will have a weight of 2.
-            In the equation, Sharpness will have a factor of 1 while Mending will have a factor of 4.5 (WITH DEFAULTS).
-
-            TLDR: higher values means that this will DECREASE rarer enchantment's cost, while lower values will INCREASE the cost.
-            Default: 2.0
+                        
+            How much an enchantment's inverted weight should be multiplied with.
+            Each enchantment has a Rarity, and each Rarity has a weight.
+            You can check Enchantment weights on many Minecraft wikis.
+            Inverted weight is calculated through (11.0 - Weight),
+            and we multiply the inverted weight with the cost,
+            so that cost is affected by the rarity of the Enchantment.
+            This weightFactor allows you to modify the inverted weight. 
             """)
-    public float weightDivisor = 2.0F;
+    public float weightFactor = 1.0F;
 
     @Syncing
     @Comment("""
@@ -108,7 +103,7 @@ public class DarkEnchantingConfig implements Config {
     @Comment("""
             As a security feature, the client can no longer send packets to the server requesting above
             maximum enchantment levels.
-            
+                        
             However, improper implementation from other mods can result in this check leading to undesirable effects.
             For example, mods that remove the limit will likely want this config option off to ensure
             compability.

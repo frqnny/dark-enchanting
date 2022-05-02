@@ -13,8 +13,8 @@ import io.github.frqnny.darkenchanting.util.CostUtils;
 import io.github.frqnny.darkenchanting.util.PlayerUtils;
 import io.github.frqnny.darkenchanting.util.TagUtils;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,16 +31,15 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class DarkEnchanterGUI extends SyncedGuiDescription {
     public final DarkEnchanterInventory inv = new DarkEnchanterInventory(this);
     public final WBox box = new WBox(Axis.VERTICAL);
-    public final List<WLabeledSlider> enchantmentSliders  = new ArrayList<>(15);
+    public final List<WLabeledSlider> enchantmentSliders = new ArrayList<>(15);
     public final ScreenHandlerContext context;
-    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsToApply = new Object2IntLinkedOpenHashMap<>(15);
-    public final Object2IntLinkedOpenHashMap<Enchantment> enchantmentsOnStack = new Object2IntLinkedOpenHashMap<>(15);
+    public final Object2IntMap<Enchantment> enchantmentsToApply = new Object2IntOpenHashMap<>(15);
+    public final Object2IntMap<Enchantment> enchantmentsOnStack = new Object2IntOpenHashMap<>(15);
     public final WButton enchantButton = new WButton();
     public final WButton repairButton = new WButton();
     public int enchantCost = 0;
@@ -116,7 +115,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         if (stack.isEmpty()) {
             return;
         }
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
+        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
         for (Enchantment enchantment : Registry.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
@@ -140,7 +139,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     if (this.isEnchantmentRemoved(enchantment)) {
                         enchantmentSlider = addNewWidgetToList(0, enchantment);
                     } else {
-                        enchantmentSlider = addNewWidgetToList(enchantments.get(enchantment), enchantment);
+                        enchantmentSlider = addNewWidgetToList(enchantments.getInt(enchantment), enchantment);
                     }
 
                 } else {
@@ -148,8 +147,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
                 }
 
-                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                    Enchantment enchantmentOnStack = entry.getKey();
+                for (Enchantment enchantmentOnStack : enchantments.keySet()) {
                     if (!this.isEnchantmentRemoved(enchantmentOnStack)) {
                         if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
                             enchantmentSliders.remove(enchantmentSlider);
@@ -157,7 +155,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
                     }
                 }
 
-                for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
+                for (var entry : enchantmentsToApply.object2IntEntrySet()) {
                     Enchantment enchantmentOnStack = entry.getKey();
 
                     if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment) && entry.getIntValue() > 0) {
@@ -193,8 +191,8 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
     public void recalculateEnchantmentCost() {
         this.context.run((world, blockPos) -> {
-            int totalExperience = PlayerUtils.getTotalExperience(playerInventory.player);
-            enchantCost = BookcaseUtils.applyDiscount(CostUtils.getXpCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
+            int totalExperience = PlayerUtils.syncAndGetTotalExperience(playerInventory.player);
+            enchantCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(enchantmentsToApply, enchantmentsOnStack), world, blockPos);
 
             if (BookcaseUtils.getObsidianCount(world, blockPos)) {
                 bookcaseStats1 = "☆";
@@ -218,9 +216,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
             boolean enchantmentsHaveChanged = true;
 
-            for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsToApply.object2IntEntrySet()) {
-                Enchantment enchantment = entrySet.getKey();
-                int level = entrySet.getIntValue();
+            for (var entry : enchantmentsToApply.object2IntEntrySet()) {
+                Enchantment enchantment = entry.getKey();
+                int level = entry.getIntValue();
 
                 if (!(enchantmentsOnStack.containsKey(enchantment)) || !(enchantmentsOnStack.getInt(enchantment) == level)) {
                     enchantmentsHaveChanged = false;
@@ -228,7 +226,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             }
 
             if (enchantmentsHaveChanged) {
-                for (Object2IntMap.Entry<Enchantment> entrySet : enchantmentsOnStack.object2IntEntrySet()) {
+                for (var entrySet : enchantmentsOnStack.object2IntEntrySet()) {
                     Enchantment enchantment = entrySet.getKey();
                     int level = entrySet.getIntValue();
                     if (!(enchantmentsToApply.containsKey(enchantment)) || !(enchantmentsToApply.getInt(enchantment) == level)) {
@@ -253,7 +251,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeBlockPos(pos);
             buf.writeVarInt(enchantmentsToApply.size());
-            for (Object2IntMap.Entry<Enchantment> entry : enchantmentsToApply.object2IntEntrySet()) {
+            for (var entry : enchantmentsToApply.object2IntEntrySet()) {
                 buf.writeIdentifier(Registry.ENCHANTMENT.getId(entry.getKey()));
                 buf.writeVarInt(entry.getIntValue());
             }
@@ -302,11 +300,13 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         enchantmentsOnStack.clear();
         enchantmentsToApply.clear();
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
-        enchantments.forEach((enchantment, level) -> {
-            enchantmentsToApply.putIfAbsent(enchantment, (int) level);
-            enchantmentsOnStack.put(enchantment, (int) level);
-        });
+        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
+        for (var entry : enchantments.object2IntEntrySet()) {
+            Enchantment enchantment = entry.getKey();
+            int level = entry.getIntValue();
+            enchantmentsToApply.putIfAbsent(enchantment, level);
+            enchantmentsOnStack.put(enchantment, level);
+        }
         recalculateEnchantmentCost();
         recalculateRepairCost();
     }
