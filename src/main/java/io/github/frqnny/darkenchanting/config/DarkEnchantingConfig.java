@@ -138,7 +138,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Override
     public String getName() {
-        return this.getModid();
+        return this.getModid() + "-v1";
     }
 
 
