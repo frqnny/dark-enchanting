@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.Axis;
+import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.blockentity.inventory.DarkEnchanterInventory;
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
@@ -57,11 +58,14 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         WPlainPanel root = new WPlainPanel();
         this.setRootPanel(root);
-        root.setSize(235, 250);
+        root.setSize(235, 252);
 
         WItemSlot slot = WItemSlot.of(inv, 0);
         slot.setFilter((stack) -> inv.isValid(0, stack));
         root.add(slot, 35, 17);
+
+        WSprite sprite = new WSprite(DarkEnchanting.id("textures/gui/background_table.png"));
+        root.add(sprite, 64, 16, 208, 160);
 
         WScrollPanel scrollPanel = new WScrollPanel(box);
         root.add(scrollPanel, 65, 17, 150, 135);
@@ -77,7 +81,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         WDynamicTooltipLabel tooltip = new WDynamicTooltipLabel(this::getTooltip);
         root.add(tooltip, -120, 43);
 
-        root.add(this.createPlayerInventoryPanel(true), 36, 153);
+        root.add(this.createPlayerInventoryPanel(true), 53, 155);
         root.validate(this);
     }
 

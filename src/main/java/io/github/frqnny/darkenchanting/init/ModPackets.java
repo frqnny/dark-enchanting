@@ -13,6 +13,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -50,6 +52,7 @@ public class ModPackets {
                     }
 
                     player.closeHandledScreen();
+                    server.getOverworld().playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0f, server.getOverworld().random.nextFloat() * 0.2f + 0.9f);
 
                 }
             });
@@ -67,6 +70,7 @@ public class ModPackets {
                     }
                 }
                 player.closeHandledScreen();
+                server.getOverworld().playSound(null, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0f, server.getOverworld().random.nextFloat() * 0.2f + 0.9f);
             });
         });
     }
