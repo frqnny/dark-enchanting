@@ -1,6 +1,5 @@
 package io.github.frqnny.darkenchanting.init;
 
-import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.block.DarkConduitBlock;
 import io.github.frqnny.darkenchanting.block.DarkEnchanterBlock;
 import io.github.frqnny.darkenchanting.block.WallDarkConduitBlock;
@@ -33,7 +32,6 @@ public class ModBlocks {
     public static void clientInit() {
         BlockEntityRendererRegistry.register(ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
-        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanting.id("gui/background_table")));
     }
 
 

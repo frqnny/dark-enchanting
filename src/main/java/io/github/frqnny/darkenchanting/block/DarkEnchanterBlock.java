@@ -39,7 +39,6 @@ public class DarkEnchanterBlock extends BlockWithEntity {
         this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookType.DEFAULT));
     }
 
-
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {

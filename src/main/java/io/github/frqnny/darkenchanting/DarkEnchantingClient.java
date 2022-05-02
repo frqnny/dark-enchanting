@@ -15,7 +15,6 @@ public class DarkEnchantingClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
         ModGUIs.clientInit();
         ModBlocks.clientInit();
 

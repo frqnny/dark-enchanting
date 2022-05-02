@@ -28,7 +28,7 @@ public class DarkEnchanterBlockEntity extends BlockEntityWithBook implements Ext
 
     @Override
     public Text getDisplayName() {
-        return new TranslatableText(this.getCachedState().getBlock().getTranslationKey());
+        return new TranslatableText("block.dark-enchanting.dark_enchanter");
     }
 
     @Nullable

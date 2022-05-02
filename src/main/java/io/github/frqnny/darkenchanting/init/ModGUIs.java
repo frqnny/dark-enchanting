@@ -18,6 +18,6 @@ public class ModGUIs {
 
     @SuppressWarnings("all")
     public static void clientInit() {
-        HandledScreens.<DarkEnchanterGUI, CottonInventoryScreen<DarkEnchanterGUI>>register(DARK_ENCHANTER_GUI, (gui, inventory, title) -> new CottonInventoryScreen<>(gui, inventory.player, title));
+        HandledScreens.<DarkEnchanterGUI, CottonInventoryScreen<DarkEnchanterGUI>>register(DARK_ENCHANTER_GUI, CottonInventoryScreen::new);
     }
 }
