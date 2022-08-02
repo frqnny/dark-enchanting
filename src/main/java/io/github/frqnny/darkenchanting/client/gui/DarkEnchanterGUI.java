@@ -23,10 +23,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 
@@ -71,11 +69,11 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         root.add(scrollPanel, 65, 17, 150, 135);
 
         root.add(enchantButton, 35, 60, 20, 20);
-        enchantButton.setLabel(new LiteralText("E"));
+        enchantButton.setLabel(Text.literal("E"));
         enchantButton.setOnClick(this::enchant);
 
         root.add(repairButton, 35, 85, 20, 20);
-        repairButton.setLabel(new LiteralText("R"));
+        repairButton.setLabel(Text.literal("R"));
         repairButton.setOnClick(this::repair);
 
         WDynamicTooltipLabel tooltip = new WDynamicTooltipLabel(this::getTooltip);
@@ -86,7 +84,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public Text getLabel(Enchantment enchantment, int level) {
-        MutableText mutableText = new TranslatableText(enchantment.getTranslationKey());
+        MutableText mutableText = Text.translatable(enchantment.getTranslationKey());
         if (enchantment.isCursed()) {
             mutableText.formatted(Formatting.RED);
         } else if (enchantment.isTreasure()) {
@@ -96,7 +94,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         }
 
         if (level > 0) {
-            mutableText.append(" ").append(new TranslatableText("enchantment.level." + level));
+            mutableText.append(" ").append(Text.translatable("enchantment.level." + level));
         }
 
         return mutableText;
@@ -282,21 +280,21 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         }
 
         return ImmutableList.of(
-                new LiteralText("Enchant Cost:").formatted(Formatting.DARK_GREEN),
-                new LiteralText(string),
-                new LiteralText(""),
-                new LiteralText(""),
-                new LiteralText("Repair Cost:").formatted(Formatting.BLUE),
-                new LiteralText("Pay: " + DarkEnchanterGUI.this.repairCost + " XP"),
-                new LiteralText(""),
-                new LiteralText(""),
-                new LiteralText("Bookshelf Discount:").formatted(Formatting.DARK_PURPLE),
-                new LiteralText(DarkEnchanterGUI.this.bookcaseStats1 + DarkEnchanterGUI.this.bookcaseStats2 + DarkEnchanterGUI.this.bookcaseStats3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
-                new LiteralText(""),
-                new LiteralText(""),
-                new LiteralText("You have: " + PlayerUtils.getTotalExperience(DarkEnchanterGUI.this.playerInventory.player) + " XP").formatted(Formatting.GOLD),
-                new LiteralText(""),
-                new LiteralText(""));
+                Text.literal("Enchant Cost:").formatted(Formatting.DARK_GREEN),
+                Text.literal(string),
+                Text.literal(""),
+                Text.literal(""),
+                Text.literal("Repair Cost:").formatted(Formatting.BLUE),
+                Text.literal("Pay: " + DarkEnchanterGUI.this.repairCost + " XP"),
+                Text.literal(""),
+                Text.literal(""),
+                Text.literal("Shrine Discount:").formatted(Formatting.DARK_PURPLE),
+                Text.literal(DarkEnchanterGUI.this.bookcaseStats1 + DarkEnchanterGUI.this.bookcaseStats2 + DarkEnchanterGUI.this.bookcaseStats3 + " " + DarkEnchanterGUI.this.bookshelfDiscount + " %"),
+                Text.literal(""),
+                Text.literal(""),
+                Text.literal("You have: " + PlayerUtils.getTotalExperience(DarkEnchanterGUI.this.playerInventory.player) + " XP").formatted(Formatting.GOLD),
+                Text.literal(""),
+                Text.literal(""));
     }
 
     public void onStackUpdate(ItemStack stack) {

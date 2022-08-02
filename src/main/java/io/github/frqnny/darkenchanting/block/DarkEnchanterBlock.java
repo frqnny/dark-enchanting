@@ -22,12 +22,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
@@ -73,8 +72,8 @@ public class DarkEnchanterBlock extends BlockWithEntity {
 
     @Environment(EnvType.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos blockPos, Random random) {
-        super.randomDisplayTick(state, world, blockPos, random);
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        super.randomDisplayTick(state, world, pos, random);
 
         //inner circle
         for (int x = -2; x <= 2; ++x) {
@@ -86,13 +85,13 @@ public class DarkEnchanterBlock extends BlockWithEntity {
 
                 if (random.nextInt(16) == 0) {
                     for (int y = 0; y <= 1; ++y) {
-                        BlockPos blockPos_2 = blockPos.add(x, y, z);
+                        BlockPos blockPos_2 = pos.add(x, y, z);
                         if (world.getBlockState(blockPos_2).getBlock() == Blocks.BOOKSHELF) {
-                            if (!world.isAir(blockPos.add(x / 2, 0, z / 2))) {
+                            if (!world.isAir(pos.add(x / 2, 0, z / 2))) {
                                 break;
                             }
 
-                            world.addParticle(ParticleTypes.ENCHANT, (double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 2.0D, (double) blockPos.getZ() + 0.5D, (double) ((float) x + random.nextFloat()) - 0.5D, (float) y - random.nextFloat() - 1.5F, (double) ((float) z + random.nextFloat()) - 0.5D);
+                            world.addParticle(ParticleTypes.ENCHANT, (double) pos.getX() + 0.5D, (double) pos.getY() + 2.0D, (double) pos.getZ() + 0.5D, (double) ((float) x + random.nextFloat()) - 0.5D, (float) y - random.nextFloat() - 1.5F, (double) ((float) z + random.nextFloat()) - 0.5D);
                         }
                     }
                 }

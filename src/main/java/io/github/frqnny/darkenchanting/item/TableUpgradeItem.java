@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -33,14 +33,14 @@ public class TableUpgradeItem extends Item {
             context.getStack().decrement(1);
             return ActionResult.SUCCESS;
         } else {
-            context.getPlayer().sendMessage(new TranslatableText("message.dark-enchanting.table_upgrade"), true);
+            context.getPlayer().sendMessage(Text.translatable("message.dark-enchanting.table_upgrade"), true);
         }
         return ActionResult.PASS;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        user.sendMessage(new TranslatableText("message.dark-enchanting.table_upgrade"), true);
+        user.sendMessage(Text.translatable("message.dark-enchanting.table_upgrade"), true);
         return super.use(world, user, hand);
     }
 }

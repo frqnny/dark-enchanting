@@ -8,9 +8,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class DarkConduitBlock extends TorchBlock {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_conduit");

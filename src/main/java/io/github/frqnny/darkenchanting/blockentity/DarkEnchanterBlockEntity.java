@@ -11,7 +11,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,7 @@ public class DarkEnchanterBlockEntity extends BlockEntityWithBook implements Ext
 
     @Override
     public Text getDisplayName() {
-        return new TranslatableText("block.dark-enchanting.dark_enchanter");
+        return Text.translatable("block.dark-enchanting.dark_enchanter");
     }
 
     @Nullable
