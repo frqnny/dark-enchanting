@@ -11,6 +11,7 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -18,7 +19,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 public class ModPackets {
     public static final Identifier APPLY_ENCHANTMENTS = DarkEnchanting.id("apply_enchantments");
@@ -33,7 +33,7 @@ public class ModPackets {
 
             for (int i = 0; i < size; i++) {
                 Identifier id = buf.readIdentifier();
-                Enchantment enchantment = Registry.ENCHANTMENT.get(id);
+                Enchantment enchantment = Registries.ENCHANTMENT.get(id);
                 int level = buf.readVarInt();
                 enchantmentsToApply.put(enchantment, level);
             }

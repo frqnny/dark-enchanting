@@ -8,8 +8,9 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.WallStandingBlockItem;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModItems {
     public static final Item DARK_ENCHANTER = new BlockItem(ModBlocks.DARK_ENCHANTER, new FabricItemSettings().group(DarkEnchanting.DARK_ENCHANTING));
@@ -17,8 +18,8 @@ public class ModItems {
     public static final Item TABLE_UPGRADE = new TableUpgradeItem(new FabricItemSettings().group(DarkEnchanting.DARK_ENCHANTING).maxCount(1).rarity(Rarity.EPIC));
 
     public static void init() {
-        Registry.register(Registry.ITEM, DarkEnchanterBlock.ID, DARK_ENCHANTER);
-        Registry.register(Registry.ITEM, DarkConduitBlock.ID, DARK_TORCH);
-        Registry.register(Registry.ITEM, TableUpgradeItem.ID, TABLE_UPGRADE);
+        Registry.register(Registries.ITEM, DarkEnchanterBlock.ID, DARK_ENCHANTER);
+        Registry.register(Registries.ITEM, DarkConduitBlock.ID, DARK_TORCH);
+        Registry.register(Registries.ITEM, TableUpgradeItem.ID, TABLE_UPGRADE);
     }
 }

@@ -12,8 +12,9 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModBlocks {
 
@@ -23,10 +24,10 @@ public class ModBlocks {
     public static final BlockEntityType<DarkEnchanterBlockEntity> DE_BLOCK_ENTITY = FabricBlockEntityTypeBuilder.create(DarkEnchanterBlockEntity::new, DARK_ENCHANTER).build();
 
     public static void init() {
-        Registry.register(Registry.BLOCK, DarkConduitBlock.ID, DARK_TORCH);
-        Registry.register(Registry.BLOCK, WallDarkConduitBlock.ID, DARK_TORCH_WALL);
-        Registry.register(Registry.BLOCK, DarkEnchanterBlock.ID, DARK_ENCHANTER);
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, DarkEnchanterBlock.ID, DE_BLOCK_ENTITY);
+        Registry.register(Registries.BLOCK, DarkConduitBlock.ID, DARK_TORCH);
+        Registry.register(Registries.BLOCK, WallDarkConduitBlock.ID, DARK_TORCH_WALL);
+        Registry.register(Registries.BLOCK, DarkEnchanterBlock.ID, DARK_ENCHANTER);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, DarkEnchanterBlock.ID, DE_BLOCK_ENTITY);
     }
 
     public static void clientInit() {
