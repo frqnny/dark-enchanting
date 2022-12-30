@@ -22,11 +22,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +119,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             return;
         }
         Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
-        for (Enchantment enchantment : Registry.ENCHANTMENT) {
+        for (Enchantment enchantment : Registries.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
             if (configEnchantmentOptional.isPresent()) {
@@ -254,7 +255,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             buf.writeBlockPos(pos);
             buf.writeVarInt(enchantmentsToApply.size());
             for (var entry : enchantmentsToApply.object2IntEntrySet()) {
-                buf.writeIdentifier(Registry.ENCHANTMENT.getId(entry.getKey()));
+                buf.writeIdentifier(Registries.ENCHANTMENT.getId(entry.getKey()));
                 buf.writeVarInt(entry.getIntValue());
             }
 
