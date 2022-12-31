@@ -5,15 +5,13 @@ import io.github.frqnny.darkenchanting.block.DarkEnchanterBlock;
 import io.github.frqnny.darkenchanting.block.WallDarkConduitBlock;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import io.github.frqnny.darkenchanting.client.renderer.DarkEnchanterBlockEntityRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.registry.Registry;
 
 public class ModBlocks {
@@ -31,9 +29,6 @@ public class ModBlocks {
     }
 
     public static void clientInit() {
-        BlockEntityRendererRegistry.register(ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
-        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlas, registry) -> registry.register(DarkEnchanterBlockEntityRenderer.BOOK_ID));
+        BlockEntityRendererFactories.register(DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
     }
-
-
 }

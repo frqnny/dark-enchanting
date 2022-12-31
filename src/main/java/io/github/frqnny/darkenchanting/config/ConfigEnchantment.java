@@ -4,7 +4,6 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registry;
 
 import java.util.Optional;
 

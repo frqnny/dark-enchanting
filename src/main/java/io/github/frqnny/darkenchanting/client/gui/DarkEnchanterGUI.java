@@ -27,7 +27,6 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;

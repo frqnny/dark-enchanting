@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "dark-enchanting:entity/book1"
+    }
+  ]
+}
