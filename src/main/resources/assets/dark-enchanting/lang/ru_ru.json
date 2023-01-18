@@ -1,8 +1,8 @@
 {
-  "itemGroup.dark-enchanting.dark_enchanting_group": "Темные чары",
-  "block.dark-enchanting.dark_enchanter": "Темный Чародей",
-  "block.dark-enchanting.dark_conduit": "Темный Трубопровод",
-  "block.dark-enchanting.wall_dark_conduit": "Темный Трубопровод",
-  "item.dark-enchanting.table_upgrade": "Обновление таблицы",
-  "message.dark-enchanting.table_upgrade": "Вам нужно щелкнуть правой кнопкой мыши по таблице ванильных чар, чтобы это сработало!"
+	"itemGroup.dark-enchanting.dark_enchanting_group":"Тёмные чары",
+	"block.dark-enchanting.dark_enchanter":"Тёмный Чарадейский стол",
+	"block.dark-enchanting.dark_conduit":"Тёмный факел",
+	"block.dark-enchanting.wall_dark_conduit":"Тёмный факел",
+	"item.dark-enchanting.table_upgrade":"Улучшение стола",
+	"message.dark-enchanting.table_upgrade":"Вам нужно щёлкнуть правой кнопкой мыши по ванильному столу зачарования, чтобы это сработало!"
 }
