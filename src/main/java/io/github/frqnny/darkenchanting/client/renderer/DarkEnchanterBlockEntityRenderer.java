@@ -16,7 +16,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
+
 
 @Environment(EnvType.CLIENT)
 public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<DarkEnchanterBlockEntity> {
@@ -45,8 +46,8 @@ public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<Dar
         }
 
         float newBookRotation = blockEntity.bookRotationPrev + bookRotationChange * tickDelta;
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotation(-newBookRotation));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(80.0F));
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(-newBookRotation));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(80.0F));
         float newPageAngle = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
         float m = MathHelper.fractionalPart(newPageAngle + 0.25F) * 1.6F - 0.3F;
         float n = MathHelper.fractionalPart(newPageAngle + 0.75F) * 1.6F - 0.3F;

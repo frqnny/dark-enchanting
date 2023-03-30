@@ -2,8 +2,8 @@ package io.github.frqnny.darkenchanting.config;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.Optional;
 
@@ -37,6 +37,6 @@ public class ConfigEnchantment {
     }
 
     public static Optional<ConfigEnchantment> getConfigEnchantmentFor(Enchantment enchantment) {
-        return getConfigEnchantmentFor(Registries.ENCHANTMENT.getId(enchantment));
+        return getConfigEnchantmentFor(Registry.ENCHANTMENT.getId(enchantment));
     }
 }
