@@ -45,7 +45,7 @@ public class ModPackets {
                     ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
                     Object2IntMap<Enchantment> currentEnchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
 
-                    if (EnchantingUtils.applyEnchantXP(serverPlayer, enchantmentsToApply, currentEnchantments, BookcaseUtils.getDiscount(player.world, pos))) {
+                    if (EnchantingUtils.applyEnchantXP(serverPlayer, enchantmentsToApply, currentEnchantments, BookcaseUtils.getDiscount(player.getEntityWorld(), pos))) {
                         EnchantingUtils.set(enchantmentsToApply, stack);
                         player.incrementStat(Stats.ENCHANT_ITEM);
                         Criteria.ENCHANTED_ITEM.trigger(player, stack, 1);
@@ -65,7 +65,7 @@ public class ModPackets {
                 ScreenHandler screen = player.currentScreenHandler;
                 if (screen instanceof DarkEnchanterGUI) {
                     ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
-                    if (EnchantingUtils.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.world, pos))) {
+                    if (EnchantingUtils.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.getEntityWorld(), pos))) {
                         stack.setDamage(0);
                     }
                 }

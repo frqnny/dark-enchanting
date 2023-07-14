@@ -2,7 +2,7 @@ package io.github.frqnny.darkenchanting.client.gui;
 
 import io.github.cottonmc.cotton.gui.widget.WWidget;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class WDynamicTooltipLabel extends WWidget {
     }
 
     @Override
-    public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
-        MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, supplier.get(), x, y);
+    public void paint(DrawContext context, int x, int y, int mouseX, int mouseY) {
+        context.drawTooltip(MinecraftClient.getInstance().textRenderer, supplier.get(), x, y);
     }
 }

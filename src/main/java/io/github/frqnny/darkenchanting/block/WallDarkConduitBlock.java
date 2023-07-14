@@ -8,9 +8,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class WallDarkConduitBlock extends WallTorchBlock {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "wall_dark_conduit");
@@ -19,6 +18,7 @@ public class WallDarkConduitBlock extends WallTorchBlock {
         super(settings, particle);
     }
 
+    @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         Direction direction = state.get(FACING);
         double d = (double) pos.getX() + 0.5D;

@@ -11,7 +11,7 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 
 public class ModGUIs {
-    public static final ScreenHandlerType<DarkEnchanterGUI> DARK_ENCHANTER_GUI = new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> new DarkEnchanterGUI(syncId, inventory, ScreenHandlerContext.create(inventory.player.world, buf.readBlockPos())));
+    public static final ScreenHandlerType<DarkEnchanterGUI> DARK_ENCHANTER_GUI = new ExtendedScreenHandlerType<>((syncId, inventory, buf) -> new DarkEnchanterGUI(syncId, inventory, ScreenHandlerContext.create(inventory.player.getEntityWorld(), buf.readBlockPos())));
 
     public static void init() {
         Registry.register(Registries.SCREEN_HANDLER, DarkEnchanting.id("dark_enchanter_gui"), DARK_ENCHANTER_GUI);

@@ -6,12 +6,11 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class BlockEntityWithBook extends BlockEntity {
-    private static final Random RANDOM = new Random();
+    private static final Random RANDOM = Random.create();
     public int ticks;
     public float nextPageAngle;
     public float pageAngle;
