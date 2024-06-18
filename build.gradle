@@ -2,7 +2,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 plugins {
-	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -23,7 +23,7 @@ dependencies {
 
 	modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
 
-	modImplementation include("com.github.Draylar.omega-config:omega-config-base:${project.config_version}")
+	modImplementation include("com.github.Draylar:omega-config:${project.config_version}")
 
 }
 repositories {
@@ -44,32 +44,12 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
-
-	doLast {
-
-		def jsonMinifyStart = System.currentTimeMillis()
-		def jsonMinified = 0
-		def jsonBytesSaved = 0
-
-		fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
-
-			File file = it
-			jsonMinified++
-			def oldLength = file.length()
-			file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
-			jsonBytesSaved += oldLength - file.length()
-		}
-
-		println('Minified ' + jsonMinified + ' json files. Saved ' + jsonBytesSaved + ' bytes. Took ' + (System.currentTimeMillis() - jsonMinifyStart) + 'ms.')
-	}
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is
 // this fixes some edge cases with special characters not displaying correctly
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	options.fork = true
 	it.options.release = 17
 }
 

@@ -59,7 +59,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         root.setSize(235, 252);
 
         WItemSlot slot = WItemSlot.of(inv, 0);
-        slot.setFilter((stack) -> inv.isValid(0, stack));
+        slot.setInputFilter((stack) -> inv.isValid(0, stack));
         root.add(slot, 35, 17);
 
         WSprite sprite = new WSprite(DarkEnchanting.id("textures/gui/background_table.png"));
