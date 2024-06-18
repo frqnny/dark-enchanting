@@ -8,20 +8,16 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.blockentity.inventory.DarkEnchanterInventory;
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.init.ModGUIs;
-import io.github.frqnny.darkenchanting.init.ModPackets;
-import io.github.frqnny.darkenchanting.util.BookcaseUtils;
-import io.github.frqnny.darkenchanting.util.CostUtils;
-import io.github.frqnny.darkenchanting.util.PlayerUtils;
-import io.github.frqnny.darkenchanting.util.TagUtils;
-import io.netty.buffer.Unpooled;
+import io.github.frqnny.darkenchanting.network.EnchantPacket;
+import io.github.frqnny.darkenchanting.network.RepairPacket;
+import io.github.frqnny.darkenchanting.util.*;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.MutableText;
@@ -117,7 +113,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
         if (stack.isEmpty()) {
             return;
         }
-        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
+        Object2IntMap<Enchantment> enchantments = EnchantingUtils.getEnchantmentMap(stack);
         for (Enchantment enchantment : Registries.ENCHANTMENT) {
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
 
@@ -187,6 +183,9 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
             enchantmentsToApply.put(enchantment, level);
         }
 
+        if (level <= 0 || level > enchantment.getMaxLevel()) {
+            enchantmentsToApply.removeInt(enchantment);
+        }
         fillBox();
         recalculateEnchantmentCost();
     }
@@ -244,31 +243,20 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
     }
 
     public void recalculateRepairCost() {
-        this.context.run((world, pos) -> repairCost = BookcaseUtils.applyDiscount(CostUtils.getRepairCost(inv.getActualStack()), world, pos));
-        repairButton.setEnabled(inv.getActualStack().isDamaged() || playerInventory.player.isCreative());
+        this.context.run((world, pos) -> this.repairCost = BookcaseUtils.applyDiscount(CostUtils.getRepairCost(inv.getActualStack()), world, pos));
+        int totalExperience = PlayerUtils.syncAndGetTotalExperience(playerInventory.player);
+        repairButton.setEnabled((inv.getActualStack().isDamaged() && totalExperience >= this.repairCost) || playerInventory.player.isCreative());
     }
 
     public void enchant() {
         this.context.run((world, pos) -> {
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeBlockPos(pos);
-            buf.writeVarInt(enchantmentsToApply.size());
-            for (var entry : enchantmentsToApply.object2IntEntrySet()) {
-                buf.writeIdentifier(Registries.ENCHANTMENT.getId(entry.getKey()));
-                buf.writeVarInt(entry.getIntValue());
-            }
-
-            this.getPacketSender().sendPacket(ModPackets.APPLY_ENCHANTMENTS, buf);
+            ClientPlayNetworking.send(new EnchantPacket(pos, EnchantingUtils.unconvert(enchantmentsToApply)));
             this.inv.markDirty();
         });
     }
 
     public void repair() {
-        this.context.run((world, pos) -> {
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeBlockPos(pos);
-            this.getPacketSender().sendPacket(ModPackets.APPLY_REPAIR, buf);
-        });
+        this.context.run((world, pos) -> ClientPlayNetworking.send(new RepairPacket(pos)));
     }
 
     public List<Text> getTooltip() {
@@ -302,7 +290,7 @@ public class DarkEnchanterGUI extends SyncedGuiDescription {
 
         enchantmentsOnStack.clear();
         enchantmentsToApply.clear();
-        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>(EnchantmentHelper.get(stack));
+        Object2IntMap<Enchantment> enchantments = EnchantingUtils.getEnchantmentMap(stack);
         for (var entry : enchantments.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             int level = entry.getIntValue();

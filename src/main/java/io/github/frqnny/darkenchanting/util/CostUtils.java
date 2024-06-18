@@ -50,7 +50,7 @@ public class CostUtils {
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
 
         int cost = config.baseExperienceCost;
-        cost *= Math.max((11.0F - enchantment.getRarity().getWeight()) * config.weightFactor, 1F);
+        cost *= Math.max((11.0F - enchantment.getWeight()) * config.weightFactor, 1F);
 
         cost *= power;
 

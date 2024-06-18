@@ -3,8 +3,8 @@ package io.github.frqnny.darkenchanting.block;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallTorchBlock;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 public class WallDarkConduitBlock extends WallTorchBlock {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "wall_dark_conduit");
 
-    public WallDarkConduitBlock(Settings settings, ParticleEffect particle) {
-        super(settings, particle);
+    public WallDarkConduitBlock(SimpleParticleType simpleParticleType, Settings settings) {
+        super(simpleParticleType, settings);
     }
 
     @Override

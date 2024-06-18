@@ -26,7 +26,7 @@ public class BlockEntityWithBook extends BlockEntity {
         super(t, pos, state);
     }
 
-    public static void tick(World world, BlockPos pos, DarkEnchanterBlockEntity be) {
+    public static void tick(World world, BlockPos pos, BlockState state, DarkEnchanterBlockEntity be) {
         be.pageTurningSpeed = be.nextPageTurningSpeed;
         be.bookRotationPrev = be.bookRotation;
         PlayerEntity player = world.getClosestPlayer((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 3.0D, false);

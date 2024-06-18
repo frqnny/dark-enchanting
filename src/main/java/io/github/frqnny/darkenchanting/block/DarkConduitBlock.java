@@ -3,8 +3,8 @@ package io.github.frqnny.darkenchanting.block;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TorchBlock;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 public class DarkConduitBlock extends TorchBlock {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_conduit");
 
-    public DarkConduitBlock(Settings settings, ParticleEffect particle) {
-        super(settings, particle);
+    public DarkConduitBlock(SimpleParticleType particle, Settings settings) {
+        super(particle, settings);
     }
 
     @Override

@@ -1,13 +1,15 @@
 package io.github.frqnny.darkenchanting.util;
 
-import io.github.frqnny.darkenchanting.DarkEnchanting;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.entry.RegistryEntry;
+
+import java.util.Set;
 
 public class EnchantingUtils {
     public static boolean applyEnchantXP(PlayerEntity player, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> enchantmentsOnStack, double discount) {
@@ -35,27 +37,51 @@ public class EnchantingUtils {
     }
 
     public static void set(Object2IntMap<Enchantment> enchantments, ItemStack stack) {
-        NbtList nbtList = new NbtList();
+        stack.set(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
 
         for (var entry : enchantments.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             if (enchantment != null) {
-                int i = entry.getIntValue();
-
-                boolean shouldCheckMaxLevelEnch = DarkEnchanting.CONFIG.shouldRejectEnchantmentAttemptsAboveMaxValue;
-                if (i > 0 && (i <= enchantment.getMaxLevel() || shouldCheckMaxLevelEnch)) {
-                    nbtList.add(EnchantmentHelper.createNbt(EnchantmentHelper.getEnchantmentId(enchantment), i));
+                int level = entry.getIntValue();
+                if (level <= 0 || level > enchantment.getMaxLevel()) {
+                    continue;
                 }
-
+                stack.addEnchantment(enchantment, level);
             }
         }
 
-        if (nbtList.isEmpty()) {
-            stack.removeSubNbt("Enchantments");
-        } else if (!stack.isOf(Items.ENCHANTED_BOOK)) {
-            stack.setSubNbt("Enchantments", nbtList);
+    }
+
+    public static Object2IntMap<Enchantment> getEnchantmentMap(ItemStack stack) {
+        return convert(stack.getEnchantments().getEnchantmentsMap());
+    }
+
+    public static Object2IntMap<Enchantment> convert(Set<Object2IntMap.Entry<RegistryEntry<Enchantment>>> map) {
+        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
+
+        for (var entry : map) {
+            int level = entry.getIntValue();
+
+            var enchantmentEntry = entry.getKey();
+            Enchantment enchantment = enchantmentEntry.value();
+
+            enchantments.put(enchantment, level);
         }
 
+        return enchantments;
+    }
+
+    public static Object2IntMap<RegistryEntry<Enchantment>> unconvert(Object2IntMap<Enchantment> map) {
+        Object2IntMap<RegistryEntry<Enchantment>> enchantments = new Object2IntOpenHashMap<>();
+
+        for (var entry : map.object2IntEntrySet()) {
+            RegistryEntry<Enchantment> enchantmentEntry = entry.getKey().getRegistryEntry();
+            int level = entry.getIntValue();
+
+            enchantments.put(enchantmentEntry, level);
+        }
+
+        return enchantments;
     }
 }
 

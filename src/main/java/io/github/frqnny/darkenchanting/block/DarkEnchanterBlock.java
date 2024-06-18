@@ -1,7 +1,7 @@
 package io.github.frqnny.darkenchanting.block;
 
+import com.mojang.serialization.MapCodec;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
-import io.github.frqnny.darkenchanting.blockentity.BlockEntityWithBook;
 import io.github.frqnny.darkenchanting.blockentity.DarkEnchanterBlockEntity;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.util.PlayerUtils;
@@ -17,7 +17,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -31,11 +30,17 @@ import org.jetbrains.annotations.Nullable;
 public class DarkEnchanterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_enchanter");
     public static final EnumProperty<BookType> BOOK_TYPE = EnumProperty.of("book_type", BookType.class);
+    public static final MapCodec<DarkEnchanterBlock> CODEC = EnchantingTableBlock.createCodec(DarkEnchanterBlock::new);
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
     public DarkEnchanterBlock(Settings s) {
         super(s);
         this.setDefaultState(this.getStateManager().getDefaultState().with(BOOK_TYPE, BookType.DEFAULT));
+    }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
     }
 
     @Nullable
@@ -45,7 +50,7 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult blockHitResult) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         PlayerUtils.syncExperience(player);
         if (world.isClient) {
             return ActionResult.SUCCESS;
@@ -107,11 +112,11 @@ public class DarkEnchanterBlock extends BlockWithEntity {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlocks.DE_BLOCK_ENTITY, (world1, pos, state1, be) -> BlockEntityWithBook.tick(world1, pos, be));
+        return world.isClient ? validateTicker(type, ModBlocks.DE_BLOCK_ENTITY, DarkEnchanterBlockEntity::tick) : null;
     }
 
     @Override
-    public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
+    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
         return false;
     }
 
