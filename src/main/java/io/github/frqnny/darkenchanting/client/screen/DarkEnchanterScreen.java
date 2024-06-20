@@ -1,7 +1,7 @@
 package io.github.frqnny.darkenchanting.client.screen;
 
 import com.google.common.collect.ImmutableList;
-import io.github.frqnny.darkenchanting.client.screen.widget.EnchantSliderWidget;
+import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.client.screen.widget.EnchantSlidersListWidget;
 import io.github.frqnny.darkenchanting.network.EnchantPacket;
 import io.github.frqnny.darkenchanting.network.RepairPacket;
@@ -26,14 +26,16 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandler> {
-    public final Object2IntMap<Enchantment> enchantmentsToApply = new Object2IntOpenHashMap<>(15);
-    public final Object2IntMap<Enchantment> enchantmentsOnStack = new Object2IntOpenHashMap<>(15);
+    public static final Identifier BACKGROUND = DarkEnchanting.id("textures/gui/dark_enchanter.png");
+    public final Object2IntMap<Enchantment> enchantmentsToApply = new Object2IntOpenHashMap<>();
+    public final Object2IntMap<Enchantment> enchantmentsOnStack = new Object2IntOpenHashMap<>();
     private final BlockPos pos;
     public int enchantCost = 0;
     public int repairCost = 0;
@@ -52,6 +54,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
     @Override
     protected void init() {
         this.backgroundHeight += 100;
+        this.titleX -= 9;
         this.playerInventoryTitleY = this.backgroundHeight - 94;
 
         super.init();
@@ -70,9 +73,9 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         this.enchantSliders = this.addDrawableChild(
                 new EnchantSlidersListWidget(
                         this,
-                        this.x + 50,
+                        this.x + 45,
                         this.y + 25,
-                        150,
+                        130,
                         135
                 )
         );
@@ -100,7 +103,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        //tooltip information
+        context.drawTexture(BACKGROUND, x-9, y, 0, 0, this.backgroundWidth+40, this.backgroundHeight, 304, 304);
         context.drawTooltip(MinecraftClient.getInstance().textRenderer, this.getTooltip(), x - 120, y + 43);
     }
 
@@ -135,10 +138,10 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
             int level = entry.getIntValue();
 
             if (level == 0) {
-                 if (enchantmentsOnStack.containsKey(enchantment)) {
-                     enchantmentsHaveChanged = true; // enchantment fully removed
-                     break;
-                 }
+                if (enchantmentsOnStack.containsKey(enchantment)) {
+                    enchantmentsHaveChanged = true; // enchantment fully removed
+                    break;
+                }
             } else {
                 if (enchantmentsOnStack.containsKey(enchantment)) {
                     if (enchantmentsOnStack.getInt(enchantment) != level) {

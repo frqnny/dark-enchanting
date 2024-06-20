@@ -23,7 +23,7 @@ public class DarkEnchanterScreenHandler extends ScreenHandler {
         this.playerInventory = playerInventory;
 
         //enchantment slot
-        this.addSlot(new Slot(this.inv, 0, 15, 47) {
+        this.addSlot(new Slot(this.inv, 0, 17, 47) {
             @Override
             public int getMaxItemCount() {
                 return 1;

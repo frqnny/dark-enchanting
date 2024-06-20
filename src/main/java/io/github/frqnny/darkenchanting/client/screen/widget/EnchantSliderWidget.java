@@ -1,10 +1,7 @@
 package io.github.frqnny.darkenchanting.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.GuiNavigationType;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -17,12 +14,17 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.IntConsumer;
 
+/*
+ * Based on SliderWidget, this enchant slider instead focuses on:
+ *  1. Integer-based slider system rather than an internal double
+ *  2. Built in min/max values
+ *  3. Hardcoded interoperability with Enchantments to insert more logic here
+ */
 public class EnchantSliderWidget extends ClickableWidget {
     private static final Identifier TEXTURE = new Identifier("widget/slider");
     private static final Identifier HIGHLIGHTED_TEXTURE = new Identifier("widget/slider_highlighted");
@@ -37,7 +39,7 @@ public class EnchantSliderWidget extends ClickableWidget {
     private boolean activated = true;
 
     public EnchantSliderWidget(Enchantment enchantment, int level, int max) {
-        super(0, 0, 140, 18, getLabel(enchantment, level, true));
+        super(0, 0, 120, 18, getLabel(enchantment, level, true));
         this.enchantment = enchantment;
         this.level = level;
         this.max = max;
@@ -129,7 +131,7 @@ public class EnchantSliderWidget extends ClickableWidget {
         }
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.active ? 16777215 : 10526880;
-        this.drawScrollableText(context, minecraftClient.textRenderer, 2, i | MathHelper.ceil(this.alpha * 255.0F) << 24);
+        this.drawScrollableText(context, minecraftClient.textRenderer, 8, i | MathHelper.ceil(this.alpha * 255.0F) << 24);
 
     }
 

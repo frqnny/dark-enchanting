@@ -111,6 +111,16 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
         }
     }
 
+    @Override
+    protected void drawHeaderAndFooterSeparators(DrawContext context) {
+
+    }
+
+    @Override
+    protected void drawMenuListBackground(DrawContext context) {
+
+    }
+
     @Environment(value = EnvType.CLIENT)
     protected static class WidgetEntry extends ElementListWidget.Entry<WidgetEntry> {
         private final EnchantSliderWidget slider;
@@ -128,7 +138,6 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             slider.setPosition(x, y);
-
             slider.render(context, mouseX, mouseY, tickDelta);
         }
 
