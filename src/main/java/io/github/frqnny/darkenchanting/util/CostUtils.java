@@ -18,14 +18,14 @@ public class CostUtils {
         for (var entry : enchantmentsToApply.object2IntEntrySet()) {
             Enchantment enchantment = entry.getKey();
             int power = entry.getIntValue();
+            int powerOnStack = stackEnchantments.getInt(enchantment);
             int individualCost = 0;
             boolean takingOff = false;
             if (stackEnchantments.containsKey(enchantment)) {
-                int powerOnStack = stackEnchantments.getInt(enchantment);
-                int powerToApply = power - powerOnStack; //positive if putting on, neg if taking off some/all, 0 if the ench wasn't touched (and should behave as such)
-                if (powerToApply > 0) { //putting on more, then powerToApply to get some of that tasty discount in there
+                int powerToApply = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
+                if (powerToApply > 0) {
                     individualCost = getEnchantmentCost(enchantment, powerToApply, false);
-                } else if (powerToApply < 0) { //taking off some/all.
+                } else if (powerToApply < 0) {
                     takingOff = true;
                     individualCost = getEnchantmentCost(enchantment, Math.absExact(powerToApply), true);
                 }
@@ -33,7 +33,7 @@ public class CostUtils {
                 individualCost = getEnchantmentCost(enchantment, power, false);
             }
 
-            if (individualCost != -1000) {
+            if (individualCost != Integer.MIN_VALUE) {
                 if (takingOff) {
                     individualCost *= DarkEnchanting.CONFIG.receiveFactor;
                     totalCost -= individualCost;
@@ -68,7 +68,7 @@ public class CostUtils {
         if (configEnchantmentOptional.isPresent()) {
             ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
             if (!configEnchantment.activated) {
-                return -1000;
+                return Integer.MIN_VALUE;
             }
 
             cost *= configEnchantment.personalFactor;

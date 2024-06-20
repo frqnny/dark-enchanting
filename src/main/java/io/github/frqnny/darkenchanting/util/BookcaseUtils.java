@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BookcaseUtils {
 
     //Inner ring
-    public static boolean getObsidianCount(World world, BlockPos blockPos) {
+    public static boolean checkInnerObsidianRing(World world, BlockPos blockPos) {
         int baseObsidian = 0;
         int z;
         for (z = -1; z <= 1; ++z) { // LOOP for Y level
@@ -47,7 +47,7 @@ public class BookcaseUtils {
         int z;
         int x;
         int y;
-        if (getObsidianCount(world, blockPos)) {
+        if (checkInnerObsidianRing(world, blockPos)) {
             for (y = 0; y <= 5; ++y) {
                 for (z = -1; z <= 1; ++z) { // LOOP for z level
                     for (x = -1; x <= 1; ++x) { // LOOP for x level
@@ -97,7 +97,7 @@ public class BookcaseUtils {
     }
 
     //outer ring
-    public static boolean getObsidianCount2(World world, BlockPos blockPos) {
+    public static boolean checkOuterObsidianRing(World world, BlockPos blockPos) {
         int baseObsidian2 = 0;
         int z;
         int x;
@@ -168,7 +168,7 @@ public class BookcaseUtils {
         int z;
         int x;
         int y;
-        if (getObsidianCount2(world, blockPos)) {
+        if (checkOuterObsidianRing(world, blockPos)) {
             for (y = 0; y <= 5; ++y) { // Loop Y level
                 for (z = -4; z <= 4; ++z) { // LOOP for Z level
                     if (z != 0) { //check if block not center
@@ -250,7 +250,7 @@ public class BookcaseUtils {
     }
 
     public static double getConduitDiscount(World world, BlockPos pos) {
-        if (getBookshelfCount(world, pos) == 15D && getBookshelfCount2(world, pos) == 29D && getConduits(world, pos)) {
+        if (getBookshelfCount(world, pos) == 15D && getBookshelfCount2(world, pos) == 29D && checkConduits(world, pos)) {
             return DarkEnchanting.CONFIG.conduitDiscount;
         } else {
             return 0;
@@ -258,7 +258,7 @@ public class BookcaseUtils {
     }
 
     //Conduit Counter
-    public static boolean getConduits(World world, BlockPos blockPos) {
+    public static boolean checkConduits(World world, BlockPos blockPos) {
         int conduitCount = 0;
         int y = 5;
 

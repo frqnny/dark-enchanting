@@ -28,9 +28,9 @@ public class ModBlocks {
 
     public static void clientInit() {
         BlockEntityRendererFactories.register(DE_BLOCK_ENTITY, DarkEnchanterBlockEntityRenderer::new);
-    }    public static final BlockEntityType<DarkEnchanterBlockEntity> DE_BLOCK_ENTITY = BlockEntityType.Builder.create(DarkEnchanterBlockEntity::new, DARK_ENCHANTER).build(null);
+    }
 
-
+    public static final BlockEntityType<DarkEnchanterBlockEntity> DE_BLOCK_ENTITY = BlockEntityType.Builder.create(DarkEnchanterBlockEntity::new, DARK_ENCHANTER).build(null);
 
 
 }

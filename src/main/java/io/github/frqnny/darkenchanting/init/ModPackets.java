@@ -1,8 +1,8 @@
 package io.github.frqnny.darkenchanting.init;
 
-import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
 import io.github.frqnny.darkenchanting.network.EnchantPacket;
 import io.github.frqnny.darkenchanting.network.RepairPacket;
+import io.github.frqnny.darkenchanting.screen.DarkEnchanterScreenHandler;
 import io.github.frqnny.darkenchanting.util.BookcaseUtils;
 import io.github.frqnny.darkenchanting.util.EnchantingUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -23,15 +23,14 @@ public class ModPackets {
         PayloadTypeRegistry.playC2S().register(EnchantPacket.PACKET_ID, EnchantPacket.PACKET_CODEC);
         PayloadTypeRegistry.playC2S().register(RepairPacket.PACKET_ID, RepairPacket.PACKET_CODEC);
 
-
         ServerPlayNetworking.registerGlobalReceiver(EnchantPacket.PACKET_ID, (payload, context) -> {
             BlockPos pos = payload.pos();
 
             context.server().execute(() -> {
                 ScreenHandler screen = context.player().currentScreenHandler;
 
-                if (screen instanceof DarkEnchanterGUI) {
-                    ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
+                if (screen instanceof DarkEnchanterScreenHandler holder) {
+                    ItemStack stack = holder.getActualStack();
                     Object2IntMap<Enchantment> currentEnchantments = EnchantingUtils.getEnchantmentMap(stack);
 
                     if (EnchantingUtils.applyEnchantXP(context.player(), EnchantingUtils.convert(payload.enchantments().object2IntEntrySet()), currentEnchantments, BookcaseUtils.getDiscount(context.player().getWorld(), pos))) {
@@ -52,8 +51,8 @@ public class ModPackets {
 
             context.server().execute(() -> {
                 ScreenHandler screen = context.player().currentScreenHandler;
-                if (screen instanceof DarkEnchanterGUI) {
-                    ItemStack stack = ((DarkEnchanterGUI) screen).inv.getActualStack();
+                if (screen instanceof DarkEnchanterScreenHandler holder) {
+                    ItemStack stack = holder.getActualStack();
                     if (EnchantingUtils.applyRepairXP(context.player(), stack, BookcaseUtils.getDiscount(context.player().getEntityWorld(), pos))) {
                         stack.setDamage(0);
                     }

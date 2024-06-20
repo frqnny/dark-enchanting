@@ -1,6 +1,6 @@
 package io.github.frqnny.darkenchanting.blockentity.inventory;
 
-import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
+import io.github.frqnny.darkenchanting.screen.DarkEnchanterScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -9,9 +9,9 @@ import net.minecraft.util.collection.DefaultedList;
 
 public class DarkEnchanterInventory implements Inventory {
     private final DefaultedList<ItemStack> stacks = DefaultedList.ofSize(1, ItemStack.EMPTY);
-    private final DarkEnchanterGUI handler;
+    private final DarkEnchanterScreenHandler handler;
 
-    public DarkEnchanterInventory(DarkEnchanterGUI h) {
+    public DarkEnchanterInventory(DarkEnchanterScreenHandler h) {
         this.handler = h;
     }
 
@@ -65,7 +65,7 @@ public class DarkEnchanterInventory implements Inventory {
 
     @Override
     public void markDirty() {
-        handler.onStackUpdate(this.getStack(0));
+        handler.onStackUpdate();
     }
 
     @Override

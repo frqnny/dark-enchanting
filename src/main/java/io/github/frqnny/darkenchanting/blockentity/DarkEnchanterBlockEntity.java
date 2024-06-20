@@ -1,8 +1,8 @@
 package io.github.frqnny.darkenchanting.blockentity;
 
-import io.github.frqnny.darkenchanting.client.gui.DarkEnchanterGUI;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import io.github.frqnny.darkenchanting.network.ScreenPacket;
+import io.github.frqnny.darkenchanting.screen.DarkEnchanterScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +28,7 @@ public class DarkEnchanterBlockEntity extends BlockEntityWithBook implements Ext
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-        return new DarkEnchanterGUI(syncId, inv, ScreenHandlerContext.create(this.world, this.pos));
+        return new DarkEnchanterScreenHandler(syncId, inv, ScreenHandlerContext.create(this.world, this.pos));
     }
 
     @Override
