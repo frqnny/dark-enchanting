@@ -103,7 +103,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(BACKGROUND, x-9, y, 0, 0, this.backgroundWidth+40, this.backgroundHeight, 304, 304);
+        context.drawTexture(BACKGROUND, x - 9, y, 0, 0, this.backgroundWidth + 40, this.backgroundHeight, 304, 304);
         context.drawTooltip(MinecraftClient.getInstance().textRenderer, this.getTooltip(), x - 120, y + 43);
     }
 
