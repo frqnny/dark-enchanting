@@ -1,5 +1,5 @@
 <h1 align="center">Dark Enchanting </h1>
-<p align="center">An enchanting mod by <a href="https://github.com/frqnny">Frqnny</a></p>
+<p align="center">An enchanting mod by <a href="https://github.com/frqnny">Frqnny</a>, available for NeoForge & Fabric.</p>
 
 ---
 
