@@ -2,7 +2,7 @@
   "sources": [
     {
       "type": "single",
-      "resource": "dark-enchanting:entity/book1"
+      "resource": "darkenchanting:entity/book1"
     }
   ]
 }

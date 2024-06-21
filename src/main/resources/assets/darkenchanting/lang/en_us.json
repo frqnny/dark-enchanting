@@ -1,0 +1,8 @@
+{
+  "itemGroup.darkenchanting.dark_enchanting_group": "Dark Enchanting",
+  "block.darkenchanting.dark_enchanter": "Dark Enchanter",
+  "block.darkenchanting.dark_conduit": "Dark Conduit",
+  "block.darkenchanting.wall_dark_conduit": "Dark Conduit",
+  "item.darkenchanting.table_upgrade": "Table Upgrade",
+  "message.darkenchanting.table_upgrade": "You need to shift-right click a vanilla Enchantment Table for this to work!"
+}

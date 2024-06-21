@@ -30,7 +30,7 @@ public class ModItems {
                     entries.add(DARK_TORCH);
                     entries.add(TABLE_UPGRADE);
                 })
-                .displayName(Text.translatable("itemGroup.dark-enchanting.dark_enchanting_group"))
+                .displayName(Text.translatable("itemGroup.darkenchanting.dark_enchanting_group"))
                 .build();
 
         Registry.register(Registries.ITEM_GROUP, DarkEnchanting.id("item_group"), DARK_ENCHANTING);

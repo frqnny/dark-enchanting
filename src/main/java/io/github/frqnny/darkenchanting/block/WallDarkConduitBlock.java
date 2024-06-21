@@ -12,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class WallDarkConduitBlock extends WallTorchBlock {
-    public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "wall_dark_conduit");
+    public static final Identifier ID = DarkEnchanting.id( "wall_dark_conduit");
 
     public WallDarkConduitBlock(SimpleParticleType simpleParticleType, Settings settings) {
         super(simpleParticleType, settings);

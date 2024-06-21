@@ -7,13 +7,13 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 
 public class DarkEnchanting implements ModInitializer {
-    public static final String MODID = "dark-enchanting";
+    public static final String MODID = "darkenchanting";
 
 
     public static final DarkEnchantingConfig CONFIG = OmegaConfig.register(DarkEnchantingConfig.class);
 
     public static Identifier id(String namespace) {
-        return new Identifier(MODID, namespace);
+        return Identifier.of(MODID, namespace);
     }
 
     @Override

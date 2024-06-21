@@ -1,6 +1,7 @@
 package io.github.frqnny.darkenchanting.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.frqnny.darkenchanting.util.TagUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.GuiNavigationType;
@@ -26,10 +27,10 @@ import java.util.function.IntConsumer;
  *  3. Hardcoded interoperability with Enchantments to insert more logic here
  */
 public class EnchantSliderWidget extends ClickableWidget {
-    private static final Identifier TEXTURE = new Identifier("widget/slider");
-    private static final Identifier HIGHLIGHTED_TEXTURE = new Identifier("widget/slider_highlighted");
-    private static final Identifier HANDLE_TEXTURE = new Identifier("widget/slider_handle");
-    private static final Identifier HANDLE_HIGHLIGHTED_TEXTURE = new Identifier("widget/slider_handle_highlighted");
+    private static final Identifier TEXTURE = Identifier.of("widget/slider");
+    private static final Identifier HIGHLIGHTED_TEXTURE = Identifier.of("widget/slider_highlighted");
+    private static final Identifier HANDLE_TEXTURE = Identifier.of("widget/slider_handle");
+    private static final Identifier HANDLE_HIGHLIGHTED_TEXTURE = Identifier.of("widget/slider_handle_highlighted");
     private static final int MIN_ENCHANT_VALUE = 0;
     private final Enchantment enchantment;
     private final int max;
@@ -46,11 +47,12 @@ public class EnchantSliderWidget extends ClickableWidget {
     }
 
     public static Text getLabel(Enchantment enchantment, int level, boolean activated) {
-        MutableText mutableText = Text.translatable(enchantment.getTranslationKey());
+        MutableText mutableText = MutableText.of(enchantment.description().getContent());
+        var world = MinecraftClient.getInstance().world;
         if (activated) {
-            if (enchantment.isCursed()) {
+            if (TagUtils.isEnchantmentCurse(world, enchantment)) {
                 mutableText.formatted(Formatting.RED);
-            } else if (enchantment.isTreasure()) {
+            } else if (TagUtils.isEnchantmentTreasure(world, enchantment)) {
                 mutableText.formatted(Formatting.BLUE);
             } else {
                 mutableText.formatted(Formatting.WHITE);

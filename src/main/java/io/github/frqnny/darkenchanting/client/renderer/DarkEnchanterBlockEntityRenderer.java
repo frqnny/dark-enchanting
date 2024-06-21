@@ -53,7 +53,7 @@ public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<Dar
         float newPageTurningSpeed = MathHelper.lerp(tickDelta, blockEntity.pageTurningSpeed, blockEntity.nextPageTurningSpeed);
         this.book.setPageAngles(partialTicks, MathHelper.clamp(m, 0.0F, 1.0F), MathHelper.clamp(n, 0.0F, 1.0F), newPageTurningSpeed);
         VertexConsumer vertexConsumer = BOOK_TEX.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
-        this.book.renderBook(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.book.renderBook(matrices, vertexConsumer, light, overlay, -1);
         matrices.pop();
     }
 

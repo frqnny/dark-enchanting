@@ -24,6 +24,8 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -111,7 +113,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         ClientPlayerEntity player = this.getClient().player;
         int totalExperience = PlayerUtils.syncAndGetTotalExperience(player);
         ClientWorld world = this.getClient().world;
-        enchantCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(enchantmentsToApply, enchantmentsOnStack), world, pos);
+        enchantCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(this.cachedClient.world, enchantmentsToApply, enchantmentsOnStack), world, pos);
 
         if (!bookcaseStats.isEmpty()) {
             bookcaseStats = new StringBuilder();
@@ -181,7 +183,14 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
     }
 
     public void enchant() {
-        ClientPlayNetworking.send(new EnchantPacket(pos, EnchantingUtils.unconvert(enchantmentsToApply)));
+        //needs cleanup
+        final Object2IntOpenHashMap<RegistryEntry<Enchantment>> finalEnchantments = new Object2IntOpenHashMap<>();
+        var registry = this.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        for (var entry : enchantmentsToApply.object2IntEntrySet()) {
+            finalEnchantments.put(registry.getEntry(entry.getKey()), entry.getIntValue());
+        }
+
+        ClientPlayNetworking.send(new EnchantPacket(pos, finalEnchantments));
     }
 
     public void repair() {

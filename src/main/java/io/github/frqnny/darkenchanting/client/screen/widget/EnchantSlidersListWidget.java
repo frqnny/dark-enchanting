@@ -4,6 +4,7 @@ import io.github.frqnny.darkenchanting.client.screen.DarkEnchanterScreen;
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.util.TagUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
@@ -13,6 +14,8 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,8 +64,9 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
         if (stack.isEmpty()) {
             return;
         }
-        for (Enchantment enchantment : Registries.ENCHANTMENT) {
-            Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+
+        for (Enchantment enchantment : screen.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)) {
+            Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(screen.getClient().world, enchantment);
 
             if (configEnchantmentOptional.isPresent()) {
                 ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
@@ -87,13 +91,17 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
     }
 
     public void checkIncompabilities() {
+        var registry = this.client.world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+
         for (WidgetEntry entry : this.children()) {
             Enchantment enchantment = entry.getEnchantment();
+            RegistryEntry<Enchantment> enchantmentRegistryEntry = registry.getEntry(enchantment);
 
             boolean activated = true;
             for (Enchantment enchantmentOnStack : screen.enchantmentsOnStack.keySet()) {
                 if (!isEnchantmentRemoved(enchantmentOnStack, screen.enchantmentsToApply)) {
-                    if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment)) {
+
+                    if (enchantmentOnStack.exclusiveSet().contains(enchantmentRegistryEntry) && !enchantmentOnStack.equals(enchantment)) {
                         activated = false;
                     }
                 }
@@ -102,7 +110,7 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
             for (var enchantmentEntry : screen.enchantmentsToApply.object2IntEntrySet()) {
                 Enchantment enchantmentOnStack = enchantmentEntry.getKey();
 
-                if (!enchantmentOnStack.canCombine(enchantment) && !enchantmentOnStack.equals(enchantment) && enchantmentEntry.getIntValue() > 0) {
+                if (enchantmentOnStack.exclusiveSet().contains(enchantmentRegistryEntry) && !enchantmentOnStack.equals(enchantment) && enchantmentEntry.getIntValue() > 0) {
                     activated = false;
                 }
             }

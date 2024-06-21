@@ -12,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class DarkConduitBlock extends TorchBlock {
-    public static final Identifier ID = new Identifier(DarkEnchanting.MODID, "dark_conduit");
+    public static final Identifier ID = DarkEnchanting.id("dark_conduit");
 
     public DarkConduitBlock(SimpleParticleType particle, Settings settings) {
         super(particle, settings);

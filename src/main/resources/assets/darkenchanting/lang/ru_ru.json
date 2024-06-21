@@ -1,0 +1,8 @@
+{
+  "itemGroup.darkenchanting.dark_enchanting_group": "Тёмные чары",
+  "block.darkenchanting.dark_enchanter": "Тёмный Чарадейский стол",
+  "block.darkenchanting.dark_conduit": "Тёмный факел",
+  "block.darkenchanting.wall_dark_conduit": "Тёмный факел",
+  "item.darkenchanting.table_upgrade": "Улучшение стола",
+  "message.darkenchanting.table_upgrade": "Вам нужно щёлкнуть правой кнопкой мыши по ванильному столу зачарования, чтобы это сработало!"
+}

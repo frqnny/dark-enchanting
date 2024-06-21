@@ -34,7 +34,7 @@ public class ModPackets {
                     Object2IntMap<Enchantment> currentEnchantments = EnchantingUtils.getEnchantmentMap(stack);
 
                     if (EnchantingUtils.applyEnchantXP(context.player(), EnchantingUtils.convert(payload.enchantments().object2IntEntrySet()), currentEnchantments, BookcaseUtils.getDiscount(context.player().getWorld(), pos))) {
-                        EnchantingUtils.set(EnchantingUtils.convert(payload.enchantments().object2IntEntrySet()), stack);
+                        EnchantingUtils.set(payload.enchantments(), stack);
                         context.player().incrementStat(Stats.ENCHANT_ITEM);
                         Criteria.ENCHANTED_ITEM.trigger(context.player(), stack, 1);
                     }

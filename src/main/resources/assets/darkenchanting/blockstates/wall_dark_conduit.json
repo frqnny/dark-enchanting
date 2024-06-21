@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "darkenchanting:block/wall_dark_conduit"
+    },
+    "facing=north": {
+      "model": "darkenchanting:block/wall_dark_conduit",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "darkenchanting:block/wall_dark_conduit",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "darkenchanting:block/wall_dark_conduit",
+      "y": 180
+    }
+  }
+}

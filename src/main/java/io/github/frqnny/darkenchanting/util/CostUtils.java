@@ -7,12 +7,13 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 
 public class CostUtils {
 
-    public static int getExperienceCost(Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> stackEnchantments) {
+    public static int getExperienceCost(World world, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> stackEnchantments) {
         int totalCost = 0;
 
         for (var entry : enchantmentsToApply.object2IntEntrySet()) {
@@ -24,13 +25,13 @@ public class CostUtils {
             if (stackEnchantments.containsKey(enchantment)) {
                 int powerToApply = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
                 if (powerToApply > 0) {
-                    individualCost = getEnchantmentCost(enchantment, powerToApply, false);
+                    individualCost = getEnchantmentCost(world, enchantment, powerToApply, false);
                 } else if (powerToApply < 0) {
                     takingOff = true;
-                    individualCost = getEnchantmentCost(enchantment, Math.absExact(powerToApply), true);
+                    individualCost = getEnchantmentCost(world, enchantment, Math.absExact(powerToApply), true);
                 }
             } else {
-                individualCost = getEnchantmentCost(enchantment, power, false);
+                individualCost = getEnchantmentCost(world, enchantment, power, false);
             }
 
             if (individualCost != Integer.MIN_VALUE) {
@@ -46,7 +47,7 @@ public class CostUtils {
         return totalCost;
     }
 
-    public static int getEnchantmentCost(Enchantment enchantment, int power, boolean takingOff) {
+    public static int getEnchantmentCost(World world, Enchantment enchantment, int power, boolean takingOff) {
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
 
         int cost = config.baseExperienceCost;
@@ -56,15 +57,14 @@ public class CostUtils {
 
         cost *= config.costFactor;
 
-        if (enchantment.isCursed()) {
-
+        if (TagUtils.isEnchantmentCurse(world, enchantment)) {
             cost *= config.curseFactor;
-        } else if (enchantment.isTreasure()) {
+        } else if (TagUtils.isEnchantmentTreasure(world, enchantment)) {
 
             cost *= config.treasureFactor;
         }
 
-        Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(enchantment);
+        Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(world, enchantment);
         if (configEnchantmentOptional.isPresent()) {
             ConfigEnchantment configEnchantment = configEnchantmentOptional.get();
             if (!configEnchantment.activated) {
