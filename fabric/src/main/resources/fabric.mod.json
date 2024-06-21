@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "darkenchanting",
+  "version": "${version}",
+  "name": "Dark Enchanting",
+  "description": "Adding Dark Enchantments, Dark Enchanter, and many other cool things since 2019.",
+  "authors": [
+    "Frqnny"
+  ],
+  "contact": {
+    "homepage": "https://github.com/frqnny/dark-enchanting",
+    "sources": "https://github.com/frqnny/dark-enchanting"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/darkenchanting/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.frqnny.darkenchanting.fabric.DarkEnchantingFabric"
+    ],
+    "client": [
+      "io.github.frqnny.darkenchanting.fabric.client.DarkEnchantingFabricClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": ">=1.21",
+    "java": ">=21",
+    "architectury": ">=12.1.2",
+    "fabric-api": "*"
+  }
+}
