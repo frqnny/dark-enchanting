@@ -13,8 +13,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class DarkEnchanterScreenHandler extends ScreenHandler {
     public final DarkEnchanterInventory inv = new DarkEnchanterInventory(this);
+    protected final PlayerInventory playerInventory;
     private final ScreenHandlerContext context;
-    protected PlayerInventory playerInventory;
     private boolean stackUpdate = false;
 
     public DarkEnchanterScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {

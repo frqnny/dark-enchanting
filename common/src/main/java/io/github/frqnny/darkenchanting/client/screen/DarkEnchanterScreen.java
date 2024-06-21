@@ -24,7 +24,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -36,8 +35,8 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandler> {
     public static final Identifier BACKGROUND = DarkEnchanting.id("textures/gui/dark_enchanter.png");
-    public final Object2IntMap<Enchantment> enchantmentsToApply = new Object2IntOpenHashMap<>();
-    public final Object2IntMap<Enchantment> enchantmentsOnStack = new Object2IntOpenHashMap<>();
+    public final Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply = new Object2IntOpenHashMap<>();
+    public final Object2IntMap<RegistryEntry<Enchantment>> enchantmentsOnStack = new Object2IntOpenHashMap<>();
     private final BlockPos pos;
     public int enchantCost = 0;
     public int repairCost = 0;
@@ -88,9 +87,9 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         enchantmentsOnStack.clear();
 
         if (!stack.isEmpty()) {
-            Object2IntMap<Enchantment> enchantments = EnchantingUtils.getEnchantmentMap(stack);
-            for (var entry : enchantments.object2IntEntrySet()) {
-                Enchantment enchantment = entry.getKey();
+            var enchantmentMap = EnchantingUtils.getEnchantmentMap(stack);
+            for (var entry : enchantmentMap.object2IntEntrySet()) {
+                RegistryEntry<Enchantment> enchantment = entry.getKey();
                 int level = entry.getIntValue();
                 enchantmentsToApply.putIfAbsent(enchantment, level);
                 enchantmentsOnStack.put(enchantment, level);
@@ -136,7 +135,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         boolean enchantmentsHaveChanged = false;
 
         for (var entry : enchantmentsToApply.object2IntEntrySet()) {
-            Enchantment enchantment = entry.getKey();
+            RegistryEntry<Enchantment> enchantment = entry.getKey();
             int level = entry.getIntValue();
 
             if (level == 0) {
@@ -171,7 +170,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         repairButton.active = (stack.isDamaged() && totalExperience >= this.repairCost) || player.isCreative();
     }
 
-    public void onSliderValueChange(Enchantment enchantment, int level) {
+    public void onSliderValueChange(RegistryEntry<Enchantment> enchantment, int level) {
         if (enchantmentsToApply.containsKey(enchantment)) {
             enchantmentsToApply.replace(enchantment, level);
         } else {
@@ -183,14 +182,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
     }
 
     public void enchant() {
-        //needs cleanup
-        final Object2IntOpenHashMap<RegistryEntry<Enchantment>> finalEnchantments = new Object2IntOpenHashMap<>();
-        var registry = this.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
-        for (var entry : enchantmentsToApply.object2IntEntrySet()) {
-            finalEnchantments.put(registry.getEntry(entry.getKey()), entry.getIntValue());
-        }
-
-        NetworkManager.sendToServer(new EnchantPacket(pos, finalEnchantments));
+        NetworkManager.sendToServer(new EnchantPacket(pos, enchantmentsToApply));
     }
 
     public void repair() {

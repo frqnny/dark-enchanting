@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -31,9 +32,9 @@ public class ModPackets {
 
                 if (screen instanceof DarkEnchanterScreenHandler holder) {
                     ItemStack stack = holder.getActualStack();
-                    Object2IntMap<Enchantment> currentEnchantments = EnchantingUtils.getEnchantmentMap(stack);
+                    Object2IntMap<RegistryEntry<Enchantment>> currentEnchantments = EnchantingUtils.getEnchantmentMap(stack);
 
-                    if (EnchantingUtils.applyEnchantXP(player, EnchantingUtils.convert(payload.enchantments().object2IntEntrySet()), currentEnchantments, BookcaseUtils.getDiscount(player.getWorld(), pos))) {
+                    if (EnchantingUtils.applyEnchantXP(player, payload.enchantments(), currentEnchantments, BookcaseUtils.getDiscount(player.getWorld(), pos))) {
                         EnchantingUtils.set(payload.enchantments(), stack);
                         player.incrementStat(Stats.ENCHANT_ITEM);
                         Criteria.ENCHANTED_ITEM.trigger((ServerPlayerEntity) player, stack, 1);

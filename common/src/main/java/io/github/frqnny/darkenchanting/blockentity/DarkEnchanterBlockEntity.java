@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class DarkEnchanterBlockEntity extends BlockEntityWithBook implements ExtendedMenuProvider{
+public class DarkEnchanterBlockEntity extends BlockEntityWithBook implements ExtendedMenuProvider {
     public DarkEnchanterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.DE_BLOCK_ENTITY.get(), pos, state);
     }

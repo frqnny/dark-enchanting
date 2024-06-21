@@ -9,10 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 
-import java.util.Set;
-
 public class EnchantingUtils {
-    public static boolean applyEnchantXP(PlayerEntity player, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> enchantmentsOnStack, double discount) {
+    public static boolean applyEnchantXP(PlayerEntity player, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsOnStack, double discount) {
         int totalExperience = PlayerUtils.syncAndGetTotalExperience(player);
         int xpCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(player.getWorld(), enchantmentsToApply, enchantmentsOnStack), discount);
 
@@ -52,24 +50,15 @@ public class EnchantingUtils {
 
     }
 
-    public static Object2IntMap<Enchantment> getEnchantmentMap(ItemStack stack) {
-        return convert(stack.getEnchantments().getEnchantmentEntries());
-    }
-
-    public static Object2IntMap<Enchantment> convert(Set<Object2IntMap.Entry<RegistryEntry<Enchantment>>> map) {
-        Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
-
-        for (var entry : map) {
-            int level = entry.getIntValue();
-
-            var enchantmentEntry = entry.getKey();
-            Enchantment enchantment = enchantmentEntry.value();
-
-            enchantments.put(enchantment, level);
+    public static Object2IntMap<RegistryEntry<Enchantment>> getEnchantmentMap(ItemStack stack) {
+        Object2IntMap<RegistryEntry<Enchantment>> enchantments = new Object2IntOpenHashMap<>();
+        var stackEnchantments = stack.getEnchantments().getEnchantmentEntries();
+        for (var entry : stackEnchantments) {
+            enchantments.put(entry.getKey(), entry.getIntValue());
         }
-
         return enchantments;
     }
+
 
 }
 

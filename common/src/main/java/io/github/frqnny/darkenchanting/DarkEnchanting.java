@@ -13,12 +13,13 @@ import org.slf4j.LoggerFactory;
 public final class DarkEnchanting {
     public static final String MOD_ID = "darkenchanting";
     public static final DarkEnchantingConfig CONFIG = OmegaConfig.register(DarkEnchantingConfig.class);
-    public static Supplier<RegistrarManager> MANAGER;
     public static final Logger LOGGER = LoggerFactory.getLogger("DarkEnchanting");
+    public static Supplier<RegistrarManager> MANAGER;
 
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);
     }
+
     public static void init() {
         LOGGER.info("Gathering the powers of the moon...");
         MANAGER = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));

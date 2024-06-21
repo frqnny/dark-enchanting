@@ -7,22 +7,24 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 
 import java.util.Optional;
 
 public class CostUtils {
 
-    public static int getExperienceCost(World world, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> stackEnchantments) {
+    public static int getExperienceCost(World world, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply, Object2IntMap<RegistryEntry<Enchantment>> stackEnchantments) {
         int totalCost = 0;
 
         for (var entry : enchantmentsToApply.object2IntEntrySet()) {
-            Enchantment enchantment = entry.getKey();
+            RegistryEntry<Enchantment> registryEntry = entry.getKey();
+            Enchantment enchantment = registryEntry.value();
             int power = entry.getIntValue();
             int powerOnStack = stackEnchantments.getInt(enchantment);
             int individualCost = 0;
             boolean takingOff = false;
-            if (stackEnchantments.containsKey(enchantment)) {
+            if (stackEnchantments.containsKey(registryEntry)) {
                 int powerToApply = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
                 if (powerToApply > 0) {
                     individualCost = getEnchantmentCost(world, enchantment, powerToApply, false);

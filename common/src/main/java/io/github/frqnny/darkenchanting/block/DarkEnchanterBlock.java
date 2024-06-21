@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class DarkEnchanterBlock extends BlockWithEntity {
-    public static final Identifier ID = DarkEnchanting.id( "dark_enchanter");
+    public static final Identifier ID = DarkEnchanting.id("dark_enchanter");
     public static final EnumProperty<BookType> BOOK_TYPE = EnumProperty.of("book_type", BookType.class);
     public static final MapCodec<DarkEnchanterBlock> CODEC = EnchantingTableBlock.createCodec(DarkEnchanterBlock::new);
     private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.input.KeyCodes;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -32,27 +33,27 @@ public class EnchantSliderWidget extends ClickableWidget {
     private static final Identifier HANDLE_TEXTURE = Identifier.of("widget/slider_handle");
     private static final Identifier HANDLE_HIGHLIGHTED_TEXTURE = Identifier.of("widget/slider_handle_highlighted");
     private static final int MIN_ENCHANT_VALUE = 0;
-    private final Enchantment enchantment;
+    private final RegistryEntry<Enchantment> enchantment;
     private final int max;
     protected int level;
     private boolean sliderFocused;
     private IntConsumer callback = null;
     private boolean activated = true;
 
-    public EnchantSliderWidget(Enchantment enchantment, int level, int max) {
+    public EnchantSliderWidget(RegistryEntry<Enchantment> enchantment, int level, int max) {
         super(0, 0, 120, 18, getLabel(enchantment, level, true));
         this.enchantment = enchantment;
         this.level = level;
         this.max = max;
     }
 
-    public static Text getLabel(Enchantment enchantment, int level, boolean activated) {
-        MutableText mutableText = MutableText.of(enchantment.description().getContent());
+    public static Text getLabel(RegistryEntry<Enchantment> enchantment, int level, boolean activated) {
+        MutableText mutableText = MutableText.of(enchantment.value().description().getContent());
         var world = MinecraftClient.getInstance().world;
         if (activated) {
-            if (TagUtils.isEnchantmentCurse(world, enchantment)) {
+            if (TagUtils.isEnchantmentCurse(world, enchantment.value())) {
                 mutableText.formatted(Formatting.RED);
-            } else if (TagUtils.isEnchantmentTreasure(world, enchantment)) {
+            } else if (TagUtils.isEnchantmentTreasure(world, enchantment.value())) {
                 mutableText.formatted(Formatting.BLUE);
             } else {
                 mutableText.formatted(Formatting.WHITE);
@@ -82,7 +83,7 @@ public class EnchantSliderWidget extends ClickableWidget {
     }
 
     public Enchantment getEnchantment() {
-        return this.enchantment;
+        return this.enchantment.value();
     }
 
     private Identifier getTexture() {

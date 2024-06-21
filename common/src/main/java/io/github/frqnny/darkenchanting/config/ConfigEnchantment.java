@@ -2,7 +2,6 @@ package io.github.frqnny.darkenchanting.config;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;

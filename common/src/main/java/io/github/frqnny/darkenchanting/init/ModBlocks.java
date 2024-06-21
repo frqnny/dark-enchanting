@@ -1,9 +1,7 @@
 package io.github.frqnny.darkenchanting.init;
 
-import com.google.common.base.Supplier;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
-import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.frqnny.darkenchanting.DarkEnchanting;
@@ -15,7 +13,6 @@ import io.github.frqnny.darkenchanting.client.renderer.DarkEnchanterBlockEntityR
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;

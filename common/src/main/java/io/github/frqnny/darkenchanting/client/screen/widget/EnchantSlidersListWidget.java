@@ -4,7 +4,6 @@ import io.github.frqnny.darkenchanting.client.screen.DarkEnchanterScreen;
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.util.TagUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
@@ -13,7 +12,6 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
@@ -31,20 +29,20 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
         this.setY(y);
     }
 
-    public static EnchantSliderWidget getSlider(Enchantment enchantment, Object2IntMap<Enchantment> enchantmentsToApply, Object2IntMap<Enchantment> enchantments) {
+    public static EnchantSliderWidget getSlider(RegistryEntry<Enchantment> enchantment, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply, Object2IntMap<RegistryEntry<Enchantment>> enchantments) {
         int levelForSlider = 0;
         if (enchantmentsToApply.containsKey(enchantment)) {
             levelForSlider = enchantmentsToApply.getInt(enchantment);
         } else if (enchantments.containsKey(enchantment)) {
-            if (!isEnchantmentRemoved(enchantment, enchantmentsToApply)) {
+            if (!isEnchantmentRemoved(enchantment.value(), enchantmentsToApply)) {
                 levelForSlider = enchantments.getInt(enchantment);
             }
         }
 
-        return new EnchantSliderWidget(enchantment, levelForSlider, enchantment.getMaxLevel());
+        return new EnchantSliderWidget(enchantment, levelForSlider, enchantment.value().getMaxLevel());
     }
 
-    public static boolean isEnchantmentRemoved(Enchantment enchantment, Object2IntMap<Enchantment> enchantmentsToApply) {
+    public static boolean isEnchantmentRemoved(Enchantment enchantment, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply) {
         return enchantmentsToApply.getInt(enchantment) <= 0;
     }
 
@@ -65,7 +63,9 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
             return;
         }
 
-        for (Enchantment enchantment : screen.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT)) {
+        var enchantmentRegistry = screen.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        for (Enchantment enchantment : enchantmentRegistry) {
+            var registryEntry = enchantmentRegistry.getEntry(enchantment);
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(screen.getClient().world, enchantment);
 
             if (configEnchantmentOptional.isPresent()) {
@@ -80,8 +80,8 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
             }
 
             if (enchantment.isAcceptableItem(stack)) {
-                EnchantSliderWidget slider = getSlider(enchantment, screen.enchantmentsToApply, screen.enchantmentsOnStack);
-                slider.setCallback(level -> screen.onSliderValueChange(enchantment, level));
+                EnchantSliderWidget slider = getSlider(registryEntry, screen.enchantmentsToApply, screen.enchantmentsOnStack);
+                slider.setCallback(level -> screen.onSliderValueChange(registryEntry, level));
                 WidgetEntry entry = WidgetEntry.create(slider);
                 this.addEntry(entry);
             }
@@ -98,17 +98,17 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
             RegistryEntry<Enchantment> enchantmentRegistryEntry = registry.getEntry(enchantment);
 
             boolean activated = true;
-            for (Enchantment enchantmentOnStack : screen.enchantmentsOnStack.keySet()) {
-                if (!isEnchantmentRemoved(enchantmentOnStack, screen.enchantmentsToApply)) {
+            for (RegistryEntry<Enchantment> enchantmentOnStack : screen.enchantmentsOnStack.keySet()) {
+                if (!isEnchantmentRemoved(enchantmentOnStack.value(), screen.enchantmentsToApply)) {
 
-                    if (enchantmentOnStack.exclusiveSet().contains(enchantmentRegistryEntry) && !enchantmentOnStack.equals(enchantment)) {
+                    if (enchantmentOnStack.value().exclusiveSet().contains(enchantmentRegistryEntry) && !enchantmentOnStack.equals(enchantmentRegistryEntry)) {
                         activated = false;
                     }
                 }
             }
 
             for (var enchantmentEntry : screen.enchantmentsToApply.object2IntEntrySet()) {
-                Enchantment enchantmentOnStack = enchantmentEntry.getKey();
+                Enchantment enchantmentOnStack = enchantmentEntry.getKey().value();
 
                 if (enchantmentOnStack.exclusiveSet().contains(enchantmentRegistryEntry) && !enchantmentOnStack.equals(enchantment) && enchantmentEntry.getIntValue() > 0) {
                     activated = false;

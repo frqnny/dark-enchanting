@@ -11,8 +11,6 @@
 Dark Enchanting is a lightweight mod that adds a new *Dark Enchanter*,
 providing the capabilities to select the exact enchantments on an item with extremely higher costs applied.
 
-
-
 ### License
 
 Dark Enchanting is available under LGPL-3.0
