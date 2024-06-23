@@ -15,14 +15,14 @@ import java.util.Optional;
 public class CostUtils {
 
     public static int getExperienceCost(World world, Object2IntMap<RegistryEntry<Enchantment>> enchantmentsToApply, Object2IntMap<RegistryEntry<Enchantment>> stackEnchantments) {
-        int totalCost = 0;
+        float totalCost = 0;
 
         for (var entry : enchantmentsToApply.object2IntEntrySet()) {
             RegistryEntry<Enchantment> registryEntry = entry.getKey();
             Enchantment enchantment = registryEntry.value();
             int power = entry.getIntValue();
             int powerOnStack = stackEnchantments.getInt(registryEntry);
-            int individualCost = 0;
+            float individualCost = 0;
             boolean takingOff = false;
             if (stackEnchantments.containsKey(registryEntry)) {
                 int powerToApply = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
@@ -54,13 +54,13 @@ public class CostUtils {
             }
         }
 
-        return totalCost;
+        return Math.round(totalCost);
     }
 
-    public static int getEnchantmentCost(World world, Enchantment enchantment, int power, boolean takingOff) {
+    public static float getEnchantmentCost(World world, Enchantment enchantment, int power, boolean takingOff) {
         DarkEnchantingConfig config = DarkEnchanting.CONFIG;
 
-        int cost = config.baseExperienceCost;
+        float cost = config.baseExperienceCost;
         cost *= Math.max((11.0F - enchantment.getWeight()) * config.weightFactor, 1F);
 
         cost *= power;
