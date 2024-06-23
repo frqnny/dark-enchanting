@@ -25,7 +25,7 @@ public class DarkEnchantingConfig implements Config {
             All enchantments will be worth at least this much.
             Default: 30
             """)
-    public int baseExperienceCost = 30;
+    public int baseExperienceCost = 35;
 
     @Syncing
     @Comment("""
@@ -38,12 +38,25 @@ public class DarkEnchantingConfig implements Config {
     @Syncing
     @Comment("""
 
-            Removing an enchantment from gear will give XP back.
+            Removing an enchantment from gear will cost XP.
             The amount received back is multiplied by this value.
-            Set to a negative value to make taking off enchantments cost XP.
-            Default: 0.49
+            If you want it to cost XP when taking off levels, use takingOffLevelsCostsXP instead of setting this number negative.
+            Default: 0.1
             """)
-    public float receiveFactor = 0.49F;
+    public float receiveFactor = 0.1F;
+
+    @Syncing
+    @Comment("""
+
+            Set to true if you want to cost money to remove levels of an enchantment.
+            Set to false if you want to receive xp from taking off enchantment levels.
+            
+            WARNING: setting to false will cause exploits, where people can enchant with the vanilla table,
+             then take them off at the Dark Enchanter to receive free experience. It is advised to heavily limit the receive factor
+             if you decide to turn this off.
+            Default: true
+            """)
+    public boolean takingOffLevelsCostsXP = true;
 
     @Syncing
     @Comment("""
@@ -105,9 +118,10 @@ public class DarkEnchantingConfig implements Config {
     @Syncing
     @Comment("""
             
-            If the enchantment is a curse, taking off levels/taking off the curse entirely COSTS xp.
-            Turn this off to allow curses to be handled like any other enchantment.
-            See curseFactor to modify the overall cost of putting it on.
+            If true, when a player takes off an curse enchantment,
+            this will revert the receive factor, so that it costs quite a bit of experience
+            to take of the curse enchantment.
+            Turn this false to allow curses to be handled like any other enchantment.
             Default: True
             """)
     public boolean curseEnchantmentsHaveSpecialHandling = true;

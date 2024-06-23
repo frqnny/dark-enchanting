@@ -191,7 +191,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
 
     public List<Text> getTooltip() {
         String string;
-        if (DarkEnchanterScreen.this.enchantCost > 0) {
+        if (DarkEnchanterScreen.this.enchantCost >= 0) {
             string = "Pay: " + DarkEnchanterScreen.this.enchantCost + " XP";
         } else {
             string = "Receive: " + -DarkEnchanterScreen.this.enchantCost + " XP";

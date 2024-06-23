@@ -36,13 +36,21 @@ public class CostUtils {
                 individualCost = getEnchantmentCost(world, enchantment, power, false);
             }
 
+
             if (individualCost != Integer.MIN_VALUE) {
+
                 if (takingOff) {
                     individualCost *= DarkEnchanting.CONFIG.receiveFactor;
-                    totalCost -= individualCost;
+                    if (DarkEnchanting.CONFIG.takingOffLevelsCostsXP) {
+                        totalCost += individualCost; // implement the cost when taking off levels
+                    } else {
+                        totalCost -= individualCost; // allow to receive xp if you turn it off
+                    }
                 } else {
                     totalCost += individualCost;
+
                 }
+
             }
         }
 
@@ -61,10 +69,10 @@ public class CostUtils {
 
         if (TagUtils.isEnchantmentCurse(world, enchantment)) {
             if (config.curseEnchantmentsHaveSpecialHandling && takingOff) {
-                cost *= -1;
-            } else {
-                cost *= config.curseFactor;
+                cost /= config.receiveFactor;
             }
+            cost *= config.curseFactor;
+
         } else if (TagUtils.isEnchantmentTreasure(world, enchantment)) {
 
             cost *= config.treasureFactor;
