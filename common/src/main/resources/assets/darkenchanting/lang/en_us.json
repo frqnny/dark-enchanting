@@ -4,7 +4,7 @@
   "block.darkenchanting.dark_conduit": "Dark Conduit",
   "block.darkenchanting.wall_dark_conduit": "Dark Conduit",
   "item.darkenchanting.table_upgrade": "Table Upgrade",
-  "message.darkenchanting.table_upgrade": "You need to shift-right click a vanilla Enchantment Table for this to work!",
+  "message.darkenchanting.table_upgrade": "You need to shift right-click a vanilla Enchantment Table for this to work!",
   "tag.enchantment.darkenchanting.disabled": "Disabled Enchantments",
   "tag.block.darkenchanting.crying_obsidian": "Crying Obsidian Blocks"
 }

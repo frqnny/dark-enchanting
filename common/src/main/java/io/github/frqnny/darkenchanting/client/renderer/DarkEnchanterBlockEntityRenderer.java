@@ -48,10 +48,10 @@ public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<Dar
         matrices.multiply(RotationAxis.POSITIVE_Y.rotation(-newBookRotation));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(80.0F));
         float newPageAngle = MathHelper.lerp(tickDelta, blockEntity.pageAngle, blockEntity.nextPageAngle);
-        float m = MathHelper.fractionalPart(newPageAngle + 0.25F) * 1.6F - 0.3F;
-        float n = MathHelper.fractionalPart(newPageAngle + 0.75F) * 1.6F - 0.3F;
+        float leftFlipAmount = MathHelper.fractionalPart(newPageAngle + 0.25F) * 1.6F - 0.3F;
+        float rightFlipAmount = MathHelper.fractionalPart(newPageAngle + 0.75F) * 1.6F - 0.3F;
         float newPageTurningSpeed = MathHelper.lerp(tickDelta, blockEntity.pageTurningSpeed, blockEntity.nextPageTurningSpeed);
-        this.book.setPageAngles(partialTicks, MathHelper.clamp(m, 0.0F, 1.0F), MathHelper.clamp(n, 0.0F, 1.0F), newPageTurningSpeed);
+        this.book.setPageAngles(partialTicks, MathHelper.clamp(leftFlipAmount, 0.0F, 1.0F), MathHelper.clamp(rightFlipAmount, 0.0F, 1.0F), newPageTurningSpeed);
         VertexConsumer vertexConsumer = BOOK_TEX.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
         this.book.renderBook(matrices, vertexConsumer, light, overlay, -1);
         matrices.pop();

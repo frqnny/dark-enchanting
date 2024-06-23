@@ -115,19 +115,19 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         enchantCost = BookcaseUtils.applyDiscount(CostUtils.getExperienceCost(this.cachedClient.world, enchantmentsToApply, enchantmentsOnStack), world, pos);
 
         if (!bookcaseStats.isEmpty()) {
-            bookcaseStats = new StringBuilder();
+            bookcaseStats = new StringBuilder(3);
         }
 
         if (BookcaseUtils.checkInnerObsidianRing(world, pos)) {
-            bookcaseStats.append("☆");
+            bookcaseStats.append('☆');
         }
 
         if (BookcaseUtils.checkOuterObsidianRing(world, pos)) {
-            bookcaseStats.append("☆");
+            bookcaseStats.append('☆');
         }
 
         if (BookcaseUtils.checkConduits(world, pos)) {
-            bookcaseStats.append("☆");
+            bookcaseStats.append('☆');
         }
 
         bookshelfDiscount = (int) (BookcaseUtils.getDiscount(world, pos) * 100);
@@ -190,29 +190,30 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
     }
 
     public List<Text> getTooltip() {
-        String string;
+        String costLine;
         if (DarkEnchanterScreen.this.enchantCost >= 0) {
-            string = "Pay: " + DarkEnchanterScreen.this.enchantCost + " XP";
+            costLine = "Pay: " + DarkEnchanterScreen.this.enchantCost + " XP";
         } else {
-            string = "Receive: " + -DarkEnchanterScreen.this.enchantCost + " XP";
+            costLine = "Receive: " + -DarkEnchanterScreen.this.enchantCost + " XP";
         }
+        var emptyLine = Text.literal("");
 
         return ImmutableList.of(
                 Text.literal("Enchant Cost:").formatted(Formatting.DARK_GREEN),
-                Text.literal(string),
-                Text.literal(""),
-                Text.literal(""),
+                Text.literal(costLine),
+                emptyLine,
+                emptyLine,
                 Text.literal("Repair Cost:").formatted(Formatting.BLUE),
                 Text.literal("Pay: " + DarkEnchanterScreen.this.repairCost + " XP"),
-                Text.literal(""),
-                Text.literal(""),
+                emptyLine,
+                emptyLine,
                 Text.literal("Shrine Discount:").formatted(Formatting.DARK_PURPLE),
                 Text.literal(bookcaseStats.toString() + " " + DarkEnchanterScreen.this.bookshelfDiscount + " %"),
-                Text.literal(""),
-                Text.literal(""),
+                emptyLine,
+                emptyLine,
                 Text.literal("You have: " + PlayerUtils.getTotalExperience(getClient().player) + " XP").formatted(Formatting.GOLD),
-                Text.literal(""),
-                Text.literal(""));
+                emptyLine,
+                emptyLine);
     }
 
     public MinecraftClient getClient() {

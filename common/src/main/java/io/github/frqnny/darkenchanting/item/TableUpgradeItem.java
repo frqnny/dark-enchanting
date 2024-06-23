@@ -33,14 +33,14 @@ public class TableUpgradeItem extends Item {
             context.getStack().decrement(1);
             return ActionResult.SUCCESS;
         } else {
-            context.getPlayer().sendMessage(Text.translatable("message.dark-enchanting.table_upgrade"), true);
+            context.getPlayer().sendMessage(Text.translatable("message.darkenchanting.table_upgrade"), true);
         }
         return ActionResult.PASS;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        user.sendMessage(Text.translatable("message.dark-enchanting.table_upgrade"), true);
+        user.sendMessage(Text.translatable("message.darkenchanting.table_upgrade"), true);
         return super.use(world, user, hand);
     }
 }

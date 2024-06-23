@@ -6,11 +6,6 @@ import net.minecraft.util.math.MathHelper;
 
 //Due to horrible vanilla methods, these should be used instead when dealing with xp
 public class PlayerUtils {
-
-    public static void syncExperience(PlayerEntity player) {
-        syncExperience(player, getTotalExperience(player));
-    }
-
     public static void syncExperience(PlayerEntity player, int totalExperience) {
         player.addExperience(0);
         player.addExperienceLevels(0);
@@ -46,7 +41,7 @@ public class PlayerUtils {
         //calculate the last level, which is partial
         float nextLevelExperience = player.getNextLevelExperience();
         nextLevelExperience *= player.experienceProgress;
-        experienceFromFullLevels += nextLevelExperience;
+        experienceFromFullLevels += (int) nextLevelExperience;
 
         //this now contains what should be an accurate measure of total experience
         //based on experienceProgress and experienceLevel rather than desynced

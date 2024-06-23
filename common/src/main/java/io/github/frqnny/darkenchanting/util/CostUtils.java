@@ -4,6 +4,7 @@ import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.darkenchanting.config.ConfigEnchantment;
 import io.github.frqnny.darkenchanting.config.DarkEnchantingConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
@@ -22,20 +23,13 @@ public class CostUtils {
             Enchantment enchantment = registryEntry.value();
             int power = entry.getIntValue();
             int powerOnStack = stackEnchantments.getInt(registryEntry);
-            float individualCost = 0;
-            boolean takingOff = false;
-            if (stackEnchantments.containsKey(registryEntry)) {
-                int powerToApply = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
-                if (powerToApply > 0) {
-                    individualCost = getEnchantmentCost(world, enchantment, powerToApply, false);
-                } else if (powerToApply < 0) {
-                    takingOff = true;
-                    individualCost = getEnchantmentCost(world, enchantment, Math.absExact(powerToApply), true);
-                }
-            } else {
-                individualCost = getEnchantmentCost(world, enchantment, power, false);
-            }
 
+            int netLevelChange = power - powerOnStack; //positive if putting on levels, neg if taking off levels, 0 if same (no effect)
+            if (netLevelChange == 0) {
+                continue;
+            }
+            boolean takingOff = netLevelChange < 0; // the enchantment's levels are being reduced
+            float individualCost = getEnchantmentCost(world, enchantment, Math.absExact(netLevelChange), takingOff);
 
             if (individualCost != Integer.MIN_VALUE) {
 
@@ -99,18 +93,12 @@ public class CostUtils {
 
     public static int getRepairCost(ItemStack stack) {
         float cost = 0;
-        if (stack.isDamaged()) {
+        boolean damaged = stack.isDamaged();
+        if (damaged) {
             //Cost is initially XP amount
             cost += stack.getDamage();
-
-            //tools don't scale up well, compared to armor
-            if (stack.getItem() instanceof ToolItem) {
-                cost *= 0.7F;
-            }
-
             cost *= DarkEnchanting.CONFIG.repairFactor;
-            return (int) Math.ceil(Math.max(1D, cost));
         }
-        return 0;
+        return damaged ? Math.round(Math.max(1.0F, cost)) : 0;
     }
 }

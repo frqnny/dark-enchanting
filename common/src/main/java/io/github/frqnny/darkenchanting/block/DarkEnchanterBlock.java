@@ -53,7 +53,7 @@ public class DarkEnchanterBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        PlayerUtils.syncExperience(player);
+        PlayerUtils.syncAndGetTotalExperience(player);
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {

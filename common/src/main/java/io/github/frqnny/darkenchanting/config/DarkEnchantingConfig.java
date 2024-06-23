@@ -23,7 +23,7 @@ public class DarkEnchantingConfig implements Config {
 
             Base experience cost for each enchantment.
             All enchantments will be worth at least this much.
-            Default: 30
+            Default: 35
             """)
     public int baseExperienceCost = 35;
 
@@ -141,11 +141,9 @@ public class DarkEnchantingConfig implements Config {
                 personalReceiveFactor: Removing enchantments allows you to receive back some XP. The amount received is multiplied by this value.
 
             Below is an example entry for Sharpness with its defaults.
-            A mending example is also put on here, but this one changes the default cost of Mending to give less when you are disenchanting items. This is added to avoid Mending XP farming.
             """)
     public ArrayList<ConfigEnchantment> configEnchantments = Lists.newArrayList(
-            ConfigEnchantment.of("minecraft:sharpness", 1.0F, true, 1.0F),
-            ConfigEnchantment.of("minecraft:mending", 1.0F, true, 0.5F)
+            ConfigEnchantment.of("minecraft:sharpness", 1.0F, true, 1.0F)
     );
 
     @Override
