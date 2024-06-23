@@ -91,7 +91,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
             for (var entry : enchantmentMap.object2IntEntrySet()) {
                 RegistryEntry<Enchantment> enchantment = entry.getKey();
                 int level = entry.getIntValue();
-                enchantmentsToApply.putIfAbsent(enchantment, level);
+                enchantmentsToApply.put(enchantment, level);
                 enchantmentsOnStack.put(enchantment, level);
             }
 

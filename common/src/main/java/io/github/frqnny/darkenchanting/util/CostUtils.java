@@ -21,7 +21,7 @@ public class CostUtils {
             RegistryEntry<Enchantment> registryEntry = entry.getKey();
             Enchantment enchantment = registryEntry.value();
             int power = entry.getIntValue();
-            int powerOnStack = stackEnchantments.getInt(enchantment);
+            int powerOnStack = stackEnchantments.getInt(registryEntry);
             int individualCost = 0;
             boolean takingOff = false;
             if (stackEnchantments.containsKey(registryEntry)) {
@@ -60,7 +60,11 @@ public class CostUtils {
         cost *= config.costFactor;
 
         if (TagUtils.isEnchantmentCurse(world, enchantment)) {
-            cost *= config.curseFactor;
+            if (config.curseEnchantmentsHaveSpecialHandling && takingOff) {
+                cost *= -1;
+            } else {
+                cost *= config.curseFactor;
+            }
         } else if (TagUtils.isEnchantmentTreasure(world, enchantment)) {
 
             cost *= config.treasureFactor;

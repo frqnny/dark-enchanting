@@ -40,6 +40,7 @@ public class DarkEnchantingConfig implements Config {
 
             Removing an enchantment from gear will give XP back.
             The amount received back is multiplied by this value.
+            Set to a negative value to make taking off enchantments cost XP.
             Default: 0.49
             """)
     public float receiveFactor = 0.49F;
@@ -64,7 +65,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
-                        
+            
             How much an enchantment's inverted weight should be multiplied with.
             Each enchantment has a Rarity, and each Rarity has a weight.
             You can check Enchantment weights on many Minecraft wikis.
@@ -72,7 +73,7 @@ public class DarkEnchantingConfig implements Config {
             and we multiply the inverted weight with the cost,
             so that cost is affected by the rarity of the Enchantment.
             This weightFactor allows you to modify the inverted weight.
-                        
+            
             Default: 3.0
             """)
     public float weightFactor = 3.0F;
@@ -100,6 +101,16 @@ public class DarkEnchantingConfig implements Config {
             Default: 0.1 (10%)
             """)
     public float conduitDiscount = 0.1F;
+
+    @Syncing
+    @Comment("""
+            
+            If the enchantment is a curse, taking off levels/taking off the curse entirely COSTS xp.
+            Turn this off to allow curses to be handled like any other enchantment.
+            See curseFactor to modify the overall cost of putting it on.
+            Default: True
+            """)
+    public boolean curseEnchantmentsHaveSpecialHandling = true;
 
     @Syncing
     @Comment("""
