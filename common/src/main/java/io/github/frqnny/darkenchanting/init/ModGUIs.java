@@ -21,7 +21,6 @@ public class ModGUIs {
 
     }
 
-    @SuppressWarnings("all")
     public static void clientInit() {
         MenuRegistry.registerScreenFactory(DARK_ENCHANTER, DarkEnchanterScreen::new);
     }

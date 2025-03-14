@@ -58,12 +58,12 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
 
     public void populateSliders() {
         this.clearEntries();
-        ItemStack stack = screen.getScreenHandler().inv.getActualStack();
+        ItemStack stack = screen.getScreenHandler().inv.getEnchantStack();
         if (stack.isEmpty()) {
             return;
         }
 
-        var enchantmentRegistry = screen.getClient().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        var enchantmentRegistry = screen.getClient().world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
         for (Enchantment enchantment : enchantmentRegistry) {
             var registryEntry = enchantmentRegistry.getEntry(enchantment);
             Optional<ConfigEnchantment> configEnchantmentOptional = ConfigEnchantment.getConfigEnchantmentFor(screen.getClient().world, enchantment);
@@ -91,7 +91,7 @@ public class EnchantSlidersListWidget extends ElementListWidget<EnchantSlidersLi
     }
 
     public void checkIncompabilities() {
-        var registry = this.client.world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        var registry = this.client.world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
 
         for (WidgetEntry entry : this.children()) {
             Enchantment enchantment = entry.getEnchantment();

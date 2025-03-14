@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.frqnny.darkenchanting.fabric.DarkEnchantingFabric"
+      "io.github.frqnny.darkenchanting.DarkEnchantingFabric"
     ],
     "client": [
-      "io.github.frqnny.darkenchanting.fabric.client.DarkEnchantingFabricClient"
+      "io.github.frqnny.darkenchanting.client.DarkEnchantingFabricClient"
     ]
   },
   "depends": {

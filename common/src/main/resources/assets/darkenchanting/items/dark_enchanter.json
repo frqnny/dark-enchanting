@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "darkenchanting:block/dark_enchanter"
+  }
+}

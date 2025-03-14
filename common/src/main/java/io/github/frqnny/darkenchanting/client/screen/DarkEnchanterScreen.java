@@ -20,6 +20,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,6 +32,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandler> {
@@ -104,7 +106,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(BACKGROUND, x - 9, y, 0, 0, this.backgroundWidth + 40, this.backgroundHeight, 304, 304);
+        context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND, x - 9, y, 0, 0, this.backgroundWidth + 40, this.backgroundHeight, 304, 304);
         context.drawTooltip(MinecraftClient.getInstance().textRenderer, this.getTooltip(), x - 120, y + 43);
     }
 
@@ -165,7 +167,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         ClientPlayerEntity player = this.getClient().player;
         ClientWorld world = this.getClient().world;
         int totalExperience = PlayerUtils.syncAndGetTotalExperience(player);
-        ItemStack stack = getScreenHandler().inv.getActualStack();
+        ItemStack stack = getScreenHandler().inv.getEnchantStack();
         this.repairCost = BookcaseUtils.applyDiscount(CostUtils.getRepairCost(stack), world, pos);
         repairButton.active = (stack.isDamaged() && totalExperience >= this.repairCost) || player.isCreative();
     }
@@ -216,9 +218,10 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
                 emptyLine);
     }
 
+
     public MinecraftClient getClient() {
         if (this.cachedClient == null) {
-            this.cachedClient = MinecraftClient.getInstance();
+            this.cachedClient = Objects.requireNonNull(MinecraftClient.getInstance());
         }
 
         return this.cachedClient;
@@ -230,7 +233,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
         var screenHandler = getScreenHandler();
         if (screenHandler.hasStackUpdate()) {
             screenHandler.handleStackUpdate();
-            this.onStackUpdate(screenHandler.inv.getActualStack());
+            this.onStackUpdate(screenHandler.inv.getEnchantStack());
         }
     }
 

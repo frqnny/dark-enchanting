@@ -6,15 +6,9 @@
     "CCC"
   ],
   "key": {
-    "E": {
-      "item": "minecraft:emerald"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "C": {
-      "item": "minecraft:crying_obsidian"
-    }
+    "E": "minecraft:emerald",
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:crying_obsidian"
   },
   "result": {
     "id": "darkenchanting:table_upgrade",

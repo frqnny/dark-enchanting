@@ -100,8 +100,8 @@ public class DarkEnchanterScreenHandler extends ScreenHandler {
     }
 
 
-    public ItemStack getActualStack() {
-        return this.inv.getActualStack();
+    public ItemStack getEnchantStack() {
+        return this.inv.getEnchantStack();
     }
 
     public boolean hasStackUpdate() {

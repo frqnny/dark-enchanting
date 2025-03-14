@@ -6,18 +6,10 @@
     "CCC"
   ],
   "key": {
-    "E": {
-      "item": "minecraft:emerald"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "D": {
-      "item": "minecraft:enchanting_table"
-    },
-    "C": {
-      "item": "minecraft:crying_obsidian"
-    }
+    "E": "minecraft:emerald",
+    "G": "minecraft:gold_ingot",
+    "D": "minecraft:enchanting_table",
+    "C": "minecraft:crying_obsidian"
   },
   "result": {
     "id": "darkenchanting:dark_enchanter",

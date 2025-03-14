@@ -1,7 +1,6 @@
-package io.github.frqnny.darkenchanting.fabric.client;
+package io.github.frqnny.darkenchanting.client;
 
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
-import io.github.frqnny.darkenchanting.client.DarkEnchantingClient;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.render.RenderLayer;

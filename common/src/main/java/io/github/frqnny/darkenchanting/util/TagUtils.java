@@ -10,19 +10,19 @@ import net.minecraft.world.World;
 public class TagUtils {
 
     public static boolean isEnchantmentDisabled(World world, Enchantment enchantment) {
-        Registry<Enchantment> registry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        Registry<Enchantment> registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
         var regEntry = registry.getEntry(enchantment);
         return regEntry.isIn(ModTags.DISABLED);
     }
 
     public static boolean isEnchantmentTreasure(World world, Enchantment enchantment) {
-        Registry<Enchantment> registry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        Registry<Enchantment> registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
         var regEntry = registry.getEntry(enchantment);
         return regEntry.isIn(EnchantmentTags.TREASURE);
     }
 
     public static boolean isEnchantmentCurse(World world, Enchantment enchantment) {
-        Registry<Enchantment> registry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        Registry<Enchantment> registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
         var regEntry = registry.getEntry(enchantment);
         return regEntry.isIn(EnchantmentTags.CURSE);
     }

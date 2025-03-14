@@ -31,7 +31,7 @@ public class ModPackets {
                 ScreenHandler screen = player.currentScreenHandler;
 
                 if (screen instanceof DarkEnchanterScreenHandler holder) {
-                    ItemStack stack = holder.getActualStack();
+                    ItemStack stack = holder.getEnchantStack();
                     Object2IntMap<RegistryEntry<Enchantment>> currentEnchantments = EnchantingUtils.getEnchantmentMap(stack);
 
                     if (EnchantingUtils.applyEnchantXP(player, payload.enchantments(), currentEnchantments, BookcaseUtils.getDiscount(player.getWorld(), pos))) {
@@ -54,7 +54,7 @@ public class ModPackets {
             player.getServer().execute(() -> {
                 ScreenHandler screen = player.currentScreenHandler;
                 if (screen instanceof DarkEnchanterScreenHandler holder) {
-                    ItemStack stack = holder.getActualStack();
+                    ItemStack stack = holder.getEnchantStack();
                     if (EnchantingUtils.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.getEntityWorld(), pos))) {
                         stack.setDamage(0);
                     }

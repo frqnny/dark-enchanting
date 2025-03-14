@@ -11,8 +11,10 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.VerticallyAttachableBlockItem;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.Direction;
 
@@ -27,9 +29,17 @@ public class ModItems {
                 () -> DARK_ENCHANTER_BLOCK.get().getDefaultStack()
         ));
         Registrar<Item> items = DarkEnchanting.MANAGER.get().get(RegistryKeys.ITEM);
-        DARK_ENCHANTER_BLOCK = items.register(DarkEnchanterBlock.ID, () -> new BlockItem(ModBlocks.DARK_ENCHANTER.get(), new Item.Settings().arch$tab(GROUP)));
-        var darkTorch = items.register(DarkConduitBlock.ID, () -> new VerticallyAttachableBlockItem(ModBlocks.DARK_TORCH.get(), ModBlocks.DARK_TORCH_WALL.get(), new Item.Settings().arch$tab(GROUP), Direction.DOWN));
-        var tableUpgrade = items.register(TableUpgradeItem.ID, () -> new TableUpgradeItem(new Item.Settings().arch$tab(GROUP).maxCount(1).rarity(Rarity.EPIC)));
+        DARK_ENCHANTER_BLOCK = items.register(DarkEnchanterBlock.ID, () ->
+                new BlockItem(ModBlocks.DARK_ENCHANTER.get(), new Item.Settings().arch$tab(GROUP).registryKey(getKey(DarkEnchanterBlock.ID))));
+        items.register(DarkConduitBlock.ID, () ->
+                new VerticallyAttachableBlockItem(ModBlocks.DARK_TORCH.get(), ModBlocks.DARK_TORCH_WALL.get(), Direction.DOWN, new Item.Settings().arch$tab(GROUP).registryKey(getKey(DarkConduitBlock.ID))));
+        items.register(TableUpgradeItem.ID, () ->
+                new TableUpgradeItem(new Item.Settings().arch$tab(GROUP).maxCount(1).rarity(Rarity.EPIC).registryKey(getKey(TableUpgradeItem.ID))));
 
+    }
+
+
+    private static RegistryKey<Item> getKey(Identifier identifier) {
+        return RegistryKey.of(RegistryKeys.ITEM, identifier);
     }
 }

@@ -1,7 +1,6 @@
-package io.github.frqnny.darkenchanting.neoforge.client;
+package io.github.frqnny.darkenchanting.client;
 
 import io.github.frqnny.darkenchanting.DarkEnchanting;
-import io.github.frqnny.darkenchanting.client.DarkEnchantingClient;
 import io.github.frqnny.darkenchanting.client.renderer.DarkEnchanterBlockEntityRenderer;
 import io.github.frqnny.darkenchanting.init.ModBlocks;
 import net.neoforged.api.distmarker.Dist;

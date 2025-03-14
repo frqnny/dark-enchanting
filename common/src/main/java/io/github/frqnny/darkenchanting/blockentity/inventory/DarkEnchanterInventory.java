@@ -32,7 +32,7 @@ public class DarkEnchanterInventory implements Inventory {
         return true;
     }
 
-    public ItemStack getActualStack() {
+    public ItemStack getEnchantStack() {
         return getStack(0);
     }
 

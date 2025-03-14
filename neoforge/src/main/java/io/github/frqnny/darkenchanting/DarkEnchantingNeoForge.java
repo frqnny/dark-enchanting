@@ -1,6 +1,5 @@
-package io.github.frqnny.darkenchanting.neoforge;
+package io.github.frqnny.darkenchanting;
 
-import io.github.frqnny.darkenchanting.DarkEnchanting;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 

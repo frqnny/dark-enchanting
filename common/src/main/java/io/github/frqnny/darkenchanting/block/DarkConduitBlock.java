@@ -16,6 +16,7 @@ public class DarkConduitBlock extends TorchBlock {
 
     public DarkConduitBlock(SimpleParticleType particle, Settings settings) {
         super(particle, settings);
+
     }
 
     @Override

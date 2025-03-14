@@ -2,6 +2,8 @@ package io.github.frqnny.darkenchanting.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.frqnny.darkenchanting.util.TagUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.GuiNavigationType;
@@ -9,6 +11,7 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.input.KeyCodes;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -27,6 +30,7 @@ import java.util.function.IntConsumer;
  *  2. Built in min/max values
  *  3. Hardcoded interoperability with Enchantments to insert more logic here
  */
+@Environment(EnvType.CLIENT)
 public class EnchantSliderWidget extends ClickableWidget {
     private static final Identifier TEXTURE = Identifier.of("widget/slider");
     private static final Identifier HIGHLIGHTED_TEXTURE = Identifier.of("widget/slider_highlighted");
@@ -120,19 +124,17 @@ public class EnchantSliderWidget extends ClickableWidget {
     @Override
     public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
+        //context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        context.drawGuiTexture(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        context.drawGuiTexture(RenderLayer::getGuiTextured, this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
         if (activated) {
             double ratio = (double) this.level / this.max;
             int xOffset = (int) Math.round(ratio * (this.getWidth() - 8));
-            context.drawGuiTexture(this.getHandleTexture(), this.getX() + xOffset, this.getY(), 8, this.getHeight());
-        } else {
-            //TODO implement a tooltip to explain why it got disabled?
+            context.drawGuiTexture(RenderLayer::getGuiTextured, this.getHandleTexture(), this.getX() + xOffset, this.getY(), 8, this.getHeight());
         }
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.active ? 16777215 : 10526880;
         this.drawScrollableText(context, minecraftClient.textRenderer, 8, i | MathHelper.ceil(this.alpha * 255.0F) << 24);
 

@@ -6,21 +6,11 @@
     " S "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:skeleton_skull"
-    },
-    "E": {
-      "item": "minecraft:end_crystal"
-    },
-    "W": {
-      "item": "minecraft:wither_skeleton_skull"
-    },
-    "G": {
-      "item": "minecraft:ghast_tear"
-    },
-    "S": {
-      "item": "minecraft:soul_torch"
-    }
+    "#": "minecraft:skeleton_skull",
+    "E": "minecraft:end_crystal",
+    "W": "minecraft:wither_skeleton_skull",
+    "G": "minecraft:ghast_tear",
+    "S": "minecraft:soul_torch"
   },
   "result": {
     "id": "darkenchanting:dark_conduit",

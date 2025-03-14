@@ -6,13 +6,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,14 +30,14 @@ public class TableUpgradeItem extends Item {
             world.setBlockState(pos, ModBlocks.DARK_ENCHANTER.get().getDefaultState());
             context.getStack().decrement(1);
             return ActionResult.SUCCESS;
-        } else {
+        } else if (context.getPlayer() != null) {
             context.getPlayer().sendMessage(Text.translatable("message.darkenchanting.table_upgrade"), true);
         }
         return ActionResult.PASS;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand) {
         user.sendMessage(Text.translatable("message.darkenchanting.table_upgrade"), true);
         return super.use(world, user, hand);
     }

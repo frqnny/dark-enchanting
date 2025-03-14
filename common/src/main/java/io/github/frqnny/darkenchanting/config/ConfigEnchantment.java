@@ -38,7 +38,7 @@ public class ConfigEnchantment {
     }
 
     public static Optional<ConfigEnchantment> getConfigEnchantmentFor(World world, Enchantment enchantment) {
-        var registry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
+        var registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
 
         return getConfigEnchantmentFor(registry.getId(enchantment));
     }
