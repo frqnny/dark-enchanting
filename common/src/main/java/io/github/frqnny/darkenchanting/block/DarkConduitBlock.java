@@ -28,14 +28,14 @@ public class DarkConduitBlock extends TorchBlock {
             double d = (double) i + random.nextDouble();
             double e = (double) j + 0.7D;
             double f = (double) k + random.nextDouble();
-            world.addParticle(ParticleTypes.FALLING_OBSIDIAN_TEAR, d, e, f, 0.0D, 0.0D, 0.0D);
+            world.addParticleClient(ParticleTypes.FALLING_OBSIDIAN_TEAR, d, e, f, 0.0D, 0.0D, 0.0D);
             BlockPos.Mutable mutable = new BlockPos.Mutable();
 
             for (int l = 0; l < 5; ++l) {
                 mutable.set(i + MathHelper.nextInt(random, -4, 4), j - random.nextInt(5), k + MathHelper.nextInt(random, -4, 4));
                 BlockState blockState = world.getBlockState(mutable);
                 if (!blockState.isFullCube(world, mutable)) {
-                    world.addParticle(ParticleTypes.ENCHANT, (double) mutable.getX() + random.nextDouble(), (double) mutable.getY() + random.nextDouble(), (double) mutable.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+                    world.addParticleClient(ParticleTypes.ENCHANT, (double) mutable.getX() + random.nextDouble(), (double) mutable.getY() + random.nextDouble(), (double) mutable.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
                 }
             }
         }

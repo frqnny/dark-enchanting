@@ -1,7 +1,6 @@
 package io.github.frqnny.darkenchanting.config;
 
 import com.google.common.collect.Lists;
-import io.github.frqnny.darkenchanting.DarkEnchanting;
 import io.github.frqnny.omegaconfig.api.Comment;
 import io.github.frqnny.omegaconfig.api.Config;
 import io.github.frqnny.omegaconfig.api.Syncing;
@@ -50,7 +49,7 @@ public class DarkEnchantingConfig implements Config {
 
             Set to true if you want to cost money to remove levels of an enchantment.
             Set to false if you want to receive xp from taking off enchantment levels.
-            
+                        
             WARNING: setting to false will cause exploits, where people can enchant with the vanilla table,
              then take them off at the Dark Enchanter to receive free experience. It is advised to heavily limit the receive factor
              if you decide to turn this off.
@@ -78,7 +77,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
-            
+                        
             How much an enchantment's inverted weight should be multiplied with.
             Each enchantment has a Rarity, and each Rarity has a weight.
             You can check Enchantment weights on many Minecraft wikis.
@@ -86,7 +85,7 @@ public class DarkEnchantingConfig implements Config {
             and we multiply the inverted weight with the cost,
             so that cost is affected by the rarity of the Enchantment.
             This weightFactor allows you to modify the inverted weight.
-            
+                        
             Default: 3.0
             """)
     public float weightFactor = 3.0F;
@@ -117,7 +116,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Syncing
     @Comment("""
-            
+                        
             If true, when a player takes off an curse enchantment,
             this will revert the receive factor, so that it costs quite a bit of experience
             to take of the curse enchantment.
@@ -148,7 +147,7 @@ public class DarkEnchantingConfig implements Config {
 
     @Override
     public String getName() {
-        return this.getModid() + "-v1";
+        return "darkenchanting-v1";
     }
 
 
@@ -157,8 +156,4 @@ public class DarkEnchantingConfig implements Config {
         return "json5";
     }
 
-    @Override
-    public String getModid() {
-        return DarkEnchanting.MOD_ID;
-    }
 }

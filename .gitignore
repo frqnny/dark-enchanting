@@ -2,6 +2,7 @@ build/
 *.ipr
 *.lock
 run/
+runserver/
 *.iws
 out/
 *.iml
