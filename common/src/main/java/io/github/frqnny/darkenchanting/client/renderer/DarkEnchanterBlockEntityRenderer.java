@@ -37,12 +37,12 @@ public class DarkEnchanterBlockEntityRenderer implements BlockEntityRenderer<Dar
         matrices.translate(0.0D, (0.1F + MathHelper.sin(partialTicks * 0.1F) * 0.01F), 0.0D);
 
         float bookRotationChange = blockEntity.bookRotation - blockEntity.bookRotationPrev;
-        while (bookRotationChange >= 3.1415927F) {
-            bookRotationChange -= 6.2831855F;
+        while (bookRotationChange >= Math.PI) {
+            bookRotationChange -= (float) (Math.PI * 2);
         }
 
-        while (bookRotationChange < -3.1415927F) {
-            bookRotationChange += 6.2831855F;
+        while (bookRotationChange < -Math.PI) {
+            bookRotationChange += (float) (Math.PI * 2);
         }
 
         float newBookRotation = blockEntity.bookRotationPrev + bookRotationChange * tickDelta;

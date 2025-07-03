@@ -55,7 +55,7 @@ public class ModPackets {
                 ScreenHandler screen = player.currentScreenHandler;
                 if (screen instanceof DarkEnchanterScreenHandler holder) {
                     ItemStack stack = holder.getEnchantStack();
-                    if (EnchantingUtils.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.getEntityWorld(), pos))) {
+                    if (EnchantingUtils.applyRepairXP(player, stack, BookcaseUtils.getDiscount(player.getWorld(), pos))) {
                         stack.setDamage(0);
                     }
                 }

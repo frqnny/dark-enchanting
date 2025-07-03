@@ -1,17 +1,16 @@
 package io.github.frqnny.darkenchanting.client.screen.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.frqnny.darkenchanting.util.TagUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.GuiNavigationType;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.input.KeyCodes;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -125,11 +124,11 @@ public class EnchantSliderWidget extends ClickableWidget {
     public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         //context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
-        context.drawGuiTexture(RenderLayer::getGuiTextured, this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
         if (activated) {
             double ratio = (double) this.level / this.max;
             int xOffset = (int) Math.round(ratio * (this.getWidth() - 8));
-            context.drawGuiTexture(RenderLayer::getGuiTextured, this.getHandleTexture(), this.getX() + xOffset, this.getY(), 8, this.getHeight());
+            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, this.getHandleTexture(), this.getX() + xOffset, this.getY(), 8, this.getHeight());
         }
         //context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.active ? 16777215 : 10526880;

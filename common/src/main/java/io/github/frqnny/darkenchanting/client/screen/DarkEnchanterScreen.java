@@ -16,11 +16,11 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerInventory;
@@ -106,7 +106,7 @@ public class DarkEnchanterScreen extends HandledScreen<DarkEnchanterScreenHandle
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND, x - 9, y, 0, 0, this.backgroundWidth + 40, this.backgroundHeight, 304, 304);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, BACKGROUND, x - 9, y, 0, 0, this.backgroundWidth + 40, this.backgroundHeight, 304, 304);
         context.drawTooltip(MinecraftClient.getInstance().textRenderer, this.getTooltip(), x - 120, y + 43);
     }
 

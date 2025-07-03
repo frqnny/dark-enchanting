@@ -18,3 +18,4 @@ classes/
 
 .vscode/
 logs/
+/.env

@@ -11,7 +11,7 @@ import net.minecraft.screen.ScreenHandlerType;
 
 public class ModGUIs {
     public static final ScreenHandlerType<DarkEnchanterScreenHandler> DARK_ENCHANTER = MenuRegistry.ofExtended(
-            (id, playerInv, buf) -> new DarkEnchanterScreenHandler(id, playerInv, ScreenHandlerContext.create(playerInv.player.getEntityWorld(), buf.readBlockPos()))
+            (id, playerInv, buf) -> new DarkEnchanterScreenHandler(id, playerInv, ScreenHandlerContext.create(playerInv.player.getWorld(), buf.readBlockPos()))
     );
 
 
